@@ -44,6 +44,11 @@ Item {
             orientationTransitionEnabled = false;
             orientation = qApp.orientation
             transitionDisableTimer.running = true;
+            qApp.orientationLocked = false;
+        }
+        else if (!foreground)
+        {
+            qApp.orientationLocked = true;
         }
     }
 
@@ -203,12 +208,10 @@ Item {
     onOrientationChanged: {
         mainWindow.actualOrientation = orientation;
     }
+
     property bool orientationLocked: false
     onOrientationLockedChanged: {
-        if (!orientationLocked && foreground)
-        {
-            orientation = qApp.orientation;
-        }
+        qApp.orientationLocked = orientationLocked;
     }
 
     // Disable orientation transitions on startup
@@ -245,7 +248,7 @@ Item {
     Connections {
         target: qApp
         onOrientationChanged: {
-            if (!scene.orientationLocked && scene.foreground)
+            if (scene.foreground)
             {
                 scene.orientation = qApp.orientation;
             }
