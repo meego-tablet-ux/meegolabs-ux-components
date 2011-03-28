@@ -30,7 +30,7 @@ BorderImage {
         id: fakeText
         x: 15
         y: 15
-        anchors.verticalCenter: parent.verticalCenter
+        anchors {top:  parent.top; topMargin: 13 }
 
         font.pixelSize: theme_fontPixelSizeLarge
         color: "slategrey"
@@ -52,7 +52,7 @@ BorderImage {
         x: 15
         y: 15
         width: parent.width - 30
-        anchors.verticalCenter: parent.verticalCenter
+        anchors {top:  parent.top; topMargin: 13 }
 
         font.pixelSize: theme_fontPixelSizeLarge
 
