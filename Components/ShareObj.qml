@@ -106,7 +106,7 @@ Item {
     }
 
     TopItem {
-        id: myTopItem
+        id: screenItem
     }
 
     Component {
@@ -166,8 +166,8 @@ Item {
 
             Flickable {
                 id: flickable
-                width: Math.min(contentWidth, myTopItem.topItem.width - 80)
-                height: Math.min(contentHeight, myTopItem.topItem.height - 80)
+                width: Math.min(contentWidth, screenItem.topItem.width * 0.90)
+                height: Math.min(contentHeight, screenItem.topItem.height * 0.90)
                 anchors.centerIn: parent
                 contentWidth: customLoader.item.width
                 contentHeight: customLoader.item.height
