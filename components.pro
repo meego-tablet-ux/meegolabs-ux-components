@@ -16,7 +16,6 @@ PKGCONFIG += gconf-2.0 \
     libpulse-mainloop-glib \
     libexif \
     libkcalcoren \
-    contentaction-0.1 \
     mlite \
     xdamage \
     QtPublishSubscribe \
