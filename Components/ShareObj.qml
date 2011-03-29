@@ -2,7 +2,7 @@
  * Copyright 2011 Intel Corporation.
  *
  * This program is licensed under the terms and conditions of the
- * Apache License, version 2.0.  The full text of the Apache License is at	
+ * Apache License, version 2.0.  The full text of the Apache License is at
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -105,6 +105,10 @@ Item {
         autoCenter: true
     }
 
+    TopItem {
+        id: myTopItem
+    }
+
     Component {
         id: shareDlg
 
@@ -117,8 +121,8 @@ Item {
             border.bottom: 20
 
             source: "image://theme/notificationBox_bg"
-            width: customLoader.width
-            height: customLoader.height
+            width: flickable.width
+            height: flickable.height
 
 
             property QtObject sharingObj: shareContainer.sharingObj
@@ -160,39 +164,50 @@ Item {
                 }
             }
 
-            Loader {
-                id: customLoader
-                source: dlgItem.qmlSource
+            Flickable {
+                id: flickable
+                width: Math.min(contentWidth, myTopItem.topItem.width - 80)
+                height: Math.min(contentHeight, myTopItem.topItem.height - 80)
                 anchors.centerIn: parent
-                onStatusChanged: {
-                    if (customLoader.status == Loader.Ready)
-                        console.log('Loaded ' + source);
-                }
-            }
+                contentWidth: customLoader.item.width
+                contentHeight: customLoader.item.height
+                clip: true
+                boundsBehavior: Flickable.StopAtBounds
 
-            Connections {
-                target: customLoader.item
-                onCancel: {
-                    customLoader.source = "";
-                    mdlSurface.close();
-                }
-                onShared: {
-                    console.log("Shared, with share ID " + shareid);
-                    customLoader.source = "";
-                    shareID = shareid;
-                    if (shareID != -1)
-                        customLoader.sourceComponent = progressDlg;
-                    else {
-                        mdlSurface.close();
-                        sharingObj.clearFiles();
+                Loader {
+                    id: customLoader
+                    source: dlgItem.qmlSource
+                    anchors.centerIn: parent
+                    onStatusChanged: {
+                        if (customLoader.status == Loader.Ready)
+                            console.log('Loaded ' + source);
                     }
                 }
-                onShareError: {
-                    console.log("Share error occured: " + errMsg);
-                    customLoader.source = "";
-                    shareError = errMsg;
-                    customLoader.sourceComponent = errorDlg;
-                    sharingObj.clearFiles();
+
+                Connections {
+                    target: customLoader.item
+                    onCancel: {
+                        customLoader.source = "";
+                        mdlSurface.close();
+                    }
+                    onShared: {
+                        console.log("Shared, with share ID " + shareid);
+                        customLoader.source = "";
+                        shareID = shareid;
+                        if (shareID != -1)
+                            customLoader.sourceComponent = progressDlg;
+                        else {
+                            mdlSurface.close();
+                            sharingObj.clearFiles();
+                        }
+                    }
+                    onShareError: {
+                        console.log("Share error occured: " + errMsg);
+                        customLoader.source = "";
+                        shareError = errMsg;
+                        customLoader.sourceComponent = errorDlg;
+                        sharingObj.clearFiles();
+                    }
                 }
             }
 
