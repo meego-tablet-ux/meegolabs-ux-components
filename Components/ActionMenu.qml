@@ -16,7 +16,9 @@ Flickable {
     property int minWidth : 200     // The width of the menu should always be between minWidth and maxWidth
     property int maxWidth : 500
     property int currentWidth: minWidth
+    property int highlightIndex : -1
     property int textMargin : 16
+    property string title : ""
 
     property bool elideEnabled: false
 
@@ -40,6 +42,26 @@ Flickable {
         id: layout
 
         width: parent.width
+
+        Text {
+            id: titleItem
+            color: theme_fontColorHighlight
+            font.pixelSize: theme_contextMenuFontPixelSize
+            visible: (title.length != 0)
+            text: title
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            width: currentWidth
+        }
+
+        Image {
+            id: titleSeperatorImage
+            anchors.top: titleItem.bottom
+            anchors.topMargin: 5
+            width: currentWidth
+            visible: (title.length != 0)
+            source: "image://theme/menu_item_separator"
+        }
 
         Repeater {
             id: repeater
@@ -65,7 +87,7 @@ Flickable {
 
                     verticalAlignment: Text.AlignVCenter
 
-                    color: theme_contextMenuFontColor
+                    color:(highlightIndex == index)?theme_fontColorHighlight:theme_contextMenuFontColor
                     font.pixelSize: theme_contextMenuFontPixelSize
 
                     // elide has to be turned of to correctly compute the paintedWidth. It is re-enabled after the width computing
