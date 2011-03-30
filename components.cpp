@@ -40,6 +40,7 @@
 #include "windowiconprovider.h"
 #include "windowmodel.h"
 #include "gconfitem.h"
+#include "musicindicator.h"
 
 #include <MNotification>
 #include <mnotificationgroup.h>
@@ -61,6 +62,8 @@ void components::registerTypes(const char *uri)
     qmlRegisterInterface<WindowElement>("WindowElement");
     qmlRegisterType<devicemodel>(uri,0,1,"UDiskDeviceModel");
     qmlRegisterType<VolumeControl>(uri,0,1,"VolumeControl");
+
+    qmlRegisterType<MusicIndicator>(uri,0,1,"MusicIndicator");
 
     qmlRegisterType<ImageExtension>(uri, 0,0, "ImageExtension");
 

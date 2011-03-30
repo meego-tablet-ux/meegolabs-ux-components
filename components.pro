@@ -65,7 +65,9 @@ SOURCES += \
     windowiconprovider.cpp \
     windowlistener.cpp \
     windowmodel.cpp \
-    gconfitem.cpp
+    gconfitem.cpp \
+    musicserviceproxy.cpp \
+    musicindicator.cpp 
 
 QML_SOURCES += \
     Components/*.qml
@@ -112,7 +114,9 @@ HEADERS += \
     windowinfo.h \
     windowlistener.h \
     windowmodel.h \
-    gconfitem.h
+    gconfitem.h \
+    musicserviceproxy.h \
+    musicindicator.h 
 
 qmldir.files += $$TARGET
 qmldir.path += $$[QT_INSTALL_IMPORTS]/MeeGo/Labs/
