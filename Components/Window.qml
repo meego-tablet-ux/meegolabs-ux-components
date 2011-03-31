@@ -275,7 +275,7 @@ Item {
 
     // This function returns if the view is in landscape or inverted landscape
     function isLandscapeView() {
-        return orientation == 0 || orientation == 2;
+        return orientation == 1 || orientation == 3;
     }
 
     // Clamp val between min and max
@@ -470,7 +470,7 @@ Item {
     states: [
         State {
             name: "landscape"
-            when: scene.orientation == 0
+            when: scene.orientation == 1
             PropertyChanges {
                 target: outerContent
                 width: scene.width
@@ -485,7 +485,7 @@ Item {
 
         State {
             name: "invertedlandscape"
-            when:scene.orientation == 2
+            when:scene.orientation == 3
             PropertyChanges {
                 target: outerContent
                 width: scene.width
@@ -501,7 +501,7 @@ Item {
 
         State {
             name: "portrait"
-            when: scene.orientation == 3
+            when: scene.orientation == 0
             PropertyChanges {
                 target: outerContent
                 width: scene.height
@@ -516,7 +516,7 @@ Item {
 
         State {
             name: "invertedportrait"
-            when:scene.orientation == 1
+            when:scene.orientation == 2
             PropertyChanges {
                 target: outerContent
                 width: scene.height
