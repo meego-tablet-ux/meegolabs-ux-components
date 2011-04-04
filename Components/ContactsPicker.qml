@@ -38,6 +38,7 @@ ModalSurface {
 
     property string dataType: "" //not implemented yet
     property int dataIndex: 0 //not implemented yet
+    property variant person: null
 
     signal closed
     signal opened
@@ -111,7 +112,7 @@ ModalSurface {
 		Item {
                     id:loadingText
                     height:30
-                    width:backgroundRect.width
+                    width:contactsView.width
                     Text {
                         id: promptText
                         text: qsTr("Loading...")
@@ -172,6 +173,7 @@ ModalSurface {
                             width: parent.width
                             opacity: 1
 
+                            property variant dataContact: model.contact
                             property string dataUuid: model.contact.guid.guid
                             property string dataFirst: model.contact.name.firstName
                             property string dataLast: model.contact.name.lastName
@@ -335,7 +337,7 @@ ModalSurface {
                         active: enabled
                         anchors.verticalCenter: parent.verticalCenter
                         onClicked: {
-                            contactPicker.contactSelected(contactsView.contactListView.currentItem)
+                            contactPicker.contactSelected(contactPicker.person)
                             contactPicker.dataSelected(contactPicker.dataType, contactPicker.dataIndex)
                             contactPicker.closed();
                             close();
