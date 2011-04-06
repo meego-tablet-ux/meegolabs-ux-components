@@ -9,7 +9,6 @@ CheckBox 0.1 CheckBox.qml
 ClipboardContextMenu 0.1 ClipboardContextMenu.qml
 ContextMenu 0.1 ContextMenu.qml
 Crumb 0.1 Crumb.qml
-DatePickerDialog 0.1 DatePickerDialog.qml
 DialogText 0.1 DialogText.qml
 DropDown 0.1 DropDown.qml
 EditPane 0.1 EditPane.qml
@@ -32,7 +31,6 @@ TabIcon 0.1 TabIcon.qml
 TabItem 0.1 TabItem.qml
 TabWidget 0.1 TabWidget.qml
 TextEntry 0.1 TextEntry.qml
-TimePicker 0.1 TimePicker.qml
 ToggleButton 0.1 ToggleButton.qml
 TopicFilter 0.1 TopicFilter.qml
 TopItem 0.1 TopItem.qml
