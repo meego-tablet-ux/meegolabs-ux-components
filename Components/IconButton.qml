@@ -7,6 +7,7 @@
  */
 
 import Qt 4.7
+import Qt.labs.gestures 2.0
 
 Item {
     id: container
@@ -44,12 +45,18 @@ Item {
         ]
     }
 
+    GestureArea {
+        anchors.fill: parent
+        Tap {
+            onFinished: {
+                if (container.active)
+                    container.clicked(gesture.position)
+            }
+        }
+    }
+
     MouseArea {
         anchors.fill: parent
-        onClicked: {
-            if (container.active)
-                container.clicked(mouse)
-            }
         onPressed: {
             if (container.active) {
                 parent.pressed = true;
