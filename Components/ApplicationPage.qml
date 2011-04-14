@@ -8,6 +8,7 @@
 
 import Qt 4.7
 import MeeGo.Labs.Components 0.1
+import Qt.labs.gestures 2.0
 
 Item {
     id: container
@@ -232,6 +233,17 @@ Item {
             width: parent.width
             height: backButton.height
             source: "image://theme/titlebar_l"
+
+            // block gestures from falling through
+            GestureArea {
+                anchors.fill: parent
+
+                Tap {}
+                TapAndHold {}
+                Pan {}           
+                Swipe {}         
+                Pinch {}         
+            }
 
             MouseArea {
                 id: mouseArea
