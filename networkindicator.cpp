@@ -78,13 +78,14 @@ void NetworkIndicator::paint(QPainter *p, const QStyleOptionGraphicsItem *, QWid
         // TODO: Add support for displaying the operator name while roaming
 
         int offset = 0;
-        double percentage = m_signalStrengthProperty->value().toDouble();
+        int strength = m_signalStrengthProperty->value().toInt();
         QString networkType = m_networkTypeProperty->value().toString();
 
         if (networkType != "ethernet")
         {
-            p->drawPixmap(0, 0, m_signalStrengthPixmaps[qCeil(percentage * 4.0)]);
-            offset = m_signalStrengthPixmaps[0].width();
+           int index = strength < 0 || strength > 100 ? 0 : qCeil(((double)strength/100.0) * 4.0);
+	   p->drawPixmap(0, 0, m_signalStrengthPixmaps[index]);
+           offset = m_signalStrengthPixmaps[0].width();
         }
 
         if (networkType == "WLAN")
