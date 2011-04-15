@@ -123,7 +123,7 @@ qmldir.path += $$[QT_INSTALL_IMPORTS]/MeeGo/Labs/
 INSTALLS += qmldir
 
 TRANSLATIONS += $${SOURCES} $${HEADERS} $${QML_SOURCES}
-VERSION = 0.2.3
+VERSION = 0.2.4
 PROJECT_NAME = meegolabs-ux-components
 
 dist.commands += rm -fR $${PROJECT_NAME}-$${VERSION} &&
