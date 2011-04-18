@@ -513,9 +513,10 @@ void BrowserItemListModel::bookmarkUpdated(qint64 id, const QString &url, const 
 	{
 		if(m_items.length() >= m_limit)
 		{
+      item = m_items[m_items.length()-1];
 			beginRemoveRows(QModelIndex(), m_items.length() - 1, m_items.length() - 1);
-			m_items.removeOne(m_items[m_items.length() -1]);
-			delete m_items[m_items.length() - 1];
+			m_items.removeOne(item);
+			delete item;
 			endRemoveRows();
 		}
 
@@ -626,9 +627,10 @@ void BrowserItemListModel::urlVisited(qint64 id, const QString &url, const QStri
 		int length = m_items.length();
 		if(length >= m_limit)
 		{
+      item = m_items[length - 1];
 			beginRemoveRows(QModelIndex(), length - 1, length - 1);
-			m_items.removeOne(m_items[length - 1]);
-			delete m_items[length - 1];
+			m_items.removeOne(item);
+			delete item;
 			endRemoveRows();
 		}
 
