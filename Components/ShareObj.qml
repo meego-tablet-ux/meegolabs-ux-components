@@ -42,6 +42,18 @@ Item {
         sharingObj.addFiles(itemList);
     }
 
+    function setParam(fileName, paramName, paramVal) {
+        sharingObj.addHashEntryToFile(fileName, paramName, paramVal);
+    }
+
+    function getParam(fileName, paramName) {
+        return sharingObj.getHashEntryForFile(fileName, paramName);
+    }
+
+    function getParamDefVal(fileName, paramName, defaultVal) {
+        return sharingObj.getHashEntryForFile(fileName, paramName, defaultVal);
+    }
+
     function showContextTypes(x, y) {
         if (sharingObj.fileCount == 0)
             return;
