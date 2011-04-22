@@ -103,7 +103,8 @@ Item {
                 }
                 PropertyChanges {
                     target: container
-                    showSearch: false
+		    //set showSearch to false will cause the string in search bar be cleaned when loading a detail view. Bug[15576]
+                    //showSearch: false 
                 }
             }
         ]
@@ -136,7 +137,13 @@ Item {
                         properties: "x"
                         duration: 250
                     }
-                    ScriptAction { script: barArea.visible = true }
+		    ScriptAction { 
+		    	 script: {
+			     barArea.visible = true
+			     container.showSearch = false
+			 }	 
+		    }
+                    
                 }
             },
             Transition {
@@ -158,6 +165,7 @@ Item {
                     properties: "x"
                     duration: 250
                 }
+		ScriptAction { script: container.showSearch = false }
             }
         ]
     }
