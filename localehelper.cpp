@@ -101,16 +101,26 @@ QString LocaleHelper::formatString(int format) const
 {
     switch (format) {
     case DateFullLong:
+        // e.g. Monday, January 31, 2011
         return m_locale.dateFormat(QLocale::LongFormat);
 
+    case DateFull:
+        //: MMMM = full month, d = day of month, yyyy = full year (e.g. January 31, 2011)
+        return tr("MMMM d, yyyy");
+
     case DateFullShort:
+        //: MMM = short month, d = day of month, yyyy = full year (e.g. Jan 31 2011)
+        return tr("MMM d yyyy");
+
+    case DateFullNumShort:
+        // e.g. 1/31/11
         return m_locale.dateFormat(QLocale::ShortFormat);
 
-    case DateWeekdayMonthDate:
+    case DateWeekdayMonthDay:
         //: dddd = full day of week, MMMM = full month, d = day of month (e.g. Monday, January 31)
         return tr("dddd, MMMM d");
 
-    case DateWeekdayDateShort:
+    case DateWeekdayDayShort:
         //: ddd = day of week, d = day of month (e.g. Mon 31)
         return tr("ddd d");
 
@@ -118,9 +128,21 @@ QString LocaleHelper::formatString(int format) const
         //: MMMM = full month, yyyy = full year (e.g. January 2011)
         return tr("MMMM yyyy");
 
+    case DateMonthYearShort:
+        //: MMM = short month, yyyy = full year (e.g. Jan 2011)
+        return tr("MMM yyyy");
+
     case DateDay:
         //: d = day of month (e.g. 31, no leading zero)
         return tr("d");
+
+    case DateWeekday:
+        //: dddd = day of week (e.g. Monday)
+        return tr("dddd");
+
+    case DateWeekdayShort:
+        //: ddd = day of week (e.g. Mon)
+        return tr("ddd");
 
     case DateMonth:
         //: MMMM = full month (e.g. January)
