@@ -23,6 +23,7 @@ class Desktop : public QObject
     Q_PROPERTY(QString id READ id);
     Q_PROPERTY(QString type READ type NOTIFY typeChanged);
     Q_PROPERTY(QString title READ title NOTIFY titleChanged);
+    Q_PROPERTY(QString name READ name NOTIFY nameChanged);
     Q_PROPERTY(QString comment READ comment NOTIFY commentChanged);
     Q_PROPERTY(QString icon READ icon NOTIFY iconChanged);
     Q_PROPERTY(QString exec READ exec NOTIFY execChanged);
@@ -63,6 +64,10 @@ public:
 
     QString title() const {
         return m_entry->name();
+    }
+
+    QString name() const {
+        return m_entry->nameUnlocalized();
     }
 
     QString comment() const {
@@ -138,6 +143,7 @@ public slots:
 signals:
     void typeChanged();
     void titleChanged();
+    void nameChanged();
     void iconChanged();
     void execChanged();
     void commentChanged();
