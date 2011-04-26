@@ -25,11 +25,16 @@ public:
     enum DateTimeFormat {
         DateBEGIN,
         DateFullLong,          // Monday, January 31, 2011
-        DateFullShort,         // 1/31/11
-        DateWeekdayMonthDate,  // Monday, January 31
-        DateWeekdayDateShort,  // Mon 31
+        DateFull,              // January 31, 2011
+        DateFullShort,         // Jan 31 2011
+        DateFullNumShort,      // 1/31/11
+        DateWeekdayMonthDay,   // Monday, January 31
+        DateWeekdayDayShort,   // Mon 31
         DateMonthYear,         // January 2011
+        DateMonthYearShort,    // Jan 2011
         DateDay,               // 31 (no leading zero)
+        DateWeekday,           // Monday
+        DateWeekdayShort,      // Mon
         DateMonth,             // January
         DateMonthShort,        // Jan
         DateYear,              // 2011
