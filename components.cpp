@@ -16,12 +16,14 @@
 #include "desktop.h"
 #include "favoriteapplicationsmodel.h"
 #include "fuzzydatetime.h"
+#include "gconfitem.h"
 #include "gesturearea.h"
 #include "imageextension.h"
 #include "librarymodel.h"
 #include "localehelper.h"
 #include "localtime.h"
 #include "meegothemedimageprovider.h"
+#include "musicindicator.h"
 #include "networkindicator.h"
 #include "notificationindicator.h"
 #include "qmldebugtools.h"
@@ -29,6 +31,7 @@
 #include "recentapplicationsmodel.h"
 #include "roundeditem.h"
 #include "speechbubbledialog.h"
+#include "stricturl.h"
 #include "systemiconprovider.h"
 #include "themedimageprovider.h"
 #include "timezonelistmodel.h"
@@ -39,8 +42,6 @@
 #include "windowelement.h"
 #include "windowiconprovider.h"
 #include "windowmodel.h"
-#include "gconfitem.h"
-#include "musicindicator.h"
 
 #include <MNotification>
 #include <mnotificationgroup.h>
@@ -99,6 +100,9 @@ void components::registerTypes(const char *uri)
     qmlRegisterInterface<MNotificationGroup>("NotificationGroup");
 
     qmlRegisterType<GConfItem>(uri, 0, 1, "GConfItem");
+
+    // qt bug workarounds
+    qmlRegisterType<StrictUrl>(uri, 0, 1, "StrictUrl");
 }
 
 void components::initializeEngine(QDeclarativeEngine *engine, const char *uri)

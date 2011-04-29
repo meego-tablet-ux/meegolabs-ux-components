@@ -40,11 +40,14 @@ SOURCES += \
     devicemodel.cpp \
     favoriteapplicationsmodel.cpp \
     fuzzydatetime.cpp \
+    gconfitem.cpp \
     gesturearea.cpp \
     imageextension.cpp \
     librarymodel.cpp \
     localehelper.cpp \
     localtime.cpp \
+    musicindicator.cpp \
+    musicserviceproxy.cpp \
     networkindicator.cpp \
     notificationindicator.cpp \
     paintspy.cpp \
@@ -52,6 +55,7 @@ SOURCES += \
     recentapplicationsmodel.cpp \
     roundeditem.cpp \
     speechbubbledialog.cpp \
+    stricturl.cpp \
     systemiconprovider.cpp \
     themedimageprovider.cpp \
     meegothemedimageprovider.cpp \
@@ -64,10 +68,7 @@ SOURCES += \
     windowelement.cpp \
     windowiconprovider.cpp \
     windowlistener.cpp \
-    windowmodel.cpp \
-    gconfitem.cpp \
-    musicserviceproxy.cpp \
-    musicindicator.cpp 
+    windowmodel.cpp
 
 QML_SOURCES += \
     Components/*.qml
@@ -89,12 +90,15 @@ HEADERS += \
     devicemodel.h \
     favoriteapplicationsmodel.h \
     fuzzydatetime.h \
+    gconfitem.h \
     gesturearea.h \
     imageextension.h \
     librarymodel.h \
     localehelper.h \
     localtime.h \
     meegothemedimageprovider.h \
+    musicindicator.h \
+    musicserviceproxy.h \
     networkindicator.h \
     notificationindicator.h \
     paintspy.h \
@@ -102,6 +106,7 @@ HEADERS += \
     recentapplicationsmodel.h \
     roundeditem.h \
     speechbubbledialog.h \
+    stricturl.h \
     systemiconprovider.h \
     timezonelistmodel.h \
     translator.h \
@@ -113,10 +118,7 @@ HEADERS += \
     windowiconprovider.h \
     windowinfo.h \
     windowlistener.h \
-    windowmodel.h \
-    gconfitem.h \
-    musicserviceproxy.h \
-    musicindicator.h 
+    windowmodel.h
 
 qmldir.files += $$TARGET
 qmldir.path += $$[QT_INSTALL_IMPORTS]/MeeGo/Labs/
