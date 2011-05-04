@@ -8,6 +8,7 @@
 
 import Qt 4.7
 import MeeGo.Components 0.1
+import MeeGo.Labs.Components 0.1 as Labs
 import Qt.labs.gestures 2.0
 
 Item {
@@ -387,7 +388,7 @@ Item {
                         }
                     }
 
-                    ContextMenu {
+                    Labs.ContextMenu {
                         id: filterMenuComponent
                         model: container.windowModel
                         payload: container.windowFilterPayload
