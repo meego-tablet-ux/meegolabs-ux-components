@@ -8,6 +8,7 @@
 
 import Qt 4.7
 import MeeGo.Sharing 0.1
+import MeeGo.Components 0.1
 
 ShareObj {
     width: shareImg.width

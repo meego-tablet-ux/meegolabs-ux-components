@@ -8,6 +8,8 @@
 
 import Qt 4.7
 import MeeGo.Sharing 0.1
+import MeeGo.Components 0.1
+import MeeGo.Labs.Components 0.1 as Labs
 
 Item {
 
@@ -86,7 +88,7 @@ Item {
         mdlSurface.visible = true;
     }
 
-    ContextMenu {
+    Labs.ContextMenu {
         id: ctxServiceTypes
 
         onTriggered: {
@@ -99,7 +101,7 @@ Item {
         }
     }
 
-    ContextMenu {
+    Labs.ContextMenu {
         id: ctxServices
 
         onTriggered: {
@@ -112,7 +114,7 @@ Item {
         }
     }
 
-    ModalSurface {
+    Labs.ModalSurface {
         id: mdlSurface
         autoCenter: true
     }
@@ -241,7 +243,7 @@ Item {
                 anchors.leftMargin: 10
             }
             Button {
-                title: qsTr("Ok")
+                text: qsTr("Ok")
                 anchors.top: txtError.bottom
                 anchors.topMargin: 10
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -272,7 +274,7 @@ Item {
                 anchors.leftMargin: 10
             }
             Button {
-                title: qsTr("Ok")
+                text: qsTr("Ok")
                 anchors.top: txtProgress.bottom
                 anchors.topMargin: 10
                 anchors.horizontalCenter: parent.horizontalCenter

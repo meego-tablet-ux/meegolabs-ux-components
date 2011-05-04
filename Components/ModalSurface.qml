@@ -8,6 +8,7 @@
 
 import Qt 4.7
 import Qt.labs.gestures 2.0
+import MeeGo.Components 0.1
 
 Item {
     id: container
