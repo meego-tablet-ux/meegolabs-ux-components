@@ -53,14 +53,16 @@ Labs.ModalSurface {
         visible = true
     }
 
+    Theme{ id:theme }
+
     autoCenter: true
     content: BorderImage {
         id: inner
         width: 300; height: 450
 
-        TopItem {
-            id: topItem
-        }
+//        TopItem {
+//            id: topItem
+//        }
 
         border.top: 14
         border.left: 20
@@ -106,8 +108,8 @@ Labs.ModalSurface {
             width: parent.width
             anchors.horizontalCenter: parent.horizontalCenter
             text: promptString
-            font.pixelSize: theme_fontPixelSizeLarge
-            color: theme_dialogTitleFontColor
+            font.pixelSize: theme.fontPixelSizeLarge
+            color: theme.dialogTitleFontColor
             visible: true
         }
 	
@@ -118,8 +120,8 @@ Labs.ModalSurface {
                     Text {
                         id: promptText
                         text: qsTr("Loading...")
-                        color:theme_fontColorHighlight
-                        font.pixelSize: theme_fontPixelSizeLarge
+                        color:theme.fontColorHighlight
+                        font.pixelSize: theme.fontPixelSizeLarge
                         anchors.horizontalCenter: parent.horixontalCenter
                         visible: true
 			opacity: 1
@@ -203,16 +205,16 @@ Labs.ModalSurface {
    			        height: 20
                                 text: dataFirst
                                 anchors { left: photo.right; top: photo.top; topMargin: 2; leftMargin: 2;}
-                                font.pixelSize: theme_fontPixelSizeNormal
-				color: theme_fontColorNormal
+                                font.pixelSize: theme.fontPixelSizeNormal
+                                color: theme.fontColorNormal
                             }
 
                             Text {
                                 id: nameLast
                                 text: dataLast
                                 anchors { left: nameFirst.right; top: nameFirst.top; leftMargin: 2;}
-                                font.pixelSize: theme_fontPixelSizeNormal
-                                color: theme_fontColorNormal
+                                font.pixelSize: theme.fontPixelSizeNormal
+                                color: theme.fontColorNormal
 			   }
 
                             Image {
@@ -255,8 +257,8 @@ Labs.ModalSurface {
                                         return ""
                                 }
                                 anchors { left: nameFirst.left; bottom: photo.bottom; bottomMargin: 2}
-                                font.pixelSize: theme_fontPixelSizeSmall
-                                color: theme_fontColorHighlight
+                                font.pixelSize: theme.fontPixelSizeSmall
+                                color: theme.fontColorHighlight
                             }
 
                             Image{
@@ -307,8 +309,8 @@ Labs.ModalSurface {
                                 id: title
                                 text: section
                                 anchors { fill: parent; rightMargin: 6; leftMargin: 20; topMargin: 6; bottomMargin: 6; verticalCenter: header.verticalCenter }
-                                font.pixelSize: theme_fontPixelSixeNormal
-                                color: theme_fontColorHighlight
+                                font.pixelSize: theme.fontPixelSixeNormal
+                                color: theme.fontColorHighlight
                             }
                         }
 
@@ -331,8 +333,8 @@ Labs.ModalSurface {
                         bgSourceUp: "image://theme/btn_grey_up"
                         bgSourceDn: "image://theme/btn_grey_dn"
                         text: qsTr("OK")
-                        font.pixelSize: theme_fontPixelSizeLarge
-                        color: theme_buttonFontColor
+                        font.pixelSize: theme.fontPixelSizeLarge
+                        textColor: theme.buttonFontColor
                         anchors.left: parent.left
                         anchors.leftMargin: 20
                         enabled: (contactsView.contactListView.currentIndex > -1)
@@ -354,8 +356,8 @@ Labs.ModalSurface {
                         bgSourceUp: "image://theme/btn_grey_up"
                         bgSourceDn: "image://theme/btn_grey_dn"
                         text: qsTr("Cancel")
-                        font.pixelSize: theme_fontPixelSizeLarge
-                        color: theme_buttonFontColor
+                        font.pixelSize: theme.fontPixelSizeLarge
+                        textColor: theme.buttonFontColor
                         anchors.right: parent.right
                         anchors.rightMargin: 20
                         anchors.verticalCenter: parent.verticalCenter
