@@ -8,6 +8,8 @@
 
 import Qt 4.7
 import QtMobility.contacts 1.1
+import MeeGo.Labs.Components 0.1 as Labs
+import MeeGo.Components 0.1
 
 /*
  * Contacts Picker
@@ -29,7 +31,7 @@ import QtMobility.contacts 1.1
  *
  */
 
-ModalSurface {
+Labs.ModalSurface {
     id: contactPicker
     fogOpacity:0
 
@@ -328,7 +330,7 @@ ModalSurface {
                         height:40
                         bgSourceUp: "image://theme/btn_grey_up"
                         bgSourceDn: "image://theme/btn_grey_dn"
-                        title: qsTr("OK")
+                        text: qsTr("OK")
                         font.pixelSize: theme_fontPixelSizeLarge
                         color: theme_buttonFontColor
                         anchors.left: parent.left
@@ -351,7 +353,7 @@ ModalSurface {
                         height:40
                         bgSourceUp: "image://theme/btn_grey_up"
                         bgSourceDn: "image://theme/btn_grey_dn"
-                        title: qsTr("Cancel")
+                        text: qsTr("Cancel")
                         font.pixelSize: theme_fontPixelSizeLarge
                         color: theme_buttonFontColor
                         anchors.right: parent.right
