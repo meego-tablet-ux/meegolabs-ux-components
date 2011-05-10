@@ -13,9 +13,6 @@ DropDownList 0.1 DropDownList.qml
 LauncherIcon 0.1 LauncherIcon.qml
 ModalSurface 0.1 ModalSurface.qml
 RunningAppIcon 0.1 RunningAppIcon.qml
-ShareButton 0.1 ShareButton.qml
-ShareIcon 0.1 ShareIcon.qml
-ShareObj 0.1 ShareObj.qml
 Spinner 0.1 Spinner.qml
 StatusBar 0.1 StatusBar.qml
 TabIcon 0.1 TabIcon.qml
