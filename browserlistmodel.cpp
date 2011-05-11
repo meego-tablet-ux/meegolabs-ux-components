@@ -173,7 +173,7 @@ bool BrowserItemListModel::loadDataSource()
 {
     if(!m_db.isValid())
     {
-        m_db = QSqlDatabase::addDatabase("QSQLITE");
+        m_db = QSqlDatabase::addDatabase("QSQLITE", "browser_data");
 
         m_db.setDatabaseName(DB_FILENAME);
         if(!m_db.open()){
