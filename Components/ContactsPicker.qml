@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Intel Corporation.
+* Copyright 2011 Intel Corporation.
  *
  * This program is licensed under the terms and conditions of the
  * Apache License, version 2.0.  The full text of the Apache License is at
@@ -12,7 +12,7 @@ import MeeGo.Labs.Components 0.1 as Labs
 import MeeGo.Components 0.1
 
 /*
- * Contacts Picker
+* Contacts Picker
  *
  * signals:
  * contactSelected(variant contact)
@@ -31,9 +31,8 @@ import MeeGo.Components 0.1
  *
  */
 
-Labs.ModalSurface {
+ModalDialog {
     id: contactPicker
-    fogOpacity:0
 
     property string promptString: qsTr("Pick a contact:")
     property int filterFlags: 0 //not implemented yet
@@ -42,35 +41,30 @@ Labs.ModalSurface {
     property int dataIndex: 0 //not implemented yet
     property variant person: null
 
+    title: promptString
+
     signal closed
     signal opened
     signal contactSelected(variant contact)
     signal dataSelected(string type, int dataIndex)
     signal cancelled
 
-    function show() {
-        console.log("DEPRECATED! Call visible = true on the ContactPicker yourself!")
-        visible = true
+    width: 300
+    height: 450
+
+    onAccepted:{
+        contactPicker.contactSelected(contactPicker.person)
+        contactPicker.dataSelected(contactPicker.dataType, contactPicker.dataIndex)
+        contactPicker.closed();
+    }
+
+    onRejected:{
+        contactPicker.cancelled();
     }
 
     Theme{ id:theme }
 
-    autoCenter: true
-    content: BorderImage {
-        id: inner
-        width: 300; height: 450
-
-//        TopItem {
-//            id: topItem
-//        }
-
-        border.top: 14
-        border.left: 20
-        border.right: 20
-        border.bottom: 20
-        source: "image://theme/notificationBox_bg"
-
-        Item {
+    content: Item {
             id:contactsView
 
             property int highlightHeight: 0
@@ -101,18 +95,6 @@ Labs.ModalSurface {
    		height: parent.height
                 width: parent.width
 
-             Text {
-            id: titleBox
-
-            height: 30
-            width: parent.width
-            anchors.horizontalCenter: parent.horizontalCenter
-            text: promptString
-            font.pixelSize: theme.fontPixelSizeLarge
-            color: theme.dialogTitleFontColor
-            visible: true
-        }
-	
 		Item {
                     id:loadingText
                     height:30
@@ -131,7 +113,8 @@ Labs.ModalSurface {
                 Item {
                     id: groupedViewPortrait
                     width: parent.width
-		    height: parent.height-titleBox.height-buttonBox.height-10-loadingText.height
+//		    height: parent.height-titleBox.height-buttonBox.height-10-loadingText.height
+                    height: parent.height-10-loadingText.height
 
                     ListView {
                         id: cardListView
@@ -156,220 +139,171 @@ Labs.ModalSurface {
                             Component.onCompleted : {
                                 contactModel.sortOrders= sortFirstName;
                                 contactModel.filter= allFilter;
-                                 if(manager == "tracker")
+                                if(manager == "tracker")
                                     console.debug("[contacts:myappallcontacts] tracker found for all contacts model")
-                            }
-                    }//model
-                    SortOrder {
-                        id: sortFirstName
-                        detail:ContactDetail.Name
-                        field:Name.FirstName
-                        direction:Qt.AscendingOrder
-                    }
-                    IntersectionFilter {
-                        id: allFilter
-                    }
+                                }
+                                }//model
+                                    SortOrder {
+                                        id: sortFirstName
+                                        detail:ContactDetail.Name
+                                        field:Name.FirstName
+                                        direction:Qt.AscendingOrder
+                                    }
+                                    IntersectionFilter {
+                                        id: allFilter
+                                    }
 
-                        delegate:  Image {
-                            id: contactCardPortrait
+                                    delegate:  Image {
+                                        id: contactCardPortrait
 
-                            height: 50
-                            width: parent.width
-                            opacity: 1
+                                        height: 50
+                                        width: parent.width
+                                        opacity: 1
 
-                            property variant dataContact: model.contact
-                            property string dataUuid: model.contact.guid.guid
-                            property string dataFirst: model.contact.name.firstName
-                            property string dataLast: model.contact.name.lastName
-                            property string dataCompany: model.contact.organization.name
-                            property string dataFavorite: model.contact.tag.tag
-                            property int dataStatus: model.contact.presence.state
-                            property string dataAvatar: model.contact.avatar.imageUrl
+                                        property variant dataContact: model.contact
+                                        property string dataUuid: model.contact.guid.guid
+                                        property string dataFirst: model.contact.name.firstName
+                                        property string dataLast: model.contact.name.lastName
+                                        property string dataCompany: model.contact.organization.name
+                                        property string dataFavorite: model.contact.tag.tag
+                                        property int dataStatus: model.contact.presence.state
+                                        property string dataAvatar: model.contact.avatar.imageUrl
 
-                            signal clicked
+                                        signal clicked
 
-                            source: "image://theme/contacts/contact_bg_portrait";
+                                        source: "image://theme/contacts/contact_bg_portrait";
 
-                            Image{
-                                id: photo
-                                fillMode: Image.PreserveAspectFit
-                                smooth: true
-                                width: 50
-                                height: 50
-                                source: (dataAvatar ? dataAvatar :"image://theme/contacts/blank_avatar")
-                                anchors {left: contactCardPortrait.left;}
-                            }
+                                        Image{
+                                            id: photo
+                                            fillMode: Image.PreserveAspectFit
+                                            smooth: true
+                                            width: 50
+                                            height: 50
+                                            source: (dataAvatar ? dataAvatar :"image://theme/contacts/blank_avatar")
+                                            anchors {left: contactCardPortrait.left;}
+                                        }
 
-                            Text{
-                                id: nameFirst
-   			        height: 20
-                                text: dataFirst
-                                anchors { left: photo.right; top: photo.top; topMargin: 2; leftMargin: 2;}
-                                font.pixelSize: theme.fontPixelSizeNormal
-                                color: theme.fontColorNormal
-                            }
+                                        Text{
+                                            id: nameFirst
+                                            height: 20
+                                            text: dataFirst
+                                            anchors { left: photo.right; top: photo.top; topMargin: 2; leftMargin: 2;}
+                                            font.pixelSize: theme.fontPixelSizeNormal
+                                            color: theme.fontColorNormal
+                                        }
 
-                            Text {
-                                id: nameLast
-                                text: dataLast
-                                anchors { left: nameFirst.right; top: nameFirst.top; leftMargin: 2;}
-                                font.pixelSize: theme.fontPixelSizeNormal
-                                color: theme.fontColorNormal
-			   }
+                                        Text {
+                                            id: nameLast
+                                            text: dataLast
+                                            anchors { left: nameFirst.right; top: nameFirst.top; leftMargin: 2;}
+                                            font.pixelSize: theme.fontPixelSizeNormal
+                                            color: theme.fontColorNormal
+                                        }
 
-                            Image {
-                                id: favorite
-                                source: "image://theme/contacts/icn_fav_star"
-				height: 10
-				width: 10
-                                opacity: (dataFavorite == "Favorite" ? 1 : .2 )
-                                anchors {right: contactCardPortrait.right; top: nameFirst.top; rightMargin: 2;}
-                            }
+                                        Image {
+                                            id: favorite
+                                            source: "image://theme/contacts/icn_fav_star"
+                                            height: 10
+                                            width: 10
+                                            opacity: (dataFavorite == "Favorite" ? 1 : .2 )
+                                            anchors {right: contactCardPortrait.right; top: nameFirst.top; rightMargin: 2;}
+                                        }
 
-                            Image {
-                                id: statusIcon
-				height: 10
- 				width: 10
-                                source: {
-                                    if(dataStatus == Presence.Unknown)
-                                            return "image://theme/contacts/status_idle";
-                                    else if (dataStatus == Presence.Available)
-                                         return "image://theme/contacts/status_available";
-                                    else if (dataStatus == Presence.Busy)
-                                         return "image://theme/contacts/status_busy_sml";
-                                    else
-                                        return "image://theme/contacts/status_idle";
+                                        Image {
+                                            id: statusIcon
+                                            height: 10
+                                            width: 10
+                                            source: {
+                                                if(dataStatus == Presence.Unknown)
+                                                    return "image://theme/contacts/status_idle";
+                                                else if (dataStatus == Presence.Available)
+                                                    return "image://theme/contacts/status_available";
+                                                else if (dataStatus == Presence.Busy)
+                                                    return "image://theme/contacts/status_busy_sml";
+                                                else
+                                                    return "image://theme/contacts/status_idle";
+
+                                            }
+                                            anchors {horizontalCenter: favorite.horizontalCenter; bottom: photo.bottom; bottomMargin:2; rightMargin: 2; }
+                                        }
+
+                                        Text {
+                                            id: statusText
+                                            text: {
+                                                if (dataStatus == Presence.Unknown)
+                                                    return qsTr("Idle");
+                                                else if (dataStatus == Presence.Available)
+                                                    return qsTr("Available");
+                                                else if (dataStatus == Presence.Busy)
+                                                    return qsTr("Busy");
+                                                else
+                                                    return ""
+                                            }
+                                            anchors { left: nameFirst.left; bottom: photo.bottom; bottomMargin: 2}
+                                            font.pixelSize: theme.fontPixelSizeSmall
+                                            color: theme.fontColorHighlight
+                                        }
+
+                                        Image{
+                                            id: contactDivider
+                                            source: "image://theme/contacts/contact_divider"
+                                            anchors {right: contactCardPortrait.right; bottom: contactCardPortrait.bottom; left: contactCardPortrait.left; }
+                                        }
+
+                                        MouseArea {
+                                            id: mouseArea
+                                            anchors.fill: contactCardPortrait
+                                            onClicked: {
+                                                contactCardPortrait.clicked()
+                                                console.log("contact clicked"+index)
+                                                cardListView.currentIndex = index
+                                                cardListView.currentItem.state = "selected"
+                                                contactPicker.person = dataContact
+                                                contactsView.highlightX = cardListView.currentItem.height // Assume image fills Card height and is square
+                                                contactsView.highlightWidth = parent.width - contactsView.highlightX
+                                                contactsView.highlightHeight = contactsView.highlightX
+                                            }
+                                        }
+
+                                        states: [
+                                            State {
+                                                name: "selected"; when: contactListView.currentIndex == index;
+                                                PropertyChanges { target: contactCardPortrait; opacity: .7;}
+                                            },
+                                            State{
+                                                name: "unselected"; when: contactListView.currentIndex != index;
+                                                PropertyChanges { target: contactCardPortrait; opacity: 1; }
+                                            }
+                                        ]
+                                    }//contactCardPortrait
+
+                                    section.property: "dataFirst"
+                                    section.criteria: ViewSection.FirstCharacter
+                                    section.delegate: Image {
+                                        id: header
+
+                                        width: parent.width
+                                        height: 30
+
+                                        source: "image://theme/contacts/contact_btmbar_landscape";
+                                        clip: true
+
+                                        Text {
+                                            id: title
+                                            text: section
+                                            anchors { fill: parent; rightMargin: 6; leftMargin: 20; topMargin: 6; bottomMargin: 6; verticalCenter: header.verticalCenter }
+                                            font.pixelSize: theme.fontPixelSixeNormal
+                                            color: theme.fontColorHighlight
+                                        }
+                                    }
 
                                 }
-                                anchors {horizontalCenter: favorite.horizontalCenter; bottom: photo.bottom; bottomMargin:2; rightMargin: 2; }
-                            }
-
-                            Text {
-                                id: statusText
-                                text: {
-                                    if (dataStatus == Presence.Unknown)
-                                        return qsTr("Idle");
-                                    else if (dataStatus == Presence.Available)
-                                        return qsTr("Available");
-                                    else if (dataStatus == Presence.Busy)
-                                        return qsTr("Busy");
-                                    else
-                                        return ""
-                                }
-                                anchors { left: nameFirst.left; bottom: photo.bottom; bottomMargin: 2}
-                                font.pixelSize: theme.fontPixelSizeSmall
-                                color: theme.fontColorHighlight
-                            }
-
-                            Image{
-                                id: contactDivider
-                                source: "image://theme/contacts/contact_divider"
-                                anchors {right: contactCardPortrait.right; bottom: contactCardPortrait.bottom; left: contactCardPortrait.left; }
-                            }
-
-                            MouseArea {
-                                id: mouseArea
-                                anchors.fill: contactCardPortrait
-                                onClicked: {
-                                    contactCardPortrait.clicked()
-                                    console.log("contact clicked"+index)
-                                    cardListView.currentIndex = index
-                                    cardListView.currentItem.state = "selected"
-                                    contactPicker.person = dataContact
-                                    contactsView.highlightX = cardListView.currentItem.height // Assume image fills Card height and is square
-                                    contactsView.highlightWidth = parent.width - contactsView.highlightX
-                                    contactsView.highlightHeight = contactsView.highlightX
-                                }
-                            }
-
-                            states: [
-				State {
-                                  name: "selected"; when: contactListView.currentIndex == index;
-                                  PropertyChanges { target: contactCardPortrait; opacity: .7;}
-                               },
-                               State{
-                                 name: "unselected"; when: contactListView.currentIndex != index;
-                                 PropertyChanges { target: contactCardPortrait; opacity: 1; }
-				}
-			]
-                        }//contactCardPortrait
-
-                        section.property: "dataFirst"
-                        section.criteria: ViewSection.FirstCharacter
-                        section.delegate: Image {
-                            id: header
-
-                            width: parent.width
-                            height: 30
-
-                            source: "image://theme/contacts/contact_btmbar_landscape";
-                            clip: true
-
-                            Text {
-                                id: title
-                                text: section
-                                anchors { fill: parent; rightMargin: 6; leftMargin: 20; topMargin: 6; bottomMargin: 6; verticalCenter: header.verticalCenter }
-                                font.pixelSize: theme.fontPixelSixeNormal
-                                color: theme.fontColorHighlight
-                            }
-                        }
-
-                    }
 
                     Binding{target: loadingText; property: "opacity"; value: 0; when: cardListView.count > 1}
                     Binding{target: loadingText; property: "visible"; value: 1; when: cardListView.count > 1}
 
                 }//portraitGroupedView
-
-
-                Item {
-                    id:buttonBox
-                    width:parent.width
-                    height: 50
-                    Button {
-                        id:okButton
-                        width:buttonBox.width/(2.5)
-                        height:40
-                        bgSourceUp: "image://theme/btn_grey_up"
-                        bgSourceDn: "image://theme/btn_grey_dn"
-                        text: qsTr("OK")
-                        font.pixelSize: theme.fontPixelSizeLarge
-                        textColor: theme.buttonFontColor
-                        anchors.left: parent.left
-                        anchors.leftMargin: 20
-                        enabled: (contactsView.contactListView.currentIndex > -1)
-                        active: enabled
-                        anchors.verticalCenter: parent.verticalCenter
-                        onClicked: {
-                            contactPicker.contactSelected(contactPicker.person)
-                            contactPicker.dataSelected(contactPicker.dataType, contactPicker.dataIndex)
-                            contactPicker.closed();
-                            close();
-                        }
-
-                    }//buttonBox
-
-                    Button {
-                        id:cancelButton
-                        width:buttonBox.width/(2.5)
-                        height:40
-                        bgSourceUp: "image://theme/btn_grey_up"
-                        bgSourceDn: "image://theme/btn_grey_dn"
-                        text: qsTr("Cancel")
-                        font.pixelSize: theme.fontPixelSizeLarge
-                        textColor: theme.buttonFontColor
-                        anchors.right: parent.right
-                        anchors.rightMargin: 20
-                        anchors.verticalCenter: parent.verticalCenter
-                        onClicked: {
-                            contactPicker.cancelled();
-                            close();
-                        }
-                    }//cancelButton
-
-                }//buttonBox
             }//Column
-        } // backgroundRect
-    } // inner
+        }
 }//ContactPicker
 
