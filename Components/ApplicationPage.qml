@@ -8,7 +8,6 @@
 
 import Qt 4.7
 import MeeGo.Components 0.1
-import MeeGo.Labs.Components 0.1 as Labs
 import Qt.labs.gestures 2.0
 
 Item {
@@ -382,21 +381,26 @@ Item {
                         anchors.fill: parent
                         onClicked: {
                             var pos = mapToItem(container, applicationMenuButton.x, applicationMenuButton.y)
-                            filterMenuComponent.mouseX = pos.x + applicationMenuButton.width / 2
-                            filterMenuComponent.mouseY = pos.y + applicationMenuButton.height
-                            filterMenuComponent.visible = true;
+                            filterMenuComponent.setPosition( pos.x + applicationMenuButton.width / 2, pos.y + applicationMenuButton.height )
+                            filterMenuComponent.show()
                         }
                     }
 
-                    Labs.ContextMenu {
+                    ContextMenu {
                         id: filterMenuComponent
-                        model: container.windowModel
-                        payload: container.windowFilterPayload
-                        fingerMode: 2
-                        forceFingerMode: true
-                        onTriggered: {
-                            container.filterTriggered(index, payload)
-                        }
+
+                        forceFingerMode: 2
+
+                        content:  ActionMenu {
+                            id: actionMenu
+
+                            model: container.windowModel
+
+                            onTriggered: {
+                                container.filterTriggered( index, container.windowFilterPayload )
+                                filterMenuComponent.hide()  // hide if desired
+                            }
+                         }
                     }
 
                     states: [
