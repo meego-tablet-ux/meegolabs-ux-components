@@ -3,7 +3,6 @@ AbstractContext 0.1 AbstractContext.qml
 ActionMenu 0.1 ActionMenu.qml
 AppSwitcherDialog 0.1 AppSwitcherDialog.qml
 ApplicationPage 0.1 ApplicationPage.qml
-ClipboardContextMenu 0.1 ClipboardContextMenu.qml
 ContactsPicker 0.1 ContactsPicker.qml
 ContextMenu 0.1 ContextMenu.qml
 Crumb 0.1 Crumb.qml
