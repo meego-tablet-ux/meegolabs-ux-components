@@ -124,6 +124,10 @@ QString LocaleHelper::formatString(int format) const
         //: ddd = day of week, d = day of month (e.g. Mon 31)
         return tr("ddd d");
 
+    case DateMonthDay:
+        //: MMMM = full month, d = day of month (e.g. January 31)
+        return tr("MMMM d");
+
     case DateMonthYear:
         //: MMMM = full month, yyyy = full year (e.g. January 2011)
         return tr("MMMM yyyy");

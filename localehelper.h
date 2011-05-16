@@ -30,6 +30,7 @@ public:
         DateFullNumShort,      // 1/31/11
         DateWeekdayMonthDay,   // Monday, January 31
         DateWeekdayDayShort,   // Mon 31
+        DateMonthDay,          // January 31
         DateMonthYear,         // January 2011
         DateMonthYearShort,    // Jan 2011
         DateDay,               // 31 (no leading zero)
