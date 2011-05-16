@@ -5,7 +5,6 @@ AppSwitcherDialog 0.1 AppSwitcherDialog.qml
 ApplicationPage 0.1 ApplicationPage.qml
 ClipboardContextMenu 0.1 ClipboardContextMenu.qml
 ContactsPicker 0.1 ContactsPicker.qml
-ContextMenu 0.1 ContextMenu.qml
 Crumb 0.1 Crumb.qml
 DialogText 0.1 DialogText.qml
 DropDownList 0.1 DropDownList.qml
