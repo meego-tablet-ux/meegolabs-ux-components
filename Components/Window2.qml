@@ -52,7 +52,25 @@ Item {
         }
     }
 
+    Text {
+        id: warning
+        text: "meegolabs Window is<br><b>DEPRECATED</b>"
+        textFormat: Text.RichText
+        font.pixelSize: scene.height/20
+        color: "red"
+        anchors.fill: parent
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        z: 100
+
+        Component.onCompleted:{fading.running = true}
+        visible: opacity > 0
+
+        NumberAnimation { id: fading;  target: warning; property: "opacity"; to: 0; duration: 3000 }
+    }
+
     Component.onCompleted: {
+        console.log("WARNING: You are still using the meegolabs Window! This is deprecated and will be removed soon! Migrate to the meego-ux-components Window!")
         try {
             mainWindow.actualOrientation = orientation;
             qApp.appPageLoaded();

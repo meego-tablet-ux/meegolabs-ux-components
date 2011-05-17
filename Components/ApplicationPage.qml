@@ -43,11 +43,11 @@ Item {
     property int type: 2
 
     property alias menuContent: applicationFilterMenu.content
-    property alias menuItem: applicationFilterMenu.contentItem
-    property alias menuWidth: applicationFilterMenu.contentWidth
-    property alias menuHeight: applicationFilterMenu.contentHeight
+    property alias menuItem: applicationFilterMenu.content
+    property alias menuWidth: applicationFilterMenu.width
+    property alias menuHeight: applicationFilterMenu.height
 
-    function closeMenu() { applicationFilterMenu.visible = false; }
+    function closeMenu() { applicationFilterMenu.hide() }
 
     signal close();
     signal filterTriggered(int index, variant payload)
@@ -446,17 +446,21 @@ Item {
                         anchors.fill: parent
                         onClicked: {
                             var pos = mapToItem(container, 0, 0)
-                            applicationFilterMenu.mouseX = pos.x + windowMenuButton.width / 2
-                            applicationFilterMenu.mouseY = pos.y + windowMenuButton.height
-                            applicationFilterMenu.visible = true;
+                            var mouseX = pos.x + windowMenuButton.width / 2
+                            var mouseY = pos.y + windowMenuButton.height
+
+                            applicationFilterMenu.setPosition( mouseX, mouseY )
+                            applicationFilterMenu.show()
                         }
                     }
 
-                    AbstractContext {
+                    ContextMenu {
                         id: applicationFilterMenu
-                        content: menuContent
-                        fingerMode: 2
-                        forceFingerMode: true
+
+                        // if you can read this, you should immediately migrate to
+                        // meego-ux-components Window/AppPage!
+                        title: "Migrate me!"
+                        forceFingerMode: 2
 
                         Component.onCompleted: {
                             windowMenuButton.visible = applicationFilterMenu.content != null
