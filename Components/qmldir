@@ -1,5 +1,4 @@
 plugin Components
-AbstractContext 0.1 AbstractContext.qml
 ActionMenu 0.1 ActionMenu.qml
 AppSwitcherDialog 0.1 AppSwitcherDialog.qml
 ApplicationPage 0.1 ApplicationPage.qml
@@ -7,7 +6,6 @@ ContactsPicker 0.1 ContactsPicker.qml
 Crumb 0.1 Crumb.qml
 DialogText 0.1 DialogText.qml
 LauncherIcon 0.1 LauncherIcon.qml
-ModalSurface 0.1 ModalSurface.qml
 RunningAppIcon 0.1 RunningAppIcon.qml
 StatusBar 0.1 StatusBar.qml
 TabIcon 0.1 TabIcon.qml
