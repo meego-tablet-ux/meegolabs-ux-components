@@ -26,10 +26,9 @@
 #define MUSIC   "/usr/share/meego-ux-appgrid/applications/meego-app-music.desktop"
 #define VIDEO   "/usr/share/meego-ux-appgrid/applications/meego-app-video.desktop"
 
-#define LIMIT 6
-
 FavoriteApplicationsModel::FavoriteApplicationsModel(QObject *parent) :
-        QAbstractListModel(parent)
+        QAbstractListModel(parent),
+        m_limit(6)
 {
 
     QHash<int, QByteArray> roles;
@@ -73,13 +72,16 @@ void FavoriteApplicationsModel::oobeInit()
 int FavoriteApplicationsModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return qMin( m_favorites.count(), LIMIT );
+    if (m_limit == 0)
+        return m_favorites.count();
+    else
+        return qMin( m_favorites.count(), m_limit );
 }
 
 QVariant FavoriteApplicationsModel::data(const QModelIndex &index, int role) const
 {
 
-    if (!index.isValid() || index.row() > LIMIT)
+    if (!index.isValid() || index.row() > m_favorites.count())
         return QVariant();
 
     if (role == Desktop::Type)
@@ -152,6 +154,21 @@ void FavoriteApplicationsModel::writeSettings()
     connect(m_SettingFileWatcher,SIGNAL(fileChanged(QString)),this,SLOT(readSettings()));
 }
 
+void FavoriteApplicationsModel::setLimit(int limit) {
+    m_limit = limit;
+}
+int FavoriteApplicationsModel::getLimit() {
+    return m_limit;
+}
+void FavoriteApplicationsModel::setFilter(QStringList filter)
+{
+    m_filter = filter;
+    readSettings();
+}
+QStringList FavoriteApplicationsModel::getFilter()
+{
+    return m_filter;
+}
 void FavoriteApplicationsModel ::readSettings()
 {
     if (!m_readSettings)
@@ -169,7 +186,9 @@ void FavoriteApplicationsModel ::readSettings()
 
     for (QStringList::const_iterator i = m_desktopFiles.begin(); i != m_desktopFiles.end(); i++)
     {
-        m_favorites << new Desktop(*i);
+        if (!m_filter.contains(*i)) {
+            m_favorites << new Desktop(*i);
+        }
     }
 
     delayedReset();

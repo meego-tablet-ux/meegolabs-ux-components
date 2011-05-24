@@ -24,6 +24,8 @@
 class FavoriteApplicationsModel : public QAbstractListModel
 {
     Q_OBJECT
+    Q_PROPERTY(int limit READ getLimit WRITE setLimit)
+    Q_PROPERTY(QStringList filter READ getFilter WRITE setFilter)
 
 public:
     explicit FavoriteApplicationsModel(QObject *parent = 0);
@@ -31,6 +33,12 @@ public:
     virtual QVariant data(const QModelIndex &index, int role) const;
 
     Q_INVOKABLE void append(QString filename);
+
+    void setLimit(int limit);
+    int getLimit();
+
+    void setFilter(QStringList filter);
+    QStringList getFilter();
 
 private slots:
     void readSettings();
@@ -48,6 +56,8 @@ private:
     QHash<QString,QVariant> m_popularityRating;
     QFileSystemWatcher *m_SettingFileWatcher;
     QSettings*  m_readSettings;
+    int m_limit;
+    QStringList m_filter;
 };
 
 #endif // RECENTAPPLICATIONSMODEL_H
