@@ -160,14 +160,14 @@ void FavoriteApplicationsModel::setLimit(int limit) {
 int FavoriteApplicationsModel::getLimit() {
     return m_limit;
 }
-void FavoriteApplicationsModel::setFilter(QStringList filter)
+void FavoriteApplicationsModel::setFilterOut(QStringList filterOut)
 {
-    m_filter = filter;
+    m_filterOut = filterOut;
     readSettings();
 }
-QStringList FavoriteApplicationsModel::getFilter()
+QStringList FavoriteApplicationsModel::getFilterOut()
 {
-    return m_filter;
+    return m_filterOut;
 }
 void FavoriteApplicationsModel ::readSettings()
 {
@@ -186,7 +186,7 @@ void FavoriteApplicationsModel ::readSettings()
 
     for (QStringList::const_iterator i = m_desktopFiles.begin(); i != m_desktopFiles.end(); i++)
     {
-        if (!m_filter.contains(*i)) {
+        if (!m_filterOut.contains(*i)) {
             m_favorites << new Desktop(*i);
         }
     }
