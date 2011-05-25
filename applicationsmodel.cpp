@@ -44,84 +44,8 @@ ApplicationsModel::ApplicationsModel(QObject *parent) :
 
 void ApplicationsModel::appsDirChanged(QString changedDir)
 {
-    QList<Desktop *> added;
-    QList<Desktop *> removed;
-    QDir dir (changedDir);
-    dir.setFilter(QDir::Files | QDir::NoSymLinks);
-
-    foreach (QFileInfo info, dir.entryInfoList())
-    {
-        bool found = false;
-        foreach (Desktop *d, m_apps)
-        {
-            if (info.absoluteFilePath().endsWith(d->filename().right(d->filename().lastIndexOf('/'))))
-            {
-                found = true;
-                break;
-            }
-        }
-        if (!found)
-        {
-            Desktop *desktopEntry = new Desktop(info.absoluteFilePath());
-            if (!desktopEntry->isValid() || (desktopEntry->type() != m_type))
-            {
-                delete desktopEntry;
-            }
-            else
-            {
-                added << desktopEntry;
-            }
-        }
-    }
-
-    foreach (Desktop *d, m_apps)
-    {
-        if (!d->filename().contains(changedDir))
-            continue;
-
-        bool found = false;
-        foreach (QFileInfo info, dir.entryInfoList())
-        {
-            if (d->filename() == info.absoluteFilePath())
-            {
-                found = true;
-                break;
-            }
-        }
-        if (!found)
-        {
-            removed << d;
-        }
-    }
-
-    if (removed.length() > 0)
-    {
-        QList<Desktop *> tmp;
-        while (!m_apps.isEmpty())
-        {
-            Desktop *d = m_apps.takeLast();
-            if (removed.contains(d))
-            {
-                delete d;
-            }
-            else
-            {
-                tmp << d;
-            }
-        }
-
-        m_apps = tmp;
-    }
-
-    if (added.length() > 0)
-    {
-        foreach (Desktop *d, added)
-        {
-            m_apps << d;
-        }
-    }
-
-    emit appsChanged();
+  resetApps();
+  emit appsChanged();
 }
 
 void ApplicationsModel::setDirectories(QStringList directories)
