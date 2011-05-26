@@ -131,7 +131,7 @@ GestureArea {
 
   property bool enabled: true
   property bool hoverEnabled: false
-  property bool pressed: false
+  property bool isPressed: false
 
   property int mouseX: 0
   property int mouseY: 0
@@ -148,34 +148,34 @@ GestureArea {
   function setPressed( x, y ) {     
       mouseX = x
       mouseY = y
-      pressed = true
+      isPressed = true
       pressed( x, y, false )
   }
 
   function setClicked( x, y ) {     
       mouseX = x
       mouseY = y
-      pressed = true
+      isPressed = true
       clicked( x, y, false  )
   }
   function setDoubleClicked( x, y ) {
       mouseX = x
       mouseY = y
-      pressed = true
+      isPressed = true
       doubleClicked( x, y, false  )
   }
 
   function setClickAndHold( x, y ) {     
       mouseX = x
       mouseY = y
-      pressed = true      
+      isPressed = true      
       pressAndHold(  x, y, true  )
   }
 
   function setReleased( x, y ) {
       mouseX = x
       mouseY = y
-      pressed = false      
+      isPressed = false      
       released(  x, y, false  )
   }
 
@@ -190,7 +190,7 @@ GestureArea {
   function setExit( x, y ) {
       mouseX = x
       mouseY = y
-      pressed = false
+      isPressed = false
       if( hoverEnabled ) {
 	  exited(  x, y, false  )
       }
