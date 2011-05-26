@@ -19,12 +19,12 @@ import MeeGo.Components 0.1
  * - qdeclarativecontact of selected contact
  *
  * dataSelected(string type, int dataIndex) //not implemented yet
- * - type {"Phone", "Email", "IM"} and index of data,
+ * - type {"Phone", "Email", "IM"} and index of data, 
  * - usage: if(type == "Phone") contact.phones[dataIndex];
  *
  * parameters:
  * promptString - Title of Picker Dialog
- * filterFlags - int, union of data types to filter by {Name=0, Phone, Email, IM}
+ * filterType - data types to filter by {All, Phone, Email, IM}
  * 
  * functions: 
  *  show() - shows the contact picker with the current list of contacts displayed
@@ -35,26 +35,23 @@ ModalDialog {
     id: contactPicker
 
     property string promptString: qsTr("Pick a contact:")
-    property int filterFlags: 0 //not implemented yet
+    property string filterType: "All"
 
-    property string dataType: "" //not implemented yet
     property int dataIndex: 0 //not implemented yet
     property variant person: null
+    property string noContact;
 
     title: promptString
 
     signal closed
     signal opened
     signal contactSelected(variant contact)
-    signal dataSelected(string type, int dataIndex)
+    signal dataSelected(string type, int dataIndex) //not implemented
     signal cancelled
-
-    width: 300
-    height: 450
 
     onAccepted:{
         contactPicker.contactSelected(contactPicker.person)
-        contactPicker.dataSelected(contactPicker.dataType, contactPicker.dataIndex)
+        contactPicker.dataSelected(contactPicker.filterType, contactPicker.dataIndex)
         contactPicker.closed();
     }
 
@@ -69,8 +66,33 @@ ModalDialog {
 
             property int highlightHeight: 0
             property int highlightWidth: 0
-            property int highlightX: 0
             property alias contactListView: cardListView
+
+            function getDataModel(dType, cModel){
+                if( dType == "Email"){
+                    noContact = qsTr("You have no contacts with an email address");
+                    return cModel.emails;
+                }else if (dType == "Phone"){
+                    noContact = qsTr("You have no contacts with a phone number");
+                    return cModel.phoneNumbers;
+                }else if (dType == "IM") {
+                    noContact = qsTr("You have no contacts with an instant messaging account");
+                    return cModel.onlineAccounts;
+                }
+                noContact = qsTr("You have no contacts");
+                return null;
+            }
+
+            function getDataValue(dType, dModel, i){
+                if( dType == "Email"){
+                    return dModel[i].emailAddress;
+                }else if (dType == "Phone"){
+                    return dModel[i].subTypes[0] + ": "+ dModel[i].number;
+                }else if (dType == "IM") {
+                    return dModel[i].accountUri;
+                }
+                return "";
+            }
 
             Component {
                 id: cardHighlight
@@ -78,8 +100,8 @@ ModalDialog {
                     opacity: .5
                     color: "lightgrey"
                     y: cardListView.currentItem.y
-                    width: contactsView.highlightWidth; height: contactsView.highlightHeight
-                    x: contactsView.highlightX
+                    width: contactsView.highlightWidth;
+                    height: contactsView.highlightHeight
                     z: 2
                     Behavior on y { SmoothedAnimation { velocity: 5000 } }
                 }
@@ -95,26 +117,28 @@ ModalDialog {
    		height: parent.height
                 width: parent.width
 
-		Item {
-                    id:loadingText
-                    height:30
+                Item {
+                    id:noContactText
+                    height:contactsView.height
                     width:contactsView.width
                     Text {
-                        id: promptText
-                        text: qsTr("Loading...")
+                        id: noContactPrompt
+                        text: noContact
                         color:theme.fontColorHighlight
+                        height:contactsView.height
+                        width:contactsView.width
                         font.pixelSize: theme.fontPixelSizeLarge
-                        anchors.horizontalCenter: parent.horixontalCenter
+                        anchors.centerIn: contactsView.Center
                         visible: true
-			opacity: 1
-                    } // prompt text
-                }//loadingText
+                        opacity: 1
+                        wrapMode: Text.WordWrap
+                    }
+                }
 
                 Item {
                     id: groupedViewPortrait
                     width: parent.width
-//		    height: parent.height-titleBox.height-buttonBox.height-10-loadingText.height
-                    height: parent.height-10-loadingText.height
+                    height: parent.height
 
                     ListView {
                         id: cardListView
@@ -126,6 +150,8 @@ ModalDialog {
                         keyNavigationWraps: false
                         clip: true
                         opacity: 1
+
+                        property int counter  :  0
 
                         Component.onCompleted: {
                             positionViewAtIndex(-1, ListView.Beginning);
@@ -156,9 +182,15 @@ ModalDialog {
                                     delegate:  Image {
                                         id: contactCardPortrait
 
-                                        height: 50
+                                        property variant dList : (filterType == "All" ? [""] : contactsView.getDataModel(contactPicker.filterType, model.contact))
+                                        function getIfCardVisible(cardValid){
+                                            if(cardValid)
+                                                cardListView.counter++;
+                                        }
+
+                                        height: (filterType == "All" ? 50 : (dList.length > 0 ? childrenRect.height : 0))
                                         width: parent.width
-                                        opacity: 1
+                                        visible: (filterType == "All" ? true : (dList.length > 0 ? true: false))
 
                                         property variant dataContact: model.contact
                                         property string dataUuid: model.contact.guid.guid
@@ -184,20 +216,29 @@ ModalDialog {
                                         }
 
                                         Text{
-                                            id: nameFirst
+                                            id: row1
                                             height: 20
-                                            text: dataFirst
+                                            text:  dataFirst+" "+dataLast
                                             anchors { left: photo.right; top: photo.top; topMargin: 2; leftMargin: 2;}
                                             font.pixelSize: theme.fontPixelSizeNormal
                                             color: theme.fontColorNormal
                                         }
 
-                                        Text {
-                                            id: nameLast
-                                            text: dataLast
-                                            anchors { left: nameFirst.right; top: nameFirst.top; leftMargin: 2;}
-                                            font.pixelSize: theme.fontPixelSizeNormal
-                                            color: theme.fontColorNormal
+                                        Column{
+                                            id: dataCol
+                                            anchors { left: row1.left; top: row1.bottom; topMargin: 2;}
+                                            height: (filterType == "All" ? 0 : childrenRect.height)
+                                            spacing: 2
+                                            visible: (filterType == "All" ? false : true)
+                                            Repeater{
+                                                id: rep
+                                                model: dList
+                                                delegate: Text {
+                                                    text: contactsView.getDataValue(contactPicker.filterType, dList, index)
+                                                    font.pixelSize: theme.fontPixelSizeNormal
+                                                    color: theme.fontColorNormal
+                                                }
+                                            }
                                         }
 
                                         Image {
@@ -206,7 +247,7 @@ ModalDialog {
                                             height: 10
                                             width: 10
                                             opacity: (dataFavorite == "Favorite" ? 1 : .2 )
-                                            anchors {right: contactCardPortrait.right; top: nameFirst.top; rightMargin: 2;}
+                                            anchors {right: contactCardPortrait.right; top: row1.top; rightMargin: 2;}
                                         }
 
                                         Image {
@@ -224,7 +265,7 @@ ModalDialog {
                                                     return "image://theme/contacts/status_idle";
 
                                             }
-                                            anchors {horizontalCenter: favorite.horizontalCenter; bottom: photo.bottom; bottomMargin:2; rightMargin: 2; }
+                                            anchors {horizontalCenter: favorite.horizontalCenter; top: dataCol.bottom; topMargin:2; rightMargin: 2; }
                                         }
 
                                         Text {
@@ -239,7 +280,7 @@ ModalDialog {
                                                 else
                                                     return ""
                                             }
-                                            anchors { left: nameFirst.left; bottom: photo.bottom; bottomMargin: 2}
+                                            anchors { left: row1.left; top: dataCol.bottom; topMargin: 2}
                                             font.pixelSize: theme.fontPixelSizeSmall
                                             color: theme.fontColorHighlight
                                         }
@@ -255,26 +296,18 @@ ModalDialog {
                                             anchors.fill: contactCardPortrait
                                             onClicked: {
                                                 contactCardPortrait.clicked()
-                                                console.log("contact clicked"+index)
                                                 cardListView.currentIndex = index
-                                                cardListView.currentItem.state = "selected"
                                                 contactPicker.person = dataContact
-                                                contactsView.highlightX = cardListView.currentItem.height // Assume image fills Card height and is square
-                                                contactsView.highlightWidth = parent.width - contactsView.highlightX
-                                                contactsView.highlightHeight = contactsView.highlightX
+                                                contactsView.highlightWidth = cardListView.currentItem.width
+                                                contactsView.highlightHeight = cardListView.currentItem.height
                                             }
                                         }
 
-                                        states: [
-                                            State {
-                                                name: "selected"; when: contactListView.currentIndex == index;
-                                                PropertyChanges { target: contactCardPortrait; opacity: .7;}
-                                            },
-                                            State{
-                                                name: "unselected"; when: contactListView.currentIndex != index;
-                                                PropertyChanges { target: contactCardPortrait; opacity: 1; }
-                                            }
-                                        ]
+                                        Component.onCompleted: {
+                                            if(filterType == "All" ? true : (dList.length > 0 ? true: false))
+                                                cardListView.counter++;
+                                        }
+
                                     }//contactCardPortrait
 
                                     section.property: "dataFirst"
@@ -297,10 +330,9 @@ ModalDialog {
                                         }
                                     }
 
-                                }
-
-                    Binding{target: loadingText; property: "opacity"; value: 0; when: cardListView.count > 1}
-                    Binding{target: loadingText; property: "visible"; value: 1; when: cardListView.count > 1}
+                                    Binding{target: noContactText; property: "visible"; value: false; when: cardListView.counter > 0}
+                                    Binding{target: noContactText; property: "opacity"; value: 0; when: cardListView.counter > 0}
+                    }
 
                 }//portraitGroupedView
             }//Column
