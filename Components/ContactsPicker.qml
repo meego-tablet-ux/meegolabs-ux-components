@@ -49,9 +49,6 @@ ModalDialog {
     signal dataSelected(string type, int dataIndex)
     signal cancelled
 
-    width: 300
-    height: 450
-
     onAccepted:{
         contactPicker.contactSelected(contactPicker.person)
         contactPicker.dataSelected(contactPicker.dataType, contactPicker.dataIndex)
@@ -63,6 +60,9 @@ ModalDialog {
     }
 
     Theme{ id:theme }
+
+    sizeHintWidth: 300
+    sizeHintHeight: 450
 
     content: Item {
             id:contactsView
