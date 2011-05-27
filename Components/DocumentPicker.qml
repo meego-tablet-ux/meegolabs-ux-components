@@ -10,58 +10,37 @@
   \qmlclass DocumentPicker
   \title DocumentPicker
   \section1 DocumentPicker
-  The DocumentPicker provides a modal dialog in which the user can choose an
-  album or video. The 'Ok' button is disabled until a selection was made.
+  The DocumentPicker provides a modal dialog in which the user can choose a
+  document. The 'Ok' button is disabled until a selection was made.
   On 'Ok'-clicked, depending on the selection mode, the fitting signal is
   emitted which provides the selected item's data. Multi selection of items
   is possible by setting set multiSelection to true.
 
   \section2 API Properties
 
-  \qmlproperty bool albumSelectionMode
-  \qmlcm if true, selects albums instead of videos. DEPRECATED
-
   \section2 Signals
 
-  \qmlsignal videoSelected
-  \qmlcm propagates data of the selected video. Triggered on accepted if albumSelectionMode is false
-         and multiSelection is false
+  \qmlsignal documentSelected
+  \qmlcm propagates data of the selected document. Triggered on accepted if multiSelection is false
     \param string itemid
-    \qmlpcm  ID of the selected video. \endparam
+    \qmlpcm  ID of the selected document. \endparam
     \param string uri
-    \qmlpcm  path to the selected video. \endparam
+    \qmlpcm  path to the selected document. \endparam
     \param string itemtitle
-    \qmlpcm  title of the selected video. \endparam
+    \qmlpcm  title of the selected document. \endparam
     \param string thumbUri
     \qmlpcm  path to the thumbnail. \endparam
 
-  \qmlsignal multipleVideosSelected
-  \qmlcm propagates data of the selected videos. Triggered on accepted if albumSelectionMode is false
-         and multiSelection is true
+  \qmlsignal multipleDocumentsSelected
+  \qmlcm propagates data of the selected documents. Triggered on accepted if multiSelection is true
     \param string itemids
-    \qmlpcm  ID of the selected videos. \endparam
+    \qmlpcm  ID of the selected documents. \endparam
     \param string uris
-    \qmlpcm  path to the selected videos. \endparam
+    \qmlpcm  path to the selected documents. \endparam
     \param string itemtitles
-    \qmlpcm  title of the selected videos. \endparam
+    \qmlpcm  title of the selected documents. \endparam
     \param string thumbUris
     \qmlpcm  path to the thumbnails. \endparam
-
-  \qmlsignal albumSelected
-  \qmlcm propagates data of the selected album. Triggered on accpeted if albumSelectionMode is true
-         and multiSelection is false.  DEPRECATED
-    \param string albumid
-    \qmlpcm ID of the selected photo album. \endparam
-    \param string title
-    \qmlpcm title of the selected photo album. \endparam
-
-  \qmlsignal multipleAlbumsSelected
-  \qmlcm propagates data of the selected albums. Triggered on accpeted if albumSelectionMode is true
-         and multiSelection is true.  DEPRECATED
-    \param string albumids
-    \qmlpcm ID of the selected photo albums. \endparam
-    \param string titles
-    \qmlpcm title of the selected photo albums. \endparam
 
   \qmlsignal accepted
   \qmlcm emitted on 'OK' clicked.
@@ -82,7 +61,7 @@
         DocumentPicker {
             id: pickerExample
 
-            onVideoSelected: {
+            onDocumentSelected: {
                 // itemid, itemtitle and uri are available, picker dialog hidden
             }
 
@@ -98,8 +77,8 @@
   \endcode
 */
 import Qt 4.7
-import MeeGo.Media 0.1 as Models
 import MeeGo.Components 0.1
+import MeeGo.Media 0.1
 import MeeGo.Labs.Components 0.1
 import "../../Ux/Components/Media/pickerArray.js" as PickerArray
 
@@ -166,7 +145,7 @@ ModalDialog {
 
     title: qsTr("Pick a document")
 
-    content: MucMediaGridView {
+    content: MediaGridView {
         id: gridView
 
         // the MucMediaGridView needs a width to be centered correctly inside its parent. To achieve this the estimateColumnCount computes
@@ -226,12 +205,12 @@ ModalDialog {
     TopItem{ id: topItem }
     Theme { id: theme }
 
-    Models.DocumentListModel {
+    DocumentListModel {
         id: allDocumentsListModel
 
-        type: Models.DocumentListModel.ListofDocuments
+        type: DocumentListModel.ListofDocuments
         limit: 0
-        sort: Models.DocumentListModel.SortByTitle
+        sort: DocumentListModel.SortByTitle
     }
 }
 
