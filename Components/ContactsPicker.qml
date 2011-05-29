@@ -61,6 +61,9 @@ ModalDialog {
 
     Theme{ id:theme }
 
+    sizeHintWidth: 300
+    sizeHintHeight: 450
+
     content: Item {
             id:contactsView
 
