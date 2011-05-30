@@ -1,6 +1,5 @@
 import Qt 4.7
-import MeeGo.Ux.Gestures 0.1
-
+import MeeGo.Ux.Gestures 0.1 as gesture
 /*!
    \qmlclass mouseArea
    \title mouseArea
@@ -233,7 +232,7 @@ Item {
         GestureMouseEvent {}
     }
 
-    GestureArea {
+    gesture.GestureArea {
         id: gestureMouseArea
         anchors.fill: parent
 
