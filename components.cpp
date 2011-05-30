@@ -29,6 +29,7 @@
 #include "qmldebugtools.h"
 #include "paintspy.h"
 #include "recentapplicationsmodel.h"
+#include "relativetimestamp.h"
 #include "roundeditem.h"
 #include "speechbubbledialog.h"
 #include "stricturl.h"
@@ -55,6 +56,7 @@ void components::registerTypes(const char *uri)
     qmlRegisterType<TimezoneListModel>(uri, 0, 0, "TimezoneListModel");
     qmlRegisterType<RecentApplicationsModel>(uri,0,1, "RecentApplicationsModel");
 
+  
     qmlRegisterType<FavoriteApplicationsModel>(uri,0,1, "FavoriteApplicationsModel");
     qmlRegisterType<ApplicationsModel>(uri, 0, 1, "ApplicationsModel");
     qmlRegisterType<WindowModel>(uri, 0, 1, "WindowModel");
@@ -71,6 +73,8 @@ void components::registerTypes(const char *uri)
     qmlRegisterType<ValueSpacePublisher>(uri, 0,0, "ValueSpacePublisher");
     qmlRegisterType<ValueSpaceSubscriber>(uri, 0,0,"ValueSpaceSubscriber");
 
+    qmlRegisterType<RelativeTimeStamp>(uri, 0,1, "RelativeTimeStamp");
+        
     qmlRegisterType<GestureArea>(uri, 0,0, "GestureArea");
 
     qmlRegisterType<speechbubbledialog>(uri, 0, 1, "RectangularBubble");

@@ -59,7 +59,9 @@ SOURCES += \
     systemiconprovider.cpp \
     themedimageprovider.cpp \
     meegothemedimageprovider.cpp \
+    relativetimestamp.cpp \
     timezonelistmodel.cpp\
+    timestampupdater.cpp \
     translator.cpp \
     udisk_interface.cpp \
     valuespacepublisher.cpp \
@@ -108,7 +110,9 @@ HEADERS += \
     speechbubbledialog.h \
     stricturl.h \
     systemiconprovider.h \
+    relativetimestamp.h \
     timezonelistmodel.h \
+    timestampupdater.h \
     translator.h \
     udisk_interface.h \
     valuespacepublisher.h \
@@ -125,7 +129,7 @@ qmldir.path += $$[QT_INSTALL_IMPORTS]/MeeGo/Labs/
 INSTALLS += qmldir
 
 TRANSLATIONS += $${SOURCES} $${HEADERS} $${QML_SOURCES}
-VERSION = 0.2.7.7
+VERSION = 0.2.7.8
 PROJECT_NAME = meegolabs-ux-components
 
 dist.commands += rm -fR $${PROJECT_NAME}-$${VERSION} &&
