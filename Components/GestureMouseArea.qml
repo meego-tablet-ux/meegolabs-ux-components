@@ -1,5 +1,5 @@
 import Qt 4.7
-import MeeGo.Ux.Gestures 0.1 as gesture
+import MeeGo.Ux.Gestures 0.1 as Gesture
 /*!
    \qmlclass mouseArea
    \title mouseArea
@@ -232,11 +232,12 @@ Item {
         GestureMouseEvent {}
     }
 
-    gesture.GestureArea {
+    Gesture.GestureArea {
         id: gestureMouseArea
         anchors.fill: parent
+        blockMouseEvents: true
 
-        Tap {
+        Gesture.Tap {
             when: mouseArea.enabled
             onStarted: {
                 mouseArea.setEnter( gesture.position.x, gesture.position.y )
@@ -252,7 +253,7 @@ Item {
             }
         }
 
-        TapAndHold {
+        Gesture.TapAndHold {
             when: mouseArea.enabled
             onStarted: {
                 mouseArea.setEnter( gesture.position.x, gesture.position.y )
@@ -269,7 +270,7 @@ Item {
             }
         }
 
-        Pan {
+        Gesture.Pan {
             when: mouseArea.enabled
             onStarted: {
                 //mouseArea.setEnter( gesture.position.x, gesture.position.y )
@@ -285,7 +286,7 @@ Item {
             }
         }
 
-        Pinch {
+        Gesture.Pinch {
             when: mouseArea.enabled
             onStarted: {
                //mouseArea.setEnter( gesture.position.x, gesture.position.y )
@@ -298,7 +299,7 @@ Item {
             }
         }
 
-        Swipe {
+        Gesture.Swipe {
             when: mouseArea.enabled
             onStarted: {
                 mouseArea.setEnter()
