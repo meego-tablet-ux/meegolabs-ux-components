@@ -235,8 +235,7 @@ Item {
     Gesture.GestureArea {
         id: gestureMouseArea
         anchors.fill: parent
-        blockMouseEvents: true
-
+        
         Gesture.Tap {
             when: mouseArea.enabled
             onStarted: {
@@ -273,16 +272,16 @@ Item {
         Gesture.Pan {
             when: mouseArea.enabled
             onStarted: {
-                //mouseArea.setEnter( gesture.position.x, gesture.position.y )
+                mouseArea.setEnter( gesture.position.x, gesture.position.y )
             }
             onUpdated: {
-                //mouseArea.setPositionChanged( gesture.position.x, gesture.position.y )
+                mouseArea.setPositionChanged( gesture.position.x, gesture.position.y )
             }
             onCanceled: {
-                //mouseArea.setExit( gesture.position.x, gesture.position.y )
+                mouseArea.setExit( gesture.position.x, gesture.position.y )
             }
             onFinished: {
-                //mouseArea.setExit( gesture.position.x, gesture.position.y )
+                mouseArea.setExit( gesture.position.x, gesture.position.y )
             }
         }
 
