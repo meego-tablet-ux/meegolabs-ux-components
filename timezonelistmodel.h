@@ -38,6 +38,20 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    Q_INVOKABLE QVariant getData(int index, int role) const;
+
+    enum TimeZoneVars {
+        ETitle = 1,
+        ECity,
+        EGMTOffset,
+        ELatitude,
+        ELongitude,
+        ECountryCode,
+        EIndex,
+        ERegion
+    };
+
+    Q_ENUMS(TimeZoneVars);
 
     QStringList regions();
 

@@ -130,6 +130,35 @@ QVariant TimezoneListModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+QVariant TimezoneListModel::getData(int index, int role) const {
+
+    if (role == ETitle)
+        return itemsDisplay[index]->name();
+
+    if (role == ECity)
+        return getCity(itemsDisplay[index]->name());
+
+    if (role == EGMTOffset)
+        return itemsDisplay[index]->currentOffset(Qt::UTC)/3600;
+
+    if (role == ELatitude)
+        return itemsDisplay[index]->latitude();
+
+    if (role == ELongitude)
+        return itemsDisplay[index]->longitude();
+
+    if (role == ECountryCode)
+        return itemsDisplay[index]->countryCode();
+
+    if (role == EIndex)
+        return index;
+
+    if (role == ERegion)
+        return itemsDisplay[index]->name().split("/").at(0);
+
+    return QVariant();
+}
+
 int TimezoneListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
