@@ -159,6 +159,8 @@ ModalDialog {
         defaultThumbnail: "image://themedimage/images/media/document_thumb_med"
 
         model: allDocumentsListModel
+        type: documenttype
+        selectionMode: true
 
         anchors.top: parent.top
         anchors.bottom: parent.bottom
