@@ -272,29 +272,29 @@ Item {
         Gesture.Pan {
             when: mouseArea.enabled
             onStarted: {
-                mouseArea.setEnter( gesture.position.x, gesture.position.y )
+                mouseArea.setEnter( mouseArea.mouseX + gesture.delta.x, mouseArea.mouseY + gesture.delta.y )
             }
             onUpdated: {
-                mouseArea.setPositionChanged( gesture.position.x, gesture.position.y )
+                mouseArea.setPositionChanged(  mouseArea.mouseX + gesture.delta.x, mouseArea.mouseY + gesture.delta.y )
             }
             onCanceled: {
-                mouseArea.setExit( gesture.position.x, gesture.position.y )
+                mouseArea.setExit(  mouseArea.mouseX + gesture.delta.x, mouseArea.mouseY + gesture.delta.y  )
             }
             onFinished: {
-                mouseArea.setExit( gesture.position.x, gesture.position.y )
+                mouseArea.setExit(  mouseArea.mouseX + gesture.delta.x, mouseArea.mouseY + gesture.delta.y  )
             }
         }
 
         Gesture.Pinch {
             when: mouseArea.enabled
             onStarted: {
-               //mouseArea.setEnter( gesture.position.x, gesture.position.y )
+               //nop
             }
             onCanceled: {
-               // mouseArea.setExit( gesture.position.x, gesture.position.y )
+               //nop
             }
             onFinished: {
-               // mouseArea.setExit( gesture.position.x, gesture.position.y )
+               //nop
             }
         }
 
