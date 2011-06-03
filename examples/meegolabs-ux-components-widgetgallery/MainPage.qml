@@ -80,7 +80,7 @@ AppPage {
             width:  parent.buttonWidth; height: parent.buttonHeight
             anchors { margins: parent.buttonMargins; horizontalCenter: parent.horizontalCenter }
             text: qsTr("media")
-            enabled: false
+            enabled: true
 
             onClicked: {
                 mainPage.state = "media"
