@@ -29,6 +29,7 @@ MOC_DIR = .moc
 # Input
 SOURCES += \
     applicationsmodel.cpp \
+    appupappsmodel.cpp \
     backgroundmodel.cpp \
     batteryindicator.cpp \
     bluetoothindicator.cpp \
@@ -81,6 +82,7 @@ OTHER_FILES += \
 
 HEADERS += \
     applicationsmodel.h \
+    appupappsmodel.h \
     backgroundmodel.h \
     batteryindicator.h \
     bluetoothindicator.h \
