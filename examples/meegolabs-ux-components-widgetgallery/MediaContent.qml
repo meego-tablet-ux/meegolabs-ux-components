@@ -49,6 +49,9 @@ Item {
             else if( type == "message" ){
                 addPage( messageBoxPage )
             }
+            else if( type == "document" ){
+                addPage( documentPickerPage )
+            }
         }
 
         Flickable {
@@ -76,96 +79,102 @@ Item {
 
                 spacing: 2
 
-//                Repeater {
-//                    id: pickerRepeater
+                Repeater {
+                    id: pickerRepeater
 
-//                    width: parent.width
-//                    model:  buttonModel
+                    width: parent.width
+                    model:  buttonModel
 
-//                    Rectangle {
-//                        id: buttonItem
+                    Rectangle {
+                        id: buttonItem
 
-//                        width: parent.width
-//                        height:  flickContainer.itemHeight
+                        width: parent.width
+                        height:  flickContainer.itemHeight
 
-//                        anchors.left: parent.left
+                        anchors.left: parent.left
 
-//                        anchors.right: parent.right
+                        anchors.right: parent.right
 
-//                        border.width: 1
-//                        border.color: "grey"
+                        border.width: 1
+                        border.color: "grey"
 
-//                        color: flickContainer.backColor
-//                        clip:  true
+                        color: flickContainer.backColor
+                        clip:  true
 
-//                        MouseArea {
-//                            anchors.fill: buttonItem
-//                            z: 1
+                        MouseArea {
+                            anchors.fill: buttonItem
+                            z: 1
 
-//                            onClicked: outerRect.showPage( pickerType )
-//                        }
+                            onClicked: outerRect.showPage( pickerType )
+                        }
 
-//                        Item {
-//                            id: button
+                        Item {
+                            id: button
 
-//                            x: parent.width / 2 - width - ( parent.width / 2 - width ) / 2
-//                            width:  parent.width  * flickContainer.leftFactor
-//                            anchors.verticalCenter: parent.verticalCenter
-//                            Button {
-//                                text:  pickerType
+                            x: parent.width / 2 - width - ( parent.width / 2 - width ) / 2
+                            width:  parent.width  * flickContainer.leftFactor
+                            anchors.verticalCenter: parent.verticalCenter
+                            Button {
+                                text:  pickerType
 
-//                                width: parent.width
-//                                anchors.centerIn: parent
-//                                elideText: true
-//                            }
-//                        }
+                                width: parent.width
+                                anchors.centerIn: parent
+                                elideText: true
+                            }
+                        }
 
-//                        Text {
-//                            x: parent.width / 2
-//                            width: parent.width * flickContainer.rightFactor
-//                            height: parent.height
+                        Text {
+                            x: parent.width / 2
+                            width: parent.width * flickContainer.rightFactor
+                            height: parent.height
 
-//                            verticalAlignment: Text.AlignVCenter
-//                            wrapMode: Text.WordWrap
-//                            font.pixelSize: flickContainer.textSize
-//                            text: legend
-//                        }
+                            verticalAlignment: Text.AlignVCenter
+                            wrapMode: Text.WordWrap
+                            font.pixelSize: flickContainer.textSize
+                            text: legend
+                        }
 
-//                        //                            Component { id: buttonComponent; WidgetPageButton{} }
-//                    }
-//                }
+                        //Component { id: buttonComponent; WidgetPageButton{} }
+                    }
+                }
             }//end leftColumn
         }
 
-//        Component { id: messageBoxPage; WidgetPageMessageBox{} }
-//        Component { id: photoPickerPage; WidgetPagePhotoPicker{} }
-//        Component { id: musicPickerPage; WidgetPageMusicPicker{} }
-//        Component { id: videoPickerPage; WidgetPageVideoPicker{} }
-//        Component { id: datePickerPage; WidgetPageDatePicker {} }
-//        Component { id: timePickerPage; WidgetPageTimePicker {} }
+        //        Component { id: messageBoxPage; WidgetPageMessageBox{} }
+        //        Component { id: photoPickerPage; WidgetPagePhotoPicker{} }
+        //        Component { id: musicPickerPage; WidgetPageMusicPicker{} }
+        //        Component { id: videoPickerPage; WidgetPageVideoPicker{} }
+        //        Component { id: datePickerPage; WidgetPageDatePicker {} }
+        Component { id: documentPickerPage; WidgetPageDocumentPicker {} }
 
         //model for the left column
         ListModel {
             id: buttonModel
 
-//            ListElement {
-//                listIcon: "image://themedimage/widgets/common/camera/camera_lens_sm_up"
-//                listIconDown: "image://themedimage/widgets/common/camera/camera_lens_sm_dn"
-//                pickerType: "photo"
-//                legend: "PhotoPicker, to choose from a list of images or albums."
-//            }
-//            ListElement {
-//                listIcon: "image://themedimage/widgets/common/camera/camera_lens_sm_up"
-//                listIconDown: "image://themedimage/widgets/common/camera/camera_lens_sm_dn"
-//                pickerType: "video"
-//                legend: "VideoPicker, to choose from a list of videos."
-//            }
-//            ListElement {
-//                listIcon: "image://themedimage/widgets/common/camera/camera_lens_sm_up"
-//                listIconDown: "image://themedimage/widgets/common/camera/camera_lens_sm_dn"
-//                pickerType: "music"
-//                legend: "MusicPicker, to choose from a list of music files."
-//            }
+            //            ListElement {
+            //                listIcon: "image://themedimage/widgets/common/camera/camera_lens_sm_up"
+            //                listIconDown: "image://themedimage/widgets/common/camera/camera_lens_sm_dn"
+            //                pickerType: "photo"
+            //                legend: "PhotoPicker, to choose from a list of images or albums."
+            //            }
+            //            ListElement {
+            //                listIcon: "image://themedimage/widgets/common/camera/camera_lens_sm_up"
+            //                listIconDown: "image://themedimage/widgets/common/camera/camera_lens_sm_dn"
+            //                pickerType: "video"
+            //                legend: "VideoPicker, to choose from a list of videos."
+            //            }
+            //            ListElement {
+            //                listIcon: "image://themedimage/widgets/common/camera/camera_lens_sm_up"
+            //                listIconDown: "image://themedimage/widgets/common/camera/camera_lens_sm_dn"
+            //                pickerType: "music"
+            //                legend: "MusicPicker, to choose from a list of music files."
+            //            }
+            ListElement {
+                listIcon: "image://themedimage/widgets/common/camera/camera_lens_sm_up"
+                listIconDown: "image://themedimage/widgets/common/camera/camera_lens_sm_dn"
+                pickerType: "document"
+                legend: "DocumentPicker, to choose from a list of document files."
+            }
         }
     }
 } //end outerRect
