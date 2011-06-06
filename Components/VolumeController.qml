@@ -77,14 +77,14 @@ Item {
         x: volumeControlXmid - width/2
         anchors.bottom: parent.bottom
         anchors.bottomMargin: volumeControlBottomMargin
-        source: "image://theme/volume_panel_bg"
+        source: "image://themedimage/images/volume_panel_bg"
 
         MouseArea {
             anchors.fill: parent
         }
         Image {
             id: maxVolumeBt
-            source: "image://theme/icn_volume_max"
+            source: "image://themedimage/images/icn_volume_max"
             anchors.top:parent.top
             anchors.horizontalCenter: parent.horizontalCenter
             fillMode: Image.PreserveAspectFit
@@ -105,7 +105,7 @@ Item {
             anchors.bottomMargin: 10
             height: 0
             opacity: 0
-            source: "image://theme/volumehead_bg"
+            source: "image://themedimage/images/volumehead_bg"
             function mapFromPosToVolume(mouseY) {
                 var pos = volumeBar.height -mouseY;
                 pos = pos < volumeSlider.height? volumeSlider.height: pos;
@@ -126,7 +126,7 @@ Item {
 
             Image {
                 id: volumeSlider
-                source: "image://theme/volumehead_track_3"
+                source: "image://themedimage/images/volumehead_track_3"
                 anchors.horizontalCenter: parent.horizontalCenter
                 y: {
                     if (volumeControl)
@@ -137,7 +137,7 @@ Item {
             }
             Image {
                 id: volumeBody
-                source: "image://theme/volumehead_track_2"
+                source: "image://themedimage/images/volumehead_track_2"
                 anchors.top: volumeSlider.bottom
                 anchors.bottom: volumeHead.top
                 anchors.horizontalCenter:volumeBar.horizontalCenter
@@ -145,7 +145,7 @@ Item {
             }
             Image {
                 id: volumeHead
-                source: "image://theme/volumehead_track_1"
+                source: "image://themedimage/images/volumehead_track_1"
                 anchors.bottom: parent.bottom
                 anchors.horizontalCenter:volumeBar.horizontalCenter
                 z:1
@@ -167,7 +167,7 @@ Item {
 
         Image {
             id: muteBt
-            source: "image://theme/icn_volume_min"
+            source: "image://themedimage/images/icn_volume_min"
             anchors.bottom:parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
             fillMode: Image.PreserveAspectFit
