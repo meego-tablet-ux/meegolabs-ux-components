@@ -31,8 +31,6 @@ SOURCES += \
     applicationsmodel.cpp \
     appupappsmodel.cpp \
     backgroundmodel.cpp \
-    batteryindicator.cpp \
-    bluetoothindicator.cpp \
     browserlistmodel.cpp \
     browserserviceiface.cpp \
     components.cpp \
@@ -40,17 +38,11 @@ SOURCES += \
     desktopdatabase.cpp \
     devicemodel.cpp \
     favoriteapplicationsmodel.cpp \
-    fuzzydatetime.cpp \
     gconfitem.cpp \
-    gesturearea.cpp \
     imageextension.cpp \
     librarymodel.cpp \
     localehelper.cpp \
-    localtime.cpp \
-    musicindicator.cpp \
     musicserviceproxy.cpp \
-    networkindicator.cpp \
-    notificationindicator.cpp \
     paintspy.cpp \
     qmldebugtools.cpp \
     recentapplicationsmodel.cpp \
@@ -67,7 +59,6 @@ SOURCES += \
     udisk_interface.cpp \
     valuespacepublisher.cpp \
     valuespacesubscriber.cpp \
-    volumecontrol.cpp \
     windowelement.cpp \
     windowiconprovider.cpp \
     windowlistener.cpp \
@@ -84,8 +75,6 @@ HEADERS += \
     applicationsmodel.h \
     appupappsmodel.h \
     backgroundmodel.h \
-    batteryindicator.h \
-    bluetoothindicator.h \
     browserlistmodel.h \
     browserserviceiface.h \
     components.h \
@@ -93,18 +82,12 @@ HEADERS += \
     desktopdatabase.h \
     devicemodel.h \
     favoriteapplicationsmodel.h \
-    fuzzydatetime.h \
     gconfitem.h \
-    gesturearea.h \
     imageextension.h \
     librarymodel.h \
-    localehelper.h \
     localtime.h \
     meegothemedimageprovider.h \
-    musicindicator.h \
     musicserviceproxy.h \
-    networkindicator.h \
-    notificationindicator.h \
     paintspy.h \
     qmldebugtools.h \
     recentapplicationsmodel.h \
@@ -119,7 +102,6 @@ HEADERS += \
     udisk_interface.h \
     valuespacepublisher.h \
     valuespacesubscriber.h \
-    volumecontrol.h \
     windowelement.h \
     windowiconprovider.h \
     windowinfo.h \
