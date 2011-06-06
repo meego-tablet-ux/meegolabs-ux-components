@@ -20,6 +20,7 @@
 
 class RecentApplicationsModel;
 class FavoriteApplicationsModel;
+class AppUpAppsModel;
 class QFileSystemWatcher;
 
 class ApplicationsModel : public QAbstractListModel
@@ -30,6 +31,8 @@ class ApplicationsModel : public QAbstractListModel
     Q_PROPERTY(QDeclarativeListProperty<Desktop> apps READ apps NOTIFY appsChanged)
     Q_PROPERTY(RecentApplicationsModel* recents READ recents NOTIFY recentsChanged)
     Q_PROPERTY(FavoriteApplicationsModel* favorites READ favorites)
+    Q_PROPERTY(AppUpAppsModel * appupFeatured READ appupFeatured)
+    Q_PROPERTY(AppUpAppsModel * appupUpdated READ appupUpdated)
     Q_PROPERTY(QString customField READ customValue WRITE setCustomValue)
     Q_PROPERTY(QString type READ type WRITE setType)
 
@@ -48,6 +51,8 @@ public:
     QDeclarativeListProperty<Desktop> apps();
     RecentApplicationsModel *recents();
     FavoriteApplicationsModel *favorites();
+    AppUpAppsModel *appupFeatured();
+    AppUpAppsModel *appupUpdated();
 
     QString directory() const {
         qDebug("Warning, 'directory' has been deprecated. Use 'directories' instead.");
@@ -96,6 +101,8 @@ private:
     RecentApplicationsModel *m_recents;
     FavoriteApplicationsModel* m_favorites;
     QFileSystemWatcher *m_watcher;
+    AppUpAppsModel *m_featuredApps;
+    AppUpAppsModel *m_updatedApps;
 
     Q_DISABLE_COPY(ApplicationsModel)
 };

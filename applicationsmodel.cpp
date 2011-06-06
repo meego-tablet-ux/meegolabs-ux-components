@@ -17,12 +17,15 @@
 #include "desktop.h"
 #include "favoriteapplicationsmodel.h"
 #include "recentapplicationsmodel.h"
+#include "appupappsmodel.h"
 
 ApplicationsModel::ApplicationsModel(QObject *parent) :
     QAbstractListModel(parent),
     m_type("Application"),
     m_recents(new RecentApplicationsModel(this)),
-    m_favorites(new FavoriteApplicationsModel(this))
+    m_favorites(new FavoriteApplicationsModel(this)),
+    m_featuredApps(0),
+    m_updatedApps(0)
 
 {
     m_watcher = new QFileSystemWatcher(this);
@@ -149,6 +152,20 @@ RecentApplicationsModel *ApplicationsModel::recents()
 FavoriteApplicationsModel *ApplicationsModel::favorites()
 {
     return m_favorites;
+}
+
+AppUpAppsModel *ApplicationsModel::appupFeatured()
+{
+    if (!m_featuredApps)
+        m_featuredApps = new AppUpAppsModel(AppUpAppsModel::Featured, this);
+    return m_featuredApps;
+}
+
+AppUpAppsModel *ApplicationsModel::appupUpdated()
+{
+    if (!m_updatedApps)
+        m_updatedApps = new AppUpAppsModel(AppUpAppsModel::Updated, this);
+    return m_updatedApps;
 }
 
 QString ApplicationsModel::value(QString id, QString key)

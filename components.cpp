@@ -7,6 +7,7 @@
  */
 
 #include "applicationsmodel.h"
+#include "appupappsmodel.h"
 #include "backgroundmodel.h"
 #include "batteryindicator.h"
 #include "bluetoothindicator.h"
@@ -57,6 +58,7 @@ void components::registerTypes(const char *uri)
     qmlRegisterType<RecentApplicationsModel>(uri,0,1, "RecentApplicationsModel");
 
   
+    qmlRegisterType<AppUpAppsModel>(uri, 0, 1, "AppUpAppsModel");
     qmlRegisterType<FavoriteApplicationsModel>(uri,0,1, "FavoriteApplicationsModel");
     qmlRegisterType<ApplicationsModel>(uri, 0, 1, "ApplicationsModel");
     qmlRegisterType<WindowModel>(uri, 0, 1, "WindowModel");

@@ -29,6 +29,7 @@ MOC_DIR = .moc
 # Input
 SOURCES += \
     applicationsmodel.cpp \
+    appupappsmodel.cpp \
     backgroundmodel.cpp \
     batteryindicator.cpp \
     bluetoothindicator.cpp \
@@ -81,6 +82,7 @@ OTHER_FILES += \
 
 HEADERS += \
     applicationsmodel.h \
+    appupappsmodel.h \
     backgroundmodel.h \
     batteryindicator.h \
     bluetoothindicator.h \
@@ -129,7 +131,7 @@ qmldir.path += $$[QT_INSTALL_IMPORTS]/MeeGo/Labs/
 INSTALLS += qmldir
 
 TRANSLATIONS += $${SOURCES} $${HEADERS} $${QML_SOURCES}
-VERSION = 0.2.8.0
+VERSION = 0.2.8.1
 PROJECT_NAME = meegolabs-ux-components
 
 dist.commands += rm -fR $${PROJECT_NAME}-$${VERSION} &&
