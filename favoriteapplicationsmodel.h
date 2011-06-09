@@ -45,8 +45,6 @@ private slots:
     void writeSettings();
     void clearModel();
     void fullReset();
-    //out of box experience init
-    void oobeInit();
 
 private:
 

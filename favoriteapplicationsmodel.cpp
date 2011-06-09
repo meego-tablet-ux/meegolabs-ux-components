@@ -56,19 +56,6 @@ FavoriteApplicationsModel::FavoriteApplicationsModel(QObject *parent) :
     connect(m_SettingFileWatcher,SIGNAL(fileChanged(QString)),this,SLOT(readSettings()));
 }
 
-void FavoriteApplicationsModel::oobeInit()
-{
-
-    m_desktopFiles << BROWSER << PHOTOS << CHAT << EMAIL << MUSIC << VIDEO;
-
-    m_popularityRating.insert(BROWSER,1);
-    m_popularityRating.insert(PHOTOS,1);
-    m_popularityRating.insert(CHAT,1);
-    m_popularityRating.insert(EMAIL,1);
-    m_popularityRating.insert(MUSIC,1);
-    m_popularityRating.insert(VIDEO,1);
-}
-
 int FavoriteApplicationsModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
@@ -177,12 +164,10 @@ void FavoriteApplicationsModel ::readSettings()
     clearModel();
 
     m_desktopFiles = m_readSettings->value("favorite-applications").toStringList();
-    if ( m_desktopFiles.count()==0 )
+    if ( m_desktopFiles.count() > 0 )
     {
-        oobeInit();
-    }
-    else
         m_popularityRating = m_readSettings->value("favorite-applications-ratings").toHash();
+    }
 
     for (QStringList::const_iterator i = m_desktopFiles.begin(); i != m_desktopFiles.end(); i++)
     {
