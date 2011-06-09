@@ -23,36 +23,47 @@ public:
     explicit LocaleHelper(QObject *parent = 0);
 
     enum DateTimeFormat {
-        DateBEGIN,
-        DateFullLong,          // Monday, January 31, 2011
-        DateFull,              // January 31, 2011
-        DateFullShort,         // Jan 31 2011
-        DateFullNumShort,      // 1/31/11
-        DateWeekdayMonthDay,   // Monday, January 31
-        DateWeekdayDayShort,   // Mon 31
-        DateMonthDay,          // January 31
-        DateMonthYear,         // January 2011
-        DateMonthYearShort,    // Jan 2011
-        DateDay,               // 31 (no leading zero)
-        DateWeekday,           // Monday
-        DateWeekdayShort,      // Mon
-        DateMonth,             // January
-        DateMonthShort,        // Jan
-        DateYear,              // 2011
+        DateBEGIN = 100,
+        DateFullLong,         // Monday, January 31, 2011
+        DateFull,             // January 31, 2011
+        DateFullShort,        // Jan 31 2011
+        DateFullNum,          // 1/31/2011
+        DateFullNumShort,     // 1/31/11
+        DateWeekdayMonthDay,  // Monday, January 31
+        DateWeekdayDayShort,  // Mon 31
+        DateMonthDay,         // January 31
+        DateMonthYear,        // January 2011
+        DateMonthYearShort,   // Jan 2011
+        DateDay,              // 31 (no leading zero)
+        DateWeekday,          // Monday
+        DateWeekdayShort,     // Mon
+        DateMonth,            // January
+        DateMonthShort,       // Jan
+        DateYear,             // 2011
 
         // NOT YET SUPPORTED - Ask Geoff
-        DateWeekYear,          // January 30 - February 5, 2011
-        DateWeekYearShort,     // Jan 30 - Feb 5, 2011
+        DateWeekYear,       // January 30 - February 5, 2011
+        DateWeekYearShort,  // Jan 30 - Feb 5, 2011
+
+        // pass through to Qt date formats
+        DateQtLong,   // Monday, January 31, 2011
+        DateQtShort,  // 1/31/11
         DateEND,
 
-        TimeBEGIN,
-        TimeFullLong,   // 1:02:03 AM TZ
-        TimeFullShort,  // 1:02 AM (or 24-hr time if set for locale)
+        TimeBEGIN = 200,
+        TimeFull,    // 9:02 PM or 21:02
+        TimeFull12,  // 9:02 PM
+        TimeFull24,  // 21:02
+
+        // pass through to Qt date formats
+        TimeQtLong,   // 9:02:03 PM TZ
+        TimeQtShort,  // 9:02 PM (or 24-hr time if set for locale)
         TimeEND,
 
-        DateTimeBEGIN,
-        DateTimeFullLong,   // Monday, January 31, 2011 1:02:03 AM TZ
-        DateTimeFullShort,  // 1/31/11 1:02 AM
+        DateTimeBEGIN = 300,
+        // pass through to Qt date formats
+        DateTimeQtLong,   // Monday, January 31, 2011 1:02:03 AM TZ
+        DateTimeQtShort,  // 1/31/11 1:02 AM
         DateTimeEND
     };
     Q_ENUMS(DateTimeFormat);
@@ -92,6 +103,7 @@ protected:
     QString formatString(int format) const;
 
     QLocale m_locale;
+    bool m_24hour;
 };
 
 #endif // LOCALEHELPER_H
