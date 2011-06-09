@@ -85,7 +85,7 @@ HEADERS += \
     gconfitem.h \
     imageextension.h \
     librarymodel.h \
-    localtime.h \
+    localehelper.h \
     meegothemedimageprovider.h \
     musicserviceproxy.h \
     paintspy.h \
@@ -113,7 +113,7 @@ qmldir.path += $$[QT_INSTALL_IMPORTS]/MeeGo/Labs/
 INSTALLS += qmldir
 
 TRANSLATIONS += $${SOURCES} $${HEADERS} $${QML_SOURCES}
-VERSION = 0.2.8.1
+VERSION = 0.2.8.2
 PROJECT_NAME = meegolabs-ux-components
 
 dist.commands += rm -fR $${PROJECT_NAME}-$${VERSION} &&
