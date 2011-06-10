@@ -55,21 +55,19 @@ QString LocaleHelper::localTime(const QTime &time, int format) const
     QString ampm = (hour < 12) ? am : pm;
     int hour12 = (hour % 12) ? (hour % 12) : 12;
 
-    switch (format) {
-    case TimeFull:
-        if (m_24hour)
-            return formatString(TimeFull24);
-        else return formatString(TimeFull12);
+    if (format == TimeFull)
+        format = m_24hour ? TimeFull24 : TimeFull12;
 
+    switch (format) {
     case TimeFull12:
         //: AM time format string (translator: update order / format)
         //: %1 = hours (no leading zero), %2 = minutes (leading zero if needed), %3 = AM/PM string
-        return tr("%1:%2 %3").arg(hour12).arg(minute, 2, QChar('0')).arg(ampm);
+        return tr("%1:%2 %3").arg(hour12).arg(minute, 2, 10, QChar('0')).arg(ampm);
 
     case TimeFull24:
         //: 24-hour time format string (translator: update order / format)
         //: %1 = hours (no leading zero), %2 = minutes (leading zero if needed)
-        return tr("%1:%2").arg(hour).arg(minute, 2, QChar('0'));
+        return tr("%1:%2").arg(hour).arg(minute, 2, 10, QChar('0'));
 
     case TimeQtLong:
         return time.toString(m_locale.timeFormat(QLocale::LongFormat));
