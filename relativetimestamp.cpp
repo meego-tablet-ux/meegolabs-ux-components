@@ -37,78 +37,73 @@ const QString RelativeTimeStamp::text() const
 
     if (nowDate == dtDate) {
         if (mDatetime.addSecs(60) > now) {
-            return tr("Just Now");
+            //: Fuzzy date description
+            return tr("Just now");
         } else if (mDatetime.addSecs(2 * 60) > now) {
+            //: Fuzzy date description
             return tr("1 min ago");
         } else if (mDatetime.addSecs(29 * 60) > now) {
-            return tr("%1 mins ago", "1 is number of minutes").arg(
+            //: Fuzzy date description - %1 is a number
+            return tr("%1 mins ago").arg(
                     QString::number(int(mDatetime.secsTo(now)/60)));
         } else if (mDatetime.addSecs(59 * 60) > now) {
+            //: Fuzzy date description
             return tr("Half an hour ago");
         } else if (mDatetime.addSecs(119 * 60) > now) {
+            //: Fuzzy date description
             return tr("An hour ago");
         } else if (mDatetime.addSecs(239 * 60) > now) {
+            //: Fuzzy date description
             return tr("A couple of hours ago");
         } else {
-            return tr("%1 hours ago", "1 is number of hours").arg(
+            //: Fuzzy date description - %1 is a number
+            return tr("%1 hours ago").arg(
                     QString::number(int(mDatetime.secsTo(now)/(60 * 60))));
         }
     } else {
+        //: QDateTime format string: M is numeric month, d is num. day, yy is year; e.g. 1/31/11
+        //: translator: reorder / reformat, but make sure to use these ASCII M, d, and yy format codes
+        QString dateFormat = tr("M/d/yy");
+        QString formattedDate = dtDate.toString(dateFormat);
+
+        //: %1 is formatted date, %2 is fuzzy date description, e.g. 1/31/11 - Last week
+        QString fuzzyDateFormat = tr("%1 - %2");
+
         if (dtDate.addDays(1) == nowDate) {
+            //: Fuzzy date description
             return tr("Yesterday");
         } else if (dtDate.addDays(7) >= nowDate) {
-            return tr("%1/%2/%3 - %4", "1 is month, 2 is day, 3 is year, 4 is day name").arg(
-                    dtDate.toString("M"),
-                    dtDate.toString("d"),
-                    dtDate.toString("yy"),
-                    dtDate.toString("dddd"));
+            return fuzzyDateFormat.arg(formattedDate, dtDate.toString("dddd"));
         } else if (dtDate.addDays(14) >= nowDate) {
-            return tr("%1/%2/%3 - Last week", "1 is month, 2 is day, 3 is year").arg(
-                    dtDate.toString("M"),
-                    dtDate.toString("d"),
-                    dtDate.toString("yy"));
+            //: Fuzzy date description
+            return fuzzyDateFormat.arg(formattedDate, tr("Last week"));
         } else if (dtDate.addDays(21) >= nowDate) {
-            return tr("%1/%2/%3 - A couple of weeks ago", "1 is month, 2 is day, 3 is year").arg(
-                    dtDate.toString("M"),
-                    dtDate.toString("d"),
-                    dtDate.toString("yy"));
+            //: Fuzzy date description
+            return fuzzyDateFormat.arg(formattedDate, tr("A couple of weeks ago"));
         } else if (dtDate.month() == nowMonth) {
-            return tr("%1/%2/%3 - %4 weeks ago", "1 is month, 2 is day, 3 is year, 4 is number of weeks").arg(
-                    dtDate.toString("M"),
-                    dtDate.toString("d"),
-                    dtDate.toString("yy"),
-                    QString::number(int(dtDate.daysTo(nowDate)/7)));
+            int weeks = dtDate.daysTo(nowDate) / 7;
+            //: Fuzzy date description - %1 is a number
+            return fuzzyDateFormat.arg(formattedDate, tr("%1 weeks ago").arg(weeks));
         } else if (dtDate.addMonths(1).month() == nowMonth) {
-            return tr("%1/%2/%3 - Last month", "1 is month, 2 is day, 3 is year").arg(
-                    dtDate.toString("M"),
-                    dtDate.toString("d"),
-                    dtDate.toString("yy"));
+            //: Fuzzy date description
+            return fuzzyDateFormat.arg(formattedDate, tr("Last month"));
         } else if (dtDate.addMonths(3) >= nowDate) {
-            return tr("%1/%2/%3 - A couple of months ago", "1 is month, 2 is day, 3 is year").arg(
-                    dtDate.toString("M"),
-                    dtDate.toString("d"),
-                    dtDate.toString("yy"));
+            //: Fuzzy date description
+            return fuzzyDateFormat.arg(formattedDate, tr("A couple of months ago"));
         } else if (dtDate.addMonths(12) > nowDate) {
-            int nowMonth2 = nowMonth;
-            //If this is true, we're wrapping around a year, add 12 for the month math
-            if (nowMonth2 < dtDate.month())
-                nowMonth2 += 12;
-            return tr("%1/%2/%3 - %4 months ago", "1 is month, 2 is day, 3 is year").arg(
-                    dtDate.toString("M"),
-                    dtDate.toString("d"),
-                    dtDate.toString("yy"),
-                    QString::number(nowMonth2-dtDate.month()));
+            int months = nowMonth - dtDate.month();
+            //If this is true, we're wrapping around a year, add 12
+            if (months < 0)
+                months += 12;
+            //: Fuzzy date description - %1 is a number
+            return fuzzyDateFormat.arg(formattedDate, tr("%1 months ago").arg(months));
         } else if (dtDate.addMonths(23) >= nowDate) {
-            return tr("%1/%2/%3 - Last year", "1 is month, 2 is day, 3 is year").arg(
-                    dtDate.toString("M"),
-                    dtDate.toString("d"),
-                    dtDate.toString("yy"));
+            //: Fuzzy date description
+            return fuzzyDateFormat.arg(formattedDate, tr("Last year"));
         } else {
-            return tr("%1/%2/%3 - %4 years ago", "1 is month, 2 is day, 3 is year").arg(
-                    dtDate.toString("M"),
-                    dtDate.toString("d"),
-                    dtDate.toString("yy"),
-                    QString::number(nowDate.year() - dtDate.year()));
+            int years = nowDate.year() - dtDate.year();
+            //: Fuzzy date description - %1 is a number
+            return fuzzyDateFormat.arg(formattedDate, tr("%1 years ago").arg(years));
         }
     }
 }
