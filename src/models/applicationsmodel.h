@@ -16,7 +16,7 @@
 
 #include <mdesktopentry.h>
 
-#include "desktop.h"
+#include "../kernel/desktop.h"
 
 class RecentApplicationsModel;
 class FavoriteApplicationsModel;

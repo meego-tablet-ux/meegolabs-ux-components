@@ -18,8 +18,7 @@
 #include <QSettings>
 #include <QTimer>
 
-#include "desktop.h"
-
+#include "../kernel/desktop.h"
 
 class FavoriteApplicationsModel : public QAbstractListModel
 {

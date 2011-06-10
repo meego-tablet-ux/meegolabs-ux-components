@@ -10,7 +10,7 @@
 #include <QtDeclarative/qdeclarative.h>
 #include <mgconfitem.h>
 #include "recentapplicationsmodel.h"
-#include "desktop.h"
+#include "../kernel/desktop.h"
 
 #define ORGANIZATION_NAME "MeeGo"
 #define APPLICATION_NAME "meego-ux-components"

@@ -12,7 +12,7 @@
 #include <QAbstractListModel>
 #include <X11/X.h>
 
-#include "windowlistener.h"
+#include "../kernel/windowlistener.h"
 
 class WindowElement;
 class WindowInfo;

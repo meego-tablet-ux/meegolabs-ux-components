@@ -10,8 +10,8 @@
 #include <QHash>
 #include <QX11Info>
 #include "windowmodel.h"
-#include "windowelement.h"
-#include "windowinfo.h"
+#include "../kernel/windowelement.h"
+#include "../kernel/windowinfo.h"
 
 WindowModel::WindowModel(QObject *parent) :
     QAbstractListModel(parent)

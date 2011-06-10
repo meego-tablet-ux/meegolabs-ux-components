@@ -14,7 +14,7 @@
 #include <QObject>
 #include <QStringList>
 
-#include "desktop.h"
+#include "../kernel/desktop.h"
 
 class MGConfItem;
 

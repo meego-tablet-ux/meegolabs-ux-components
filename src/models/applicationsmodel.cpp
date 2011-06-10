@@ -14,7 +14,7 @@
 #include <mdesktopentry.h>
 
 #include "applicationsmodel.h"
-#include "desktop.h"
+#include "../kernel/desktop.h"
 #include "favoriteapplicationsmodel.h"
 #include "recentapplicationsmodel.h"
 #include "appupappsmodel.h"
