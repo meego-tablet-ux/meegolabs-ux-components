@@ -17,6 +17,7 @@ class MeeGoUxComponentsKernelPlugin : public QDeclarativeExtensionPlugin
 
 public:
     void registerTypes(const char *uri);
+    void initializeEngine(QDeclarativeEngine *engine, const char *uri);
 };
 
 #endif // KERNEL_H

@@ -8,11 +8,13 @@ QT += declarative \
     network \
     dbus \
     sql
+
 CONFIG += qt \
     plugin \
     dbus \
     link_pkgconfig \
     mobility
+
 PKGCONFIG += gconf-2.0 \
     qmfmessageserver \
     qmfclient \
@@ -25,50 +27,76 @@ PKGCONFIG += gconf-2.0 \
     QtPublishSubscribe \
     contextsubscriber-1.0
 
-SOURCES +=  desktop.cpp \
-            desktopdatabase.cpp \
-            gconfitem.cpp \
-            imageextension.cpp \
-            meegothemedimageprovider.cpp \
-            paintspy.cpp \
-            qmldebugtools.cpp \
-            relativetimestamp.cpp \
-            roundeditem.cpp \
-            speechbubbledialog.cpp \
-            stricturl.cpp \
-            systemiconprovider.cpp \
-            timestampupdater.cpp \
-            translator.cpp \
-            plugin.cpp \
-            udisk_interface.cpp \
-            valuespacepublisher.cpp \
-            valuespacesubscriber.cpp \
-            windowelement.cpp \
-            windowiconprovider.cpp \
-            windowlistener.cpp
+SOURCES +=  \
+  applicationsmodel.cpp \
+  appupappsmodel.cpp \
+  backgroundmodel.cpp \
+  browserlistmodel.cpp \
+  browserserviceiface.cpp \
+  desktop.cpp \
+  desktopdatabase.cpp \
+  devicemodel.cpp \
+  favoriteapplicationsmodel.cpp \
+  gconfitem.cpp \
+  imageextension.cpp \
+  librarymodel.cpp \
+  meegothemedimageprovider.cpp \
+  musicserviceproxy.cpp \
+  paintspy.cpp \
+  plugin.cpp \
+  qmldebugtools.cpp \
+  recentapplicationsmodel.cpp \
+  relativetimestamp.cpp \
+  roundeditem.cpp \
+  speechbubbledialog.cpp \
+  stricturl.cpp \
+  systemiconprovider.cpp \
+  timestampupdater.cpp \
+  timezonelistmodel.cpp \
+  translator.cpp \
+  udisk_interface.cpp \
+  valuespacepublisher.cpp \
+  valuespacesubscriber.cpp \
+  windowelement.cpp \
+  windowiconprovider.cpp \
+  windowlistener.cpp \
+  windowmodel.cpp
 
-HEADERS +=  desktop.h \
-            desktopdatabase.h \
-            gconfitem.h \
-            imageextension.h \
-            meegothemedimageprovider.h \
-            paintspy.h \
-            qmldebugtools.h \
-            relativetimestamp.h \
-            roundeditem.h \
-            speechbubbledialog.h \
-            stricturl.h \
-            systemiconprovider.h \
-            timestampupdater.h \
-            translator.h \
-            plugin.h \
-            udisk_interface.h \
-            valuespacepublisher.h \
-            valuespacesubscriber.h \
-            windowelement.h \
-            windowiconprovider.h \
-            windowlistener.h \
-            windowinfo.h
+HEADERS += \
+  applicationsmodel.h \
+  appupappsmodel.h \
+  backgroundmodel.h \
+  browserlistmodel.h \
+  browserserviceiface.h \
+  desktop.h \
+  desktopdatabase.h \
+  devicemodel.h \
+  favoriteapplicationsmodel.h \
+  gconfitem.h \
+  imageextension.h \
+  librarymodel.h \
+  meegothemedimageprovider.h \
+  musicserviceproxy.h \
+  paintspy.h \
+  plugin.h \
+  qmldebugtools.h \
+  recentapplicationsmodel.h \
+  relativetimestamp.h \
+  roundeditem.h \
+  speechbubbledialog.h \
+  stricturl.h \
+  systemiconprovider.h \
+  timestampupdater.h \
+  timezonelistmodel.h \
+  translator.h \
+  udisk_interface.h \
+  valuespacepublisher.h \
+  valuespacesubscriber.h \
+  windowelement.h \
+  windowiconprovider.h \
+  windowinfo.h \
+  windowlistener.h \
+  windowmodel.h
 
 QML_FILES = qmldir
 

@@ -8,5 +8,4 @@ DocumentPicker    0.1 DocumentPicker.qml
 RelativeTimeText  0.1 RelativeTimeText.qml
 
 plugin meegolabs-ux-kernel ../Kernel
-plugin meegolabs-ux-models ../Models
 plugin meegolabs-ux-locale ../Locale
