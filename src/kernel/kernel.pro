@@ -59,7 +59,7 @@ HEADERS +=  desktop.h \
             speechbubbledialog.h \
             stricturl.h \
             systemiconprovider.h \
-            timestampupdaterh \
+            timestampupdater.h \
             translator.h \
             plugin.h \
             udisk_interface.h \
