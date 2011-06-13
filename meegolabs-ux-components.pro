@@ -33,7 +33,7 @@ OBJECTS_DIR = .obj
 MOC_DIR = .moc
 
 TRANSLATIONS += $${SOURCES} $${OTHER_FILES} $${HEADERS}
-VERSION = 0.2.8.4
+VERSION = 0.2.8.5
 PROJECT_NAME = meegolabs-ux-components
 
 dist.commands += rm -fR $${PROJECT_NAME}-$${VERSION} &&
