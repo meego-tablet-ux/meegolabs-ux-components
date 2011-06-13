@@ -26,43 +26,57 @@ public:
 
     enum Role {
         Title = Qt::UserRole + 1,
-        City = Qt::UserRole + 2,
-        GMTOffset = Qt::UserRole + 3,
-        Latitude = Qt::UserRole + 4,
-        Longitude = Qt::UserRole + 5,
-        CountryCode = Qt::UserRole + 6,
-        Index = Qt::UserRole + 7,
-        Region
+        GMTOffset,
+        Latitude,
+        Longitude,
+        CountryCode,
+        Index,
+        Region,
+        LocationName,
+        LongGMTName,
+        GMTName
     };
+
+    Q_ENUMS(Role);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    Q_INVOKABLE QVariant getData(int index, int role) const;
-
-    enum TimeZoneVars {
-        ETitle = 1,
-        ECity,
-        EGMTOffset,
-        ELatitude,
-        ELongitude,
-        ECountryCode,
-        EIndex,
-        ERegion
-    };
-
-    Q_ENUMS(TimeZoneVars);
+    Q_INVOKABLE QVariant getData(int index, int role) const
+    {
+        return data(this->index(index), role);
+    }
 
     QStringList regions();
 
 public slots:
     void filterOut(QString filter);
+    QString getLocationName(QString title) const;
+    QString getLongGMTName(QString title) const;
+    QString getGMTName(QString title) const;
 
 protected:
-    QString getCity(QString title) const;
+    class TimezoneItem {
+    public:
+        TimezoneItem(KTimeZone zone,
+                QString location,
+                QString longgmt,
+                QString gmt) :
+            timezone(zone),
+            locationName(location),
+            longGMTName(longgmt),
+            GMTName(gmt)
+        {}
+
+        KTimeZone timezone;
+        QString locationName;
+        QString longGMTName;
+        QString GMTName;
+    };
+
     KSystemTimeZones zones;
-    QList<KTimeZone> itemsList;
-    QList<KTimeZone*> itemsDisplay;
+    QList<TimezoneItem> itemsList;
+    QList<TimezoneItem*> itemsDisplay;
 };
 
 #endif // TIMEZONELISTMODEL_H

@@ -8,6 +8,7 @@
 
 #include <QDir>
 #include <QDebug>
+#include <unicode/timezone.h>
 #include "timezonelistmodel.h"
 
 TimezoneListModel::TimezoneListModel(QObject *parent)
@@ -15,29 +16,29 @@ TimezoneListModel::TimezoneListModel(QObject *parent)
 {
     QHash<int, QByteArray> roles;
     roles.insert(Title, "title");
-    roles.insert(City, "city");
     roles.insert(GMTOffset, "gmtoffset");
     roles.insert(Latitude, "latitude");
     roles.insert(Longitude, "longitude");
     roles.insert(CountryCode, "countrycode");
     roles.insert(Index, "index");
     roles.insert(Region,"region");
+    roles.insert(LocationName, "locationname");
+    roles.insert(LongGMTName, "longgmtname");
+    roles.insert(GMTName, "gmtname");
     setRoleNames(roles);
 
-    KTimeZones *temp = zones.timeZones();
-    QMap<QString, KTimeZone> map = temp->zones();
-    itemsList = map.values();
-    for(int i = 0; i < itemsList.count(); i++)
-    {
-
-        itemsDisplay << &itemsList[i];
-        qDebug()<<"Title: "<<itemsDisplay[i]->name();
-        qDebug()<<"City: "<<getCity(itemsDisplay[i]->name());
-        qDebug()<<"Country Code: "<<itemsDisplay[i]->countryCode();
-        qDebug()<<"Region: "<<itemsDisplay[i]->name().split("/").at(0);
+    foreach (KTimeZone zone, zones.timeZones()->zones()) {
+        itemsList.append(TimezoneItem(zone,
+                    getLocationName(zone.name()),
+                    getLongGMTName(zone.name()),
+                    getGMTName(zone.name())));
     }
 
-    qDebug()<<"Number of items: "<<itemsDisplay.count();
+    for(int i = 0; i < itemsList.count(); i++)
+    {
+        itemsDisplay << &itemsList[i];
+    }
+
 }
 
 TimezoneListModel::~TimezoneListModel()
@@ -51,12 +52,31 @@ TimezoneListModel::~TimezoneListModel()
     }
 }
 
-QString TimezoneListModel::getCity(QString title) const
+QString TimezoneListModel::getLocationName(QString title) const
 {
-    QStringList temp = title.split("/", QString::SkipEmptyParts);
-    QString res = temp.last();
-    res.replace("_", " ");
-    return res;
+    TimeZone *zone = TimeZone::createTimeZone(UnicodeString(static_cast<const UChar*>(title.utf16())));
+    UnicodeString result;
+    zone->getDisplayName(TRUE, TimeZone::GENERIC_LOCATION, result);
+    delete zone;
+    return QString(reinterpret_cast<const QChar*>(result.getBuffer()), result.length());
+}
+
+QString TimezoneListModel::getLongGMTName(QString title) const
+{
+    TimeZone *zone = TimeZone::createTimeZone(UnicodeString(static_cast<const UChar*>(title.utf16())));
+    UnicodeString result;
+    zone->getDisplayName(TRUE, TimeZone::LONG_GMT, result);
+    delete zone;
+    return QString(reinterpret_cast<const QChar*>(result.getBuffer()), result.length());
+}
+
+QString TimezoneListModel::getGMTName(QString title) const
+{
+    TimeZone *zone = TimeZone::createTimeZone(UnicodeString(static_cast<const UChar*>(title.utf16())));
+    UnicodeString result;
+    zone->getDisplayName(TRUE, TimeZone::SHORT_GMT, result);
+    delete zone;
+    return QString(reinterpret_cast<const QChar*>(result.getBuffer()), result.length());
 }
 
 QStringList TimezoneListModel::regions()
@@ -64,9 +84,9 @@ QStringList TimezoneListModel::regions()
     QStringList list;
     QMap<QString,QString> map;
 
-    foreach(KTimeZone* item, itemsDisplay)
+    foreach(TimezoneItem* item, itemsDisplay)
     {
-        map[item->name().split("/").at(0)] = "nothing";
+        map[item->timezone.name().split("/").at(0)] = "nothing";
     }
 
     foreach(QString key, map.keys())
@@ -79,9 +99,10 @@ QStringList TimezoneListModel::regions()
 
 void TimezoneListModel::filterOut(QString filter)
 {
-    QList<KTimeZone*> displaylist;
+    QList<TimezoneItem*> displaylist;
     for(int i = 0; i < itemsList.count(); i++)
-        if(filter.isEmpty()||itemsList[i].name().contains(filter, Qt::CaseInsensitive))
+        if(filter.isEmpty() ||
+            itemsList[i].locationName.contains(filter, Qt::CaseInsensitive))
             displaylist << &itemsList[i];
 
     if(!itemsDisplay.isEmpty())
@@ -104,57 +125,34 @@ QVariant TimezoneListModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     if (role == Title)
-        return itemsDisplay[index.row()]->name();
-
-    if (role == City)
-        return getCity(itemsDisplay[index.row()]->name());
+        return itemsDisplay[index.row()]->timezone.name();
 
     if (role == GMTOffset)
-        return itemsDisplay[index.row()]->currentOffset(Qt::UTC)/3600;
+        return itemsDisplay[index.row()]->timezone.currentOffset(Qt::UTC);
 
     if (role == Latitude)
-        return itemsDisplay[index.row()]->latitude();
+        return itemsDisplay[index.row()]->timezone.latitude();
 
     if (role == Longitude)
-        return itemsDisplay[index.row()]->longitude();
+        return itemsDisplay[index.row()]->timezone.longitude();
 
     if (role == CountryCode)
-        return itemsDisplay[index.row()]->countryCode();
+        return itemsDisplay[index.row()]->timezone.countryCode();
 
     if (role == Index)
         return index.row();
 
     if (role == Region)
-        return itemsDisplay[index.row()]->name().split("/").at(0);
+        return itemsDisplay[index.row()]->timezone.name().split("/").at(0);
 
-    return QVariant();
-}
+    if (role == LocationName)
+        return itemsDisplay[index.row()]->locationName;
 
-QVariant TimezoneListModel::getData(int index, int role) const {
+    if (role == LongGMTName)
+        return itemsDisplay[index.row()]->longGMTName;
 
-    if (role == ETitle)
-        return itemsDisplay[index]->name();
-
-    if (role == ECity)
-        return getCity(itemsDisplay[index]->name());
-
-    if (role == EGMTOffset)
-        return itemsDisplay[index]->currentOffset(Qt::UTC)/3600;
-
-    if (role == ELatitude)
-        return itemsDisplay[index]->latitude();
-
-    if (role == ELongitude)
-        return itemsDisplay[index]->longitude();
-
-    if (role == ECountryCode)
-        return itemsDisplay[index]->countryCode();
-
-    if (role == EIndex)
-        return index;
-
-    if (role == ERegion)
-        return itemsDisplay[index]->name().split("/").at(0);
+    if (role == GMTName)
+        return itemsDisplay[index.row()]->GMTName;
 
     return QVariant();
 }
