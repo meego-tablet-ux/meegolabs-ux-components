@@ -90,6 +90,9 @@ void MeeGoUxComponentsKernelPlugin::registerTypes(const char *uri)
 
 void MeeGoUxComponentsKernelPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
 {
+    engine->addImageProvider("systemicon", new SystemIconProvider);
+    engine->addImageProvider("meegoimage", new MeeGoThemedImageProvider);
+    engine->addImageProvider("windowicon", new WindowIconProvider);
     Q_UNUSED(uri);
 }
 
