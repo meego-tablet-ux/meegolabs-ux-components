@@ -4,18 +4,21 @@ TARGETPATH = MeeGo/Labs/Locale
 
 TARGET = meegolabs-ux-locale
 
+DEFINES += LOCALE_LIBRARY
+
 QT += declarative
 
 CONFIG += qt \
           plugin
 
-SOURCES +=  \
-            localehelper.cpp \
-    plugin.cpp
+SOURCES +=  localehelper.cpp \
+            plugin.cpp
 
-HEADERS +=  \
+HEADERS +=  locale_global.h \
             localehelper.h \
-    plugin.h
+            plugin.h
+
+INSTALL_HEADERS += localehelper.h
 
 QML_FILES = qmldir
 
@@ -24,6 +27,9 @@ qmlfiles.sources = $$QML_FILES
 qmlfiles.path = $$[QT_INSTALL_IMPORTS]/$$TARGETPATH
 target.path = $$[QT_INSTALL_IMPORTS]/$$TARGETPATH
 
-INSTALLS += target qmlfiles
+headers.files += $$INSTALL_HEADERS
+headers.path += $$INSTALL_ROOT/usr/include/ux-localehelper
+
+INSTALLS += target qmlfiles headers
 OBJECTS_DIR = .obj
 MOC_DIR = .moc

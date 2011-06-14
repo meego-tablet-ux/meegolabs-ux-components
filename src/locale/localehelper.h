@@ -9,13 +9,14 @@
 #ifndef LOCALEHELPER_H
 #define LOCALEHELPER_H
 
+#include "locale_global.h"
 #include <QObject>
 #include <QLocale>
 
 // This is a class for exporting locale-related features to QML
 // Most will probably be wrappers around QLocale, as needed. Starting small. :)
 
-class LocaleHelper: public QObject
+class LOCALESHARED_EXPORT LocaleHelper: public QObject
 {
     Q_OBJECT
 
