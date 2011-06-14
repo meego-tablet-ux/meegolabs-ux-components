@@ -52,6 +52,7 @@ SOURCES +=  \
   stricturl.cpp \
   systemiconprovider.cpp \
   timestampupdater.cpp \
+  themedimageprovider.cpp \
   timezonelistmodel.cpp \
   translator.cpp \
   udisk_interface.cpp \
@@ -89,6 +90,7 @@ HEADERS += \
   timestampupdater.h \
   timezonelistmodel.h \
   translator.h \
+  themedimageprovider.h \
   udisk_interface.h \
   valuespacepublisher.h \
   valuespacesubscriber.h \

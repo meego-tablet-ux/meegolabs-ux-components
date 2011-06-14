@@ -32,6 +32,7 @@
 #include "systemiconprovider.h"
 #include "timestampupdater.h"
 #include "timezonelistmodel.h"
+#include "themedimageprovider.h"
 #include "translator.h"
 #include "udisk_interface.h"
 #include "valuespacepublisher.h"
@@ -90,9 +91,8 @@ void MeeGoUxComponentsKernelPlugin::registerTypes(const char *uri)
 
 void MeeGoUxComponentsKernelPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
 {
-    engine->addImageProvider("systemicon", new SystemIconProvider);
-    engine->addImageProvider("meegoimage", new MeeGoThemedImageProvider);
-    engine->addImageProvider("windowicon", new WindowIconProvider);
+    engine->addImageProvider("meegotheme", new MeeGoThemedImageProvider);
+    engine->addImageProvider("theme", new ThemedImageProvider);
     Q_UNUSED(uri);
 }
 
