@@ -27,9 +27,12 @@ qmlfiles.sources = $$QML_FILES
 qmlfiles.path = $$[QT_INSTALL_IMPORTS]/$$TARGETPATH
 target.path = $$[QT_INSTALL_IMPORTS]/$$TARGETPATH
 
+lib.files += $$[QT_INSTALL_IMPORTS]/$$TARGETPATH/*.so
+lib.path  += $$INSTALL_ROOT/usr/lib/ux-localehelper
+
 headers.files += $$INSTALL_HEADERS
 headers.path += $$INSTALL_ROOT/usr/include/ux-localehelper
 
-INSTALLS += target qmlfiles headers
+INSTALLS += target qmlfiles headers lib
 OBJECTS_DIR = .obj
 MOC_DIR = .moc
