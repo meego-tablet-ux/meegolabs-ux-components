@@ -29,7 +29,7 @@ MOBILITY = publishsubscribe
 
 
 TRANSLATIONS += src
-VERSION = 0.2.8.7
+VERSION = 0.2.8.8
 PROJECT_NAME = meegolabs-ux-components
 
 dist.commands += rm -fR $${PROJECT_NAME}-$${VERSION} &&
