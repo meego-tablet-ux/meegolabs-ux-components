@@ -9,7 +9,12 @@
 #ifndef LOCALEHELPER_H
 #define LOCALEHELPER_H
 
+#ifndef LOCALE_PLUGIN
 #include "locale_global.h"
+#else
+#define LOCALESHARED_EXPORT /**/
+#endif
+
 #include <QObject>
 #include <QLocale>
 
@@ -106,5 +111,4 @@ protected:
     QLocale m_locale;
     bool m_24hour;
 };
-
 #endif // LOCALEHELPER_H

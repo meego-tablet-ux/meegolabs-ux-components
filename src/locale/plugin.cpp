@@ -7,7 +7,9 @@
  */
 
 #include "plugin.h"
-#include "localehelper.h"
+#include "../../lib/locale/localehelper.h"
+
+QML_DECLARE_TYPE(LocaleHelper);
 
 void MeeGoUxLabsLocalePlugin::registerTypes(const char *uri)
 {

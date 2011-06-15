@@ -11,9 +11,13 @@
 #include <QDate>
 #include <QDateTime>
 #include <QTime>
-#include <qdeclarative.h>
 
+
+#ifdef LOCALE_LIBRARY
 #include "localehelper.h"
+#else
+#include "../../lib/locale/localehelper.h"
+#endif
 
 LocaleHelper::LocaleHelper(QObject *parent): QObject(parent)
 {
@@ -243,5 +247,3 @@ QString LocaleHelper::formatString(int format) const
         return QString();
     }
 }
-
-QML_DECLARE_TYPE(LocaleHelper);
