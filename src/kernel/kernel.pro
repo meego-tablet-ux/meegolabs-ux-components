@@ -25,7 +25,8 @@ PKGCONFIG += gconf-2.0 \
     mlite \
     xdamage \
     QtPublishSubscribe \
-    contextsubscriber-1.0
+    contextsubscriber-1.0 \
+    icu-i18n icu-uc
 
 SOURCES +=  \
   applicationsmodel.cpp \

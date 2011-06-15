@@ -23,8 +23,7 @@ PKGCONFIG += gconf-2.0 \
     mlite \
     xdamage \
     QtPublishSubscribe \
-    contextsubscriber-1.0 \
-    icu-i18n
+    contextsubscriber-1.0
 
 MOBILITY = publishsubscribe
 
