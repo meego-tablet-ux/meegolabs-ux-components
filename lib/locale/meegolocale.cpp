@@ -10,13 +10,16 @@
 #include <QDateTime>
 #include <QTime>
 #include <QDebug>
+#include <QLocale>
 
 #include "meegolocale.h"
 #include "meegolocale_p.h"
 
 namespace meego {
 
-    Locale::Locale(QObject *parent): QObject(parent)
+    Locale::Locale(QObject *parent):
+            QObject(parent),
+            d_ptr( new LocalePrivate( this ) )
     {
         Q_D(Locale);
         d->readConfig();
@@ -24,14 +27,12 @@ namespace meego {
 
     QString Locale::localDate(const QDate &date, int format) const
     {
-        Q_D( const Locale);
-
         if (format <= DateBEGIN || format >= DateEND) {
             qWarning() << "Locale: invalid date format: " << format;
             return QString();
         }
 
-        return date.toString( d->formatString(format) );
+        return date.toString( formatString(format) );
     }
 
     QString Locale::localTime(const QTime &time, int format) const
@@ -58,7 +59,7 @@ namespace meego {
         if (format == TimeFull) {
             if( d->m_currentHourFormat == Hrs12 )
                 format = TimeFull12;
-            else if( d->m_currentHourFormat == Hrs24 )
+            else
                 format = TimeFull24;
         }
 
@@ -87,31 +88,26 @@ namespace meego {
 
     QString Locale::localDateTime(const QDateTime &datetime, int format) const
     {
-        Q_D( const Locale );
-
         if (format <= DateTimeBEGIN || format >= DateTimeEND) {
             qWarning() << "Locale: invalid datetime format: " << format;
             return QString();
         }
 
-        return datetime.toString( d->formatString(format) );
+        return datetime.toString( formatString(format) );
     }
 
     QString Locale::currentDate(int format) const
     {
-        Q_D( const Locale );
         return localDate(QDate::currentDate(), format);
     }
 
     QString Locale::currentTime(int format) const
     {
-        Q_D( const Locale );
         return localTime(QTime::currentTime(), format);
     }
 
     QString Locale::currentDateTime(int format) const
     {
-        Q_D( const Locale );
         return localDateTime(QDateTime::currentDateTime(), format);
     }
 
@@ -138,20 +134,21 @@ namespace meego {
     void Locale::setLanguageCode( const QString code )
     {
         Q_D(Locale);
-        d->changeCurrentLanguage( code );
+        d->changeLanguage( code );
     }
+
     QString Locale::getCurrentLanguageCode() const
     {
         Q_D(const Locale);
         return d->m_currentLanguageCode;
     }
+
     QList<QString> Locale::getLanguageCodes() const
     {
-        Q_D(const Locale);
         return QList<QString>(); //TODO where comes the codes from?
     }
 
-    DayOfWeek Locale::firstDayOfWeek() const
+    Locale::DayOfWeek Locale::firstDayOfWeek() const
     {
         Q_D(const Locale);
         return d->m_currentFirstDayOfWeek;
@@ -162,56 +159,56 @@ namespace meego {
         d->m_currentFirstDayOfWeek = dayofWeek;
     }
 
-    DayOfWeek Locale::getDefaultFirstDayOfWeek() const
+    Locale::DayOfWeek Locale::getDefaultFirstDayOfWeek() const
     {
         Q_D(const Locale);
         return d->m_defaultFirstDayOfWeek;
     }
 
-    DateOrder Locale::getDateOrder() const
+    Locale::DateOrder Locale::getDateOrder() const
     {
         Q_D(const Locale);
         return d->m_currentDateOrder;
     }
 
-    void Locale::setDateOrder( DateOrder dateOrder )
+    void Locale::setDateOrder( Locale::DateOrder dateOrder )
     {
         Q_D(Locale);
         qWarning() << "DateOrder is not yet implemented";
         d->m_currentDateOrder = dateOrder;
     }
 
-    DateTimeFormat Locale::getDefaultDateFormat() const
+   Locale:: DateTimeFormat Locale::getDefaultDateFormat() const
     {
         Q_D(const Locale);
         return d->m_defaultDateFormat;
     }
 
-    DateOrder Locale::getDefaultDateOrder()
+    Locale::DateOrder Locale::getDefaultDateOrder() const
     {
-        Q_D(Locale);
+        Q_D(const Locale);
         return d->m_defaultDateOrder;
     }
 
-    DateTimeFormat Locale::getDefaultTimeFormat() const
+    Locale::DateTimeFormat Locale::getDefaultTimeFormat() const
     {
         Q_D(const Locale);
         return d->m_defaultTimeFormat;
     }
 
-    DateTimeFormat Locale::getDefaultDateTimeFormat() const
+    Locale::DateTimeFormat Locale::getDefaultDateTimeFormat() const
     {
         Q_D(const Locale);
         return d->m_defaultDateTimeFormat;
     }
 
-    HourFormat Locale::getHourFormat() const
+    Locale::HourFormat Locale::getHourFormat() const
     {
         Q_D(const Locale);
         return d->m_currentHourFormat;
     }
 
-    void Locale::setHourFormat( HourFormat hourFormat )
+    void Locale::setHourFormat( Locale::HourFormat hourFormat )
     {
         Q_D(Locale);
         d->m_currentHourFormat = hourFormat;
@@ -219,9 +216,11 @@ namespace meego {
 
     QString Locale::formatString(int format) const
     {
-        Q_D(const Locale)
+        Q_D(const Locale);
 
-        switch (format) {
+        DateTimeFormat myFormat = (DateTimeFormat)format;
+
+        switch (myFormat) {
         case DateFullLong:
             //: QDateTime format string (translator: update order / format) - See http://doc.qt.nokia.com/4.7/qdatetime.html#toString
             //: dddd = full day of week, MMMM = full month, d = day of month, yyyy = year (e.g. Monday, January 31, 2011)
@@ -337,14 +336,14 @@ namespace meego {
             dateOrder.indexOf("d") != -1 &&  dateOrder.indexOf("y") != -1) {
 
             if( dateOrder.indexOf("d") == 1 ) {
-                m_defaultDateOrder = DMY;
-                m_currentDateOrder = DMY;
+                m_defaultDateOrder = Locale::DMY;
+                m_currentDateOrder = Locale::DMY;
             } else if ( dateOrder.indexOf("m") == 1 ) {
-                m_defaultDateOrder = MDY;
-                m_currentDateOrder = MDY;
+                m_defaultDateOrder = Locale::MDY;
+                m_currentDateOrder = Locale::MDY;
             } else if ( dateOrder.indexOf("y") == 1 ) {
-                m_defaultDateOrder = YMD;
-                m_currentDateOrder = YMD;
+                m_defaultDateOrder = Locale::YMD;
+                m_currentDateOrder = Locale::YMD;
             }
         }
 
@@ -358,20 +357,23 @@ namespace meego {
             m_24hour = true;
 
         if( m_24hour ) {
-            m_currentHourFormat = Hrs24;
-            m_defaultHourFormat = Hrs24;
+            m_currentHourFormat = Locale::Hrs24;
+            m_defaultHourFormat = Locale::Hrs24;
         } else {
-            m_currentHourFormat = Hrs12;
-            m_defaultHourFormat = Hrs12;
+            m_currentHourFormat = Locale::Hrs12;
+            m_defaultHourFormat = Locale::Hrs12;
         }
 
         //: read DateOfWeek
-        DayOfWeek dayOfWeek = DaySunday;
-
+        Locale::DayOfWeek dayOfWeek = Locale::DaySunday;
+        int dow = 0;
         QString day = tr("1", "firstday");
-        QChar ch = day.at(0);
-        if (ch >= '1' && ch <= '7')
-            dayOfWeek = (DayOfWeek)ch.toAscii() - '0';
+        ch = day.at(0);
+        if (ch >= '1' && ch <= '7') {
+            dow = ch.toAscii() - '0';
+        }
+
+        dayOfWeek = (Locale::DayOfWeek)dow;
 
         m_defaultFirstDayOfWeek = dayOfWeek;
         m_currentFirstDayOfWeek = dayOfWeek;
@@ -381,7 +383,7 @@ namespace meego {
     {
         qWarning() << "not implemented";
     }
-    void  LocalePrivate::changeLanguage(const QString languageString)
+    void LocalePrivate::changeLanguage(const QString languageString)
     {
         qWarning() << "not implemented";
     }

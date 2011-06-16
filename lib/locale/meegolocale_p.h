@@ -1,54 +1,59 @@
 #ifndef MEEGOLOCALE_P_H
 #define MEEGOLOCALE_P_H
 
+#include <QObject>
+#include <QLocale>
+#include <QtCore/qglobal.h>
+
 #include "meegolocale.h"
 
 namespace meego {
 
-    class LocalePrivate {
+    class LocalePrivate : QObject {
+        Q_OBJECT
 
     public:
-        LocalePrivate( Locale* parent) : q_ptr( parent)
+        LocalePrivate( Locale* parent) : QObject( parent ), q_ptr( parent )
         {
             m_currentLanguage = QString();
             m_currentLanguageCode = QString();
             m_currentRegionCode = QString();
 
-            m_currentDateOrder = MDY;
-            m_defaultDateOrder = MDY;
-            m_currentHourFormat = Hrs24;
-            m_defaultHourFormat = Hrs24;
-            m_currentDefaultDateTimeFormat = DateTimeFull;
-            m_defaultDateTimeFormat = DateTimeFull;
-            m_currentDefaultTimeFormat = TimeFull;
-            m_defaultTimeFormat = TimeTime;
-            m_currentDefaultDateFormat = DateFull;
-            m_defaultDateFormat = DateFull;
-            m_defaultFirstDayOfWeek = DaySunday;
-            m_currentFirstDayOfWeek = DaySunday;
+            m_currentDateOrder = Locale::MDY;
+            m_defaultDateOrder = Locale::MDY;
+            m_currentHourFormat = Locale::Hrs24;
+            m_defaultHourFormat = Locale::Hrs24;
+            m_currentDateTimeFormat = Locale::DateTimeQtLong;
+            m_defaultDateTimeFormat = Locale::DateTimeQtLong;
+            m_currentTimeFormat = Locale::TimeFull;
+            m_defaultTimeFormat = Locale::TimeFull;
+            m_currentDateFormat = Locale::DateFull;
+            m_defaultDateFormat = Locale::DateFull;
+            m_defaultFirstDayOfWeek = Locale::DaySunday;
+            m_currentFirstDayOfWeek = Locale::DaySunday;
         }
 
         void readConfig();
         void resetToDefault();
         void changeLanguage(const QString languageString);
 
-        DateOrder m_currentDateOrder;
-        DateOrder m_defaultDateOrder;
+        Locale::DateOrder m_currentDateOrder;
+        Locale::DateOrder m_defaultDateOrder;
 
-        HourFormat m_currentHourFormat;
-        HourFormat m_defaultHourFormat;
+        Locale::HourFormat m_currentHourFormat;
+        Locale::HourFormat m_defaultHourFormat;
 
-        DateTimeFormat m_currentDefaultDateTimeFormat;
-        DateTimeFormat m_defaultDateTimeFormat;
+        Locale::DateTimeFormat m_currentDateTimeFormat;
+        Locale::DateTimeFormat m_defaultDateTimeFormat;
 
-        DateTimeFormat m_currentDefaultTimeFormat;
-        DateTimeFormat m_defaultTimeFormat;
+        Locale::DateTimeFormat m_currentTimeFormat;
+        Locale::DateTimeFormat m_defaultTimeFormat;
 
-        DateTimeFormat m_currentDefaultDateFormat;
-        DateTimeFormat m_defaultDateFormat;
+        Locale::DateTimeFormat m_currentDateFormat;
+        Locale::DateTimeFormat m_defaultDateFormat;
 
-        DayOfWeek m_defaultFirstDayOfWeek;
-        DayOfWeek m_currentFirstDayOfWeek;
+        Locale::DayOfWeek m_defaultFirstDayOfWeek;
+        Locale::DayOfWeek m_currentFirstDayOfWeek;
 
         QString m_currentLanguage;
         QString m_currentLanguageCode;
