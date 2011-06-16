@@ -12,8 +12,7 @@ MOC_DIR = .moc
 SOURCES +=  meegolocale.cpp
 
 HEADERS +=  meegolocale_global.h \
-            meegolocale.h \
-    meegolocale_p.h
+            meegolocale.h
 
 INSTALL_HEADERS += meegolocale_global.h \
                    meegolocale.h

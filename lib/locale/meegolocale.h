@@ -19,8 +19,6 @@ namespace meego
 
     // This is a class for providing locale-related information
 
-    class LocalePrivate;
-
     class LOCALESHARED_EXPORT Locale : public QObject
     {
         Q_OBJECT;
@@ -136,11 +134,34 @@ namespace meego
     protected:
 
         QString formatString(int format) const;
+        void readConfig();
+        void resetToDefault();
+        void changeLanguage(const QString languageString);
 
     private:
         
-        LocalePrivate * const d_ptr;
-        Q_DECLARE_PRIVATE(Locale);
+        DateOrder m_currentDateOrder;
+        DateOrder m_defaultDateOrder;
+
+        HourFormat m_currentHourFormat;
+        HourFormat m_defaultHourFormat;
+
+        DateTimeFormat m_currentDateTimeFormat;
+        DateTimeFormat m_defaultDateTimeFormat;
+
+        DateTimeFormat m_currentTimeFormat;
+        DateTimeFormat m_defaultTimeFormat;
+
+        DateTimeFormat m_currentDateFormat;
+        DateTimeFormat m_defaultDateFormat;
+
+        DayOfWeek m_defaultFirstDayOfWeek;
+        DayOfWeek m_currentFirstDayOfWeek;
+
+        QString m_currentLanguage;
+        QString m_currentLanguageCode;
+        QString m_currentRegionCode;
+        QLocale m_locale;
     };
 
 } //namespace meego

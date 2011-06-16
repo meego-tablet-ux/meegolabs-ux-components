@@ -61,6 +61,7 @@ AppPage {
         }
     }
 
+
     Labs.LocaleHelper {
         id: localehelper
     }

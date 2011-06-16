@@ -14,6 +14,8 @@
 #include <QLocale>
 #include <QtCore/qglobal.h>
 
+#include <QDebug>
+
 
 namespace meego
 {
@@ -28,6 +30,7 @@ namespace meego
             : QObject( parent ),
               q_ptr( parent )
         {
+            qDebug() << "Starting LocalePrivate...";
             m_currentLanguage = QString();
             m_currentLanguageCode = QString();
             m_currentRegionCode = QString();
