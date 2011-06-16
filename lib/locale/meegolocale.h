@@ -6,27 +6,23 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-#ifndef LOCALEHELPER_H
-#define LOCALEHELPER_H
+#ifndef MEEGO_LOCALE_H
+#define MEEGO_LOCALE_H
 
-#ifndef LOCALE_PLUGIN
-#include "locale_global.h"
-#else
-#define LOCALESHARED_EXPORT /**/
-#endif
-
+#include "meegolocale_global.h"
 #include <QObject>
 #include <QLocale>
 
-// This is a class for exporting locale-related features to QML
-// Most will probably be wrappers around QLocale, as needed. Starting small. :)
+namespace meego {
 
-class LOCALESHARED_EXPORT LocaleHelper: public QObject
+// This is a class for providing locale-related information
+
+class LOCALESHARED_EXPORT Locale : public QObject
 {
-    Q_OBJECT
+    Q_OBJECT;
 
 public:
-    explicit LocaleHelper(QObject *parent = 0);
+    explicit Locale (QObject *parent = 0);
 
     enum DateTimeFormat {
         DateBEGIN = 100,
@@ -106,9 +102,13 @@ public:
     Q_INVOKABLE QString decimalPoint() const;
 
 protected:
+
     QString formatString(int format) const;
 
     QLocale m_locale;
     bool m_24hour;
 };
-#endif // LOCALEHELPER_H
+
+} //namespace meego
+
+#endif // MEEGO_LOCALE_H
