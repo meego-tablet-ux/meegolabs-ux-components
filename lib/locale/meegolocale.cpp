@@ -385,6 +385,7 @@ namespace meego {
     }
     void LocalePrivate::changeLanguage(const QString languageString)
     {
+        Q_UNUSED(languageString);
         qWarning() << "not implemented";
     }
 

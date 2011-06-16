@@ -14,7 +14,8 @@
 #include <QLocale>
 #include <QList>
 
-namespace meego {
+namespace meego
+{
 
     // This is a class for providing locale-related information
 
@@ -22,7 +23,7 @@ namespace meego {
 
     class LOCALESHARED_EXPORT Locale : public QObject
     {
-        Q_OBJECT
+        Q_OBJECT;
         Q_ENUMS( DayOfWeek );
         Q_ENUMS( DateTimeFormat );
         Q_ENUMS( DateOrder );
@@ -90,7 +91,7 @@ namespace meego {
             MDY
         };
         enum HourFormat {
-            defaultHrs,
+            HrsDefault,
             Hrs12,
             Hrs24
         };
@@ -104,15 +105,15 @@ namespace meego {
         Q_INVOKABLE QString currentTime(int format) const;
         Q_INVOKABLE QString currentDateTime(int format) const;
 
-        // returns a three-character string with the letters 'd', 'm', and 'y' in
+        // Returns a three-character string with the letters 'd', 'm', and 'y' in
         //   the order that those should appear for this locale, e.g. "mdy" for
         //   American 1/31/2011, "dmy" for European 31/1/2011
         Q_INVOKABLE QString numericDateOrder() const;
 
         // localized first day of the week (returns DayOfWeek enum)
-        Q_INVOKABLE Locale::DayOfWeek firstDayOfWeek() const;
+        Q_INVOKABLE DayOfWeek firstDayOfWeek() const;
         Q_INVOKABLE void setFirstDayOfWeek( Locale::DayOfWeek dayofWeek );
-        Q_INVOKABLE Locale::DayOfWeek getDefaultFirstDayOfWeek() const;
+        Q_INVOKABLE DayOfWeek getDefaultFirstDayOfWeek() const;
 
         // localized decimal point
         Q_INVOKABLE QString decimalPoint() const;
@@ -121,27 +122,25 @@ namespace meego {
         Q_INVOKABLE void setLanguageCode( const QString code );
         Q_INVOKABLE QList<QString> getLanguageCodes() const;
 
-        Q_INVOKABLE Locale::DateOrder getDateOrder() const;
-        Q_INVOKABLE Locale::DateOrder getDefaultDateOrder() const;
+        Q_INVOKABLE DateOrder getDateOrder() const;
+        Q_INVOKABLE DateOrder getDefaultDateOrder() const;
         Q_INVOKABLE void setDateOrder( Locale::DateOrder dateOrder );
 
-        Q_INVOKABLE Locale::DateTimeFormat getDefaultDateFormat() const;
-        Q_INVOKABLE Locale::DateTimeFormat getDefaultTimeFormat() const;
-        Q_INVOKABLE Locale::DateTimeFormat getDefaultDateTimeFormat() const;
+        Q_INVOKABLE DateTimeFormat getDefaultDateFormat() const;
+        Q_INVOKABLE DateTimeFormat getDefaultTimeFormat() const;
+        Q_INVOKABLE DateTimeFormat getDefaultDateTimeFormat() const;
 
-        Q_INVOKABLE Locale::HourFormat getHourFormat() const;
+        Q_INVOKABLE HourFormat getHourFormat() const;
         Q_INVOKABLE void setHourFormat( Locale::HourFormat hourFormat );
 
-        //TODO locale-aware lessthan function appropriate for qSort (http://doc.qt.nokia.com/4.7/qtalgorithms.html#qSort-2)
-        //TODO collators
     protected:
 
         QString formatString(int format) const;
 
     private:
+        
         LocalePrivate * const d_ptr;
         Q_DECLARE_PRIVATE(Locale);
-
     };
 
 } //namespace meego

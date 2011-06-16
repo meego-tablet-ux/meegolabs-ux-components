@@ -1,19 +1,32 @@
-#ifndef MEEGOLOCALE_P_H
-#define MEEGOLOCALE_P_H
+/*
+ * Copyright 2011 Intel Corporation.
+ *
+ * This program is licensed under the terms and conditions of the
+ * Apache License, version 2.0.  The full text of the Apache License is at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ */
 
+#ifndef MEEGO_LOCALE_P_H
+#define MEEGO_LOCALE_P_H
+
+#include "meegolocale.h"
 #include <QObject>
 #include <QLocale>
 #include <QtCore/qglobal.h>
 
-#include "meegolocale.h"
 
-namespace meego {
+namespace meego
+{
 
-    class LocalePrivate : QObject {
-        Q_OBJECT
+    class LocalePrivate : QObject
+    {
+        Q_OBJECT;
 
     public:
-        LocalePrivate( Locale* parent) : QObject( parent ), q_ptr( parent )
+        
+        LocalePrivate( Locale* parent)
+            : QObject( parent ),
+              q_ptr( parent )
         {
             m_currentLanguage = QString();
             m_currentLanguageCode = QString();
@@ -64,5 +77,7 @@ namespace meego {
         Q_DECLARE_PUBLIC( Locale );
 
     };
-}
-#endif // MEEGOLOCALE_P_H
+    
+} //namespace meego
+
+#endif // MEEGO_LOCALE_P_H
