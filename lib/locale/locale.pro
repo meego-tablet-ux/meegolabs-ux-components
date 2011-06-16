@@ -12,7 +12,8 @@ MOC_DIR = .moc
 SOURCES +=  meegolocale.cpp
 
 HEADERS +=  meegolocale_global.h \
-            meegolocale.h
+            meegolocale.h \
+    meegolocale_p.h
 
 INSTALL_HEADERS += meegolocale_global.h \
                    meegolocale.h
@@ -25,4 +26,3 @@ headers.path += $$INSTALL_ROOT/usr/include
 INSTALLS += target headers
 
 TRANSLATIONS += $${SOURCES} $${HEADERS} $${OTHER_FILES}
-

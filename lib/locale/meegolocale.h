@@ -12,10 +12,13 @@
 #include "meegolocale_global.h"
 #include <QObject>
 #include <QLocale>
+#include <QList>
 
 namespace meego {
 
 // This is a class for providing locale-related information
+
+class LocalePrivate;
 
 class LOCALESHARED_EXPORT Locale : public QObject
 {
@@ -81,6 +84,20 @@ public:
     };
     Q_ENUMS(DayOfWeek);
 
+    enum DateOrder {
+        YMD,
+        DMY,
+        MDY
+    };
+    Q_ENUMS( DateOrder );
+
+    enum HourFormat {
+        defaultHrs,
+        Hrs12,
+        Hrs24
+    };
+    Q_ENUMS( HourFormat );
+
     // date/time formatting
     Q_INVOKABLE QString localDate(const QDate &date, int format) const;
     Q_INVOKABLE QString localTime(const QTime &time, int format) const;
@@ -97,16 +114,36 @@ public:
 
     // localized first day of the week (returns DayOfWeek enum)
     Q_INVOKABLE int firstDayOfWeek() const;
+    Q_INVOKABLE void setFirstDayOfWeek( DayOfWeek dayofWeek );
+    Q_INVOKABLE int getDefaultFirstDayOfWeek() const;
 
     // localized decimal point
     Q_INVOKABLE QString decimalPoint() const;
 
+    Q_INVOKABLE QString getCurrentLanguageCode() const;
+    Q_INVOKABLE void setLanguageCode( const QString code );
+    Q_INVOKABLE QList<QString> getLanguageCodes() const;
+
+    Q_INVOKABLE DateOrder getDateOrder();
+    Q_INVOKABLE void setDateOrder( DateOrder dateOrder );
+
+    Q_INVOKABLE DateOrder getDefaultDateOrder() const;
+    Q_INVOKABLE DateTimeFormat getDefaultDateFormat() const;
+    Q_INVOKABLE DateTimeFormat getDefaultTimeFormat() const;
+    Q_INVOKABLE DateTimeFormat getDefaultDateTimeFormat() const;
+
+    Q_INVOKABLE HourFormat getHourFormat();
+    Q_INVOKABLE void setHourFormat( HourFormat hourFormat );
+
+    //TODO locale-aware lessthan function appropriate for qSort (http://doc.qt.nokia.com/4.7/qtalgorithms.html#qSort-2)
+    //TODO collators
 protected:
 
-    QString formatString(int format) const;
+    LocalePrivate* const d_ptr;
 
-    QLocale m_locale;
-    bool m_24hour;
+private:
+    Q_DECLARE_PRIVATE(Locale);
+
 };
 
 } //namespace meego
