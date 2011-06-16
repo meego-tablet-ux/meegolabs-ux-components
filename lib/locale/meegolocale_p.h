@@ -8,13 +8,29 @@ namespace meego {
     class LocalePrivate {
 
     public:
-        LocalePrivate( Locale* parent) : q_ptr( parent) {}
+        LocalePrivate( Locale* parent) : q_ptr( parent)
+        {
+            m_currentLanguage = QString();
+            m_currentLanguageCode = QString();
+            m_currentRegionCode = QString();
+
+            m_currentDateOrder = MDY;
+            m_defaultDateOrder = MDY;
+            m_currentHourFormat = Hrs24;
+            m_defaultHourFormat = Hrs24;
+            m_currentDefaultDateTimeFormat = DateTimeFull;
+            m_defaultDateTimeFormat = DateTimeFull;
+            m_currentDefaultTimeFormat = TimeFull;
+            m_defaultTimeFormat = TimeTime;
+            m_currentDefaultDateFormat = DateFull;
+            m_defaultDateFormat = DateFull;
+            m_defaultFirstDayOfWeek = DaySunday;
+            m_currentFirstDayOfWeek = DaySunday;
+        }
 
         void readConfig();
         void resetToDefault();
         void changeLanguage(const QString languageString);
-
-        QString formatString(int format) const;
 
         DateOrder m_currentDateOrder;
         DateOrder m_defaultDateOrder;
@@ -35,6 +51,8 @@ namespace meego {
         DayOfWeek m_currentFirstDayOfWeek;
 
         QString m_currentLanguage;
+        QString m_currentLanguageCode;
+        QString m_currentRegionCode;
         QLocale m_locale;
 
         Locale* const q_ptr;

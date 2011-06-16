@@ -125,9 +125,9 @@ public:
     Q_INVOKABLE QList<QString> getLanguageCodes() const;
 
     Q_INVOKABLE DateOrder getDateOrder();
+    Q_INVOKABLE DateOrder getDefaultDateOrder() const;
     Q_INVOKABLE void setDateOrder( DateOrder dateOrder );
 
-    Q_INVOKABLE DateOrder getDefaultDateOrder() const;
     Q_INVOKABLE DateTimeFormat getDefaultDateFormat() const;
     Q_INVOKABLE DateTimeFormat getDefaultTimeFormat() const;
     Q_INVOKABLE DateTimeFormat getDefaultDateTimeFormat() const;
@@ -139,6 +139,7 @@ public:
     //TODO collators
 protected:
 
+    QString formatString(int format) const;
     LocalePrivate* const d_ptr;
 
 private:
