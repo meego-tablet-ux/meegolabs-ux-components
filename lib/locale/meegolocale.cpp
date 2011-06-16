@@ -9,15 +9,118 @@
 #include <QDate>
 #include <QDateTime>
 #include <QTime>
+
+#include <unicode/unistr.h>
+#include <unicode/locid.h>
+#include <unicode/coll.h>
+#include <unicode/tblcoll.h>
+#include <unicode/uchar.h>
+#include <unicode/ulocdata.h>
+#include <unicode/ustring.h>
+#include <unicode/uchriter.h>
+
 #include <QDebug>
 #include <QLocale>
 
 #include "meegolocale.h"
 
-namespace meego {
+namespace
+{
+    enum CollationTypes {
+        Default = 0,
+        PhoneBook,
+        Pinyin,
+        Traditional,
+        Stroke,
+        Direct
+    };
 
-    Locale::Locale(QObject *parent):
-            QObject(parent)
+    bool compare (const QString & lStr, const QString & rStr, icu::Collator & coll)
+    {
+        //Convert strings to UnicodeStrings
+        const ushort *lShort = lStr.utf16();
+        UnicodeString lUniStr = UnicodeString(static_cast<const UChar *>(lShort));
+        const ushort *rShort = rStr.utf16();
+        UnicodeString rUniStr = UnicodeString(static_cast<const UChar *>(rShort));
+
+        icu::Collator::EComparisonResult result = coll.compare(lUniStr, rUniStr);
+
+        switch (result) {
+          case icu::Collator::LESS :
+              return -1;
+              break;
+          case icu::Collator::GREATER :
+              return 1;
+              break;
+          default :
+              return 0;
+        };
+    }
+
+
+    icu::Collator * createCollator (int collType, QString locale, QLocale::Country country)
+    {
+        QString collation;
+
+        switch (collType) {
+          case PhoneBook:
+              collation = "@collation=phonebook";
+              break;
+          case Pinyin:
+              collation = "@collation=pinyin";
+              break;
+          case Traditional:
+              collation = "@collation=traditional";
+              break;
+          case Stroke:
+              collation = "@collation=stroke";
+              break;
+          case Direct:
+              collation = "@collation=direct";
+              break;
+          default:
+              collation = "@collation=default";
+        }
+
+        const char *name = (locale + collation).toLatin1().constData();
+        Locale localeName = Locale(name);
+
+        UErrorCode status = U_ZERO_ERROR;
+        icu::Collator * pColl = icu::Collator::createInstance(localeName, status);
+        
+        if (U_SUCCESS(status) &&
+            ((country == QLocale::DemocraticRepublicOfKorea) ||
+             (country == QLocale::RepublicOfKorea) ||
+             (country == QLocale::Japan))) {
+
+            //ASCII characters should be sorted after
+            //non-ASCII characters for some languages
+            UnicodeString rules = ((icu::RuleBasedCollator *)pColl)->getRules();
+            rules += "< a,A< b,B< c,C< d,D< e,E< f,F< g,G< h,H< i,I< j,J < k,K"
+                "< l,L< m,M< n,N< o,O< p,P< q,Q< r,R< s,S< t,T < u,U< v,V"
+                "< w,W< x,X< y,Y< z,Z";
+
+            delete pColl;
+            pColl = new icu::RuleBasedCollator(rules, status);
+        }
+
+        if (!U_SUCCESS(status)) {
+            delete pColl;
+            pColl = 0;
+        }
+        return pColl;
+    }
+    
+} // anonymous namespace
+
+
+namespace meego
+{
+
+    Locale::Locale(QObject *parent)
+        : QObject(parent),
+          mpDefaultCollator(0),
+          mpPhoneBookCollator(0)  
     {
         qDebug() << "Starting" << __FUNCTION__;
         m_currentLanguage = QString();
@@ -40,6 +143,15 @@ namespace meego {
         readConfig();
         qDebug() << "Ending" << __FUNCTION__;
     }
+
+    
+    Locale::~Locale()
+    {
+        delete mpDefaultCollator;
+        delete mpPhoneBookCollator;
+    }
+
+    
 
     QString Locale::localDate(const QDate &date, int format) const
     {
@@ -388,5 +500,47 @@ namespace meego {
         Q_UNUSED(languageString);
         qWarning() << "not implemented";
     }
+
+    
+    QString Locale::name() const
+    {
+        return QLocale::system().name();
+    }
+
+
+    QLocale::Country Locale::country() const
+    {
+        return QLocale::system().country();
+    }
+
+
+    bool Locale::lessThan(const QString &lStr, const QString &rStr) const
+    {
+        return (-1 == compare(lStr, rStr));
+    }
+    
+    int  Locale::compare(const QString &lStr, const QString &rStr) const
+    {
+        if (! mpDefaultCollator) {
+            mpDefaultCollator = createCollator(Default, name(), country());
+            if (!mpDefaultCollator) return 0;
+        }
+        return ::compare(lStr, rStr, *mpDefaultCollator);
+    }
+    
+    bool Locale::lessThanPhoneBook(const QString &lStr, const QString &rStr) const
+    {
+        return (-1 == comparePhoneBook(lStr, rStr));
+    }
+    
+    int  Locale::comparePhoneBook(const QString &lStr, const QString &rStr) const
+    {
+        if (! mpPhoneBookCollator) {
+            mpPhoneBookCollator = createCollator(PhoneBook, name(), country());
+            if (!mpPhoneBookCollator) return 0;
+        }
+        return ::compare(lStr, rStr, *mpPhoneBookCollator);
+    }
+    
 
 } //namespace meego

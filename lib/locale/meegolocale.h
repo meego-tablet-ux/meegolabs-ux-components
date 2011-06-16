@@ -14,6 +14,11 @@
 #include <QLocale>
 #include <QList>
 
+
+namespace icu {
+    class Collator;
+}
+
 namespace meego
 {
 
@@ -22,14 +27,19 @@ namespace meego
     class LOCALESHARED_EXPORT Locale : public QObject
     {
         Q_OBJECT;
+
         Q_ENUMS( DayOfWeek );
         Q_ENUMS( DateTimeFormat );
         Q_ENUMS( DateOrder );
         Q_ENUMS( HourFormat );
 
-    public:
-        explicit Locale (QObject *parent = 0);
+        Q_PROPERTY(QString name READ name);
+        Q_PROPERTY(QString country READ country);
 
+      public:
+        explicit Locale (QObject *parent = 0);
+        ~Locale();
+        
         enum DateTimeFormat {
             DateBEGIN = 100,
             DateFullLong,         // Monday, January 31, 2011
@@ -131,14 +141,23 @@ namespace meego
         Q_INVOKABLE HourFormat getHourFormat() const;
         Q_INVOKABLE void setHourFormat( Locale::HourFormat hourFormat );
 
-    protected:
+
+        Q_INVOKABLE QString name() const;
+        Q_INVOKABLE QLocale::Country country() const;
+
+        Q_INVOKABLE bool lessThan(const QString & lStr, const QString & rStr) const;
+        Q_INVOKABLE int  compare(const QString & lStr, const QString & rStr) const;
+        Q_INVOKABLE bool lessThanPhoneBook(const QString & lStr, const QString & rStr) const;
+        Q_INVOKABLE int  comparePhoneBook(const QString & lStr, const QString & rStr) const;
+        
+      protected:
 
         QString formatString(int format) const;
         void readConfig();
         void resetToDefault();
         void changeLanguage(const QString languageString);
 
-    private:
+      private:
         
         DateOrder m_currentDateOrder;
         DateOrder m_defaultDateOrder;
@@ -162,8 +181,11 @@ namespace meego
         QString m_currentLanguageCode;
         QString m_currentRegionCode;
         QLocale m_locale;
-    };
 
+        mutable icu::Collator * mpDefaultCollator;
+        mutable icu::Collator * mpPhoneBookCollator;
+    };
+    
 } //namespace meego
 
 #endif // MEEGO_LOCALE_H
