@@ -7,11 +7,13 @@
  */
 
 #include "plugin.h"
-#include "localehelper.h"
+#include "meegolocale.h"
+
+QML_DECLARE_TYPE(meego::Locale);
 
 void MeeGoUxLabsLocalePlugin::registerTypes(const char *uri)
 {
-    qmlRegisterType<LocaleHelper>(uri, 0, 0, "LocaleHelper");
+    qmlRegisterType<meego::Locale>(uri, 0, 0, "LocaleHelper");
 }
 
 void MeeGoUxLabsLocalePlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)

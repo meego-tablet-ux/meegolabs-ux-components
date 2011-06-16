@@ -1,7 +1,8 @@
 TEMPLATE = subdirs
 CONFIG += ordered
 
-SUBDIRS += src \
+SUBDIRS += lib \
+           src \
            examples
 
 QT += declarative \

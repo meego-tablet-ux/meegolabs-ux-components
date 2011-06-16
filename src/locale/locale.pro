@@ -9,13 +9,15 @@ QT += declarative
 CONFIG += qt \
           plugin
 
-SOURCES +=  \
-            localehelper.cpp \
-    plugin.cpp
+INCLUDEPATH += ../../lib/locale
+DEFINES += LOCALE_PLUGIN
 
-HEADERS +=  \
-            localehelper.h \
-    plugin.h
+SOURCES += plugin.cpp \
+           ../../lib/locale/meegolocale.cpp
+
+HEADERS += plugin.h \
+           ../../lib/locale/meegolocale.h \
+           ../../lib/locale/meegolocale_global.h
 
 QML_FILES = qmldir
 

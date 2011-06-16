@@ -6,8 +6,8 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-#ifndef LOCALE_H
-#define LOCALE_H
+#ifndef MEEGO_LOCALE_PLUGIN_H
+#define MEEGO_LOCALE_PLUGIN_H
 
 #include <QtDeclarative/qdeclarative.h>
 #include <QtDeclarative/QDeclarativeExtensionPlugin>
@@ -21,4 +21,4 @@ public:
     void initializeEngine(QDeclarativeEngine *engine, const char *uri);
 };
 
-#endif // LOCALE_H
+#endif // MEEGO_LOCALE_PLUGIN_H

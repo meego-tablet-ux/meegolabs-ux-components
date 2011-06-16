@@ -6,16 +6,18 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-#include <QDebug>
 
+#include "meegolocale.h"
 #include <QDate>
 #include <QDateTime>
 #include <QTime>
-#include <qdeclarative.h>
 
-#include "localehelper.h"
+#include <QDebug>
 
-LocaleHelper::LocaleHelper(QObject *parent): QObject(parent)
+
+namespace meego {
+
+Locale::Locale(QObject *parent): QObject(parent)
 {
     m_24hour = false;
 
@@ -26,20 +28,20 @@ LocaleHelper::LocaleHelper(QObject *parent): QObject(parent)
         m_24hour = true;
 }
 
-QString LocaleHelper::localDate(const QDate &date, int format) const
+QString Locale::localDate(const QDate &date, int format) const
 {
     if (format <= DateBEGIN || format >= DateEND) {
-        qWarning() << "LocaleHelper: invalid date format: " << format;
+        qWarning() << "Locale: invalid date format: " << format;
         return QString();
     }
 
     return date.toString(formatString(format));
 }
 
-QString LocaleHelper::localTime(const QTime &time, int format) const
+QString Locale::localTime(const QTime &time, int format) const
 {
     if (format <= TimeBEGIN || format >= TimeEND) {
-        qWarning() << "LocaleHelper: invalid time format: " << format;
+        qWarning() << "Locale: invalid time format: " << format;
         return QString();
     }
 
@@ -76,37 +78,37 @@ QString LocaleHelper::localTime(const QTime &time, int format) const
         return time.toString(m_locale.timeFormat(QLocale::ShortFormat));
 
     default:
-        qWarning() << "LocaleHelper: unhandled time format: " << format;
+        qWarning() << "Locale: unhandled time format: " << format;
         return QString();
     }
 }
 
-QString LocaleHelper::localDateTime(const QDateTime &datetime, int format) const
+QString Locale::localDateTime(const QDateTime &datetime, int format) const
 {
     if (format <= DateTimeBEGIN || format >= DateTimeEND) {
-        qWarning() << "LocaleHelper: invalid datetime format: " << format;
+        qWarning() << "Locale: invalid datetime format: " << format;
         return QString();
     }
 
     return datetime.toString(formatString(format));
 }
 
-QString LocaleHelper::currentDate(int format) const
+QString Locale::currentDate(int format) const
 {
     return localDate(QDate::currentDate(), format);
 }
 
-QString LocaleHelper::currentTime(int format) const
+QString Locale::currentTime(int format) const
 {
     return localTime(QTime::currentTime(), format);
 }
 
-QString LocaleHelper::currentDateTime(int format) const
+QString Locale::currentDateTime(int format) const
 {
     return localDateTime(QDateTime::currentDateTime(), format);
 }
 
-QString LocaleHelper::numericDateOrder() const
+QString Locale::numericDateOrder() const
 {
     //: translator: this order will determine order of date picker widgets
     //: default order for numeric date (m = month, d = date, y = year)
@@ -120,7 +122,7 @@ QString LocaleHelper::numericDateOrder() const
     return QString();
 }
 
-int LocaleHelper::firstDayOfWeek() const
+int Locale::firstDayOfWeek() const
 {
     //: translator: identify the first day of the week in target culture
     //: 1 = Sunday, 2 = Monday, etc.
@@ -132,7 +134,7 @@ int LocaleHelper::firstDayOfWeek() const
     return dayOfWeek;
 }
 
-QString LocaleHelper::decimalPoint() const
+QString Locale::decimalPoint() const
 {
     return m_locale.decimalPoint();
 }
@@ -141,7 +143,7 @@ QString LocaleHelper::decimalPoint() const
 // protected member functions
 //
 
-QString LocaleHelper::formatString(int format) const
+QString Locale::formatString(int format) const
 {
     switch (format) {
     case DateFullLong:
@@ -239,9 +241,9 @@ QString LocaleHelper::formatString(int format) const
         return m_locale.dateTimeFormat(QLocale::ShortFormat);
 
     default:
-        qWarning() << "LocaleHelper: unexpected format string";
+        qWarning() << "Locale: unexpected format string";
         return QString();
     }
 }
 
-QML_DECLARE_TYPE(LocaleHelper);
+} //namespace meego
