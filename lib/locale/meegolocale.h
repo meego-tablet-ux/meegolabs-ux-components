@@ -34,12 +34,17 @@ namespace meego
         Q_ENUMS( DayOfWeek );
         Q_ENUMS( DateTimeFormat );
         Q_ENUMS( DateFormat );
-        Q_ENUMS( HourFormat );
+        Q_ENUMS( TimeFormat );
 
-        Q_PROPERTY( QString    locale         READ locale WRITE setLocale NOTIFY localeChanged );
-        Q_PROPERTY( DateFormat dateFormat     READ dateFormat WRITE setDateFormat NOTIFY dateFormatChanged );
-        Q_PROPERTY( HourFormat hourFormat     READ hourFormat WRITE setHourFormat NOTIFY hourFormatChanged );
-        Q_PROPERTY( DayOfWeek  firstDayOfWeek READ firstDayOfWeek WRITE setFirstDayOfWeek NOTIFY firstDayOfWeekChanged );
+        Q_PROPERTY( QString    locale                READ locale WRITE setLocale NOTIFY localeChanged );
+        Q_PROPERTY( DateFormat dateFormat            READ dateFormat WRITE setDateFormat NOTIFY dateFormatChanged );
+        Q_PROPERTY( DateFormat defaultDateFormat     READ defaultDateFormat NOTIFY defaultDateFormatChanged );
+        Q_PROPERTY( TimeFormat timeFormat            READ timeFormat WRITE setTimeFormat NOTIFY timeFormatChanged );
+        Q_PROPERTY( TimeFormat defaultTimeFormat     READ defaultTimeFormat NOTIFY defaultTimeFormatChanged );
+        Q_PROPERTY( DayOfWeek  firstDayOfWeek        READ firstDayOfWeek WRITE setFirstDayOfWeek NOTIFY firstDayOfWeekChanged );
+        Q_PROPERTY( DayOfWeek  defaultFirstDayOfWeek READ defaultFirstDayOfWeek NOTIFY defaultFirstDayOfWeekChanged );
+        Q_PROPERTY( QString    decimalPoint          READ decimalPoint WRITE setDecimalPoint NOTIFY decimalPointChanged)
+        Q_PROPERTY( QString    defaultDecimalPoint   READ defaultDecimalPoint NOTIFY defaultDecimalPointChanged)
 
       public:
         explicit Locale (QObject *parent = 0);
@@ -92,31 +97,36 @@ namespace meego
         };
         
         enum DateFormat {
-            YMD = 0,
-            DMY,
-            MDY
+            DateFormatInvalid = 0,
+            DateFormatYMD,
+            DateFormatDMY,
+            DateFormatMDY
         };
         
-        enum HourFormat {
-            Hrs12 = 0,
-            Hrs24
+        enum TimeFormat {
+            TimeFormatInvalid = 0,
+            TimeFormat12 = 0,
+            TimeFormat24
         };
 
         QString locale() const;
         void setLocale( QString );
 
-        HourFormat hourFormat() const;
-        void setHourFormat( HourFormat );
+        TimeFormat timeFormat() const;
+        void setTimeFormat( TimeFormat );
+        TimeFormat defaultTimeFormat() const;
 
         // Returns a three-character string with the letters 'd', 'm', and 'y' in
         //   the order that those should appear for this locale, e.g. "mdy" for
         //   American 1/31/2011, "dmy" for European 31/1/2011
         DateFormat dateFormat() const;
         void       setDateFormat( DateFormat );
+        DateFormat defaultDateFormat() const;
 
         // localized first day of the week (returns DayOfWeek enum)
         DayOfWeek firstDayOfWeek() const;
         void      setFirstDayOfWeek( DayOfWeek dayofWeek );
+        DayOfWeek defaultFirstDayOfWeek() const;
 
         // date/time formatting
         Q_INVOKABLE QString localDate(const QDate &date, DateTimeFormat format) const;
@@ -126,9 +136,11 @@ namespace meego
 
         // localized decimal point
         Q_INVOKABLE QString decimalPoint() const;
+        Q_INVOKABLE void setDecimalPoint( QString );
+        Q_INVOKABLE QString defaultDecimalPoint() const;
 
         Q_INVOKABLE QList<QString> installedLocales() const;
-        Q_INVOKABLE QString localeDisplayName(QString locale) const;
+        Q_INVOKABLE QString localeDisplayName( QString locale ) const;
 
 
         bool lessThan(const QString & lStr, const QString & rStr) const;
@@ -139,11 +151,15 @@ namespace meego
       signals:
 
         void localeChanged();
-        void numericDateOrderChanged();
-        void hourFormatChanged();
-        void dateFormatChanged();
-        void firstDayOfWeekChanged();
         void installedLocalesChanged();
+        void dateFormatChanged();
+        void defaultDateFormatChanged();
+        void timeFormatChanged();
+        void defaultTimeFormatChanged();
+        void firstDayOfWeekChanged();
+        void defaultFirstDayOfWeekChanged();
+        void decimalPointChanged();
+        void defaultDecimalPointChanged();
         
       protected:
 
@@ -151,11 +167,12 @@ namespace meego
 
       private:
         
-        DateFormat mDateFormat;
-        HourFormat mHourFormat;
-        DayOfWeek  mFirstDayOfWeek;
-        QString    mLocale;
         QLocale  * mpQLocale;
+        DateFormat mDateFormat;
+        TimeFormat mTimeFormat;
+        DayOfWeek  mFirstDayOfWeek;
+        QString    mDecimalPoint;
+        QString    mLocale;
 
         mutable icu::Collator * mpDefaultCollator;
         mutable icu::Collator * mpPhoneBookCollator;

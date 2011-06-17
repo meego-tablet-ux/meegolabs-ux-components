@@ -137,39 +137,52 @@ namespace meego
 
     Locale::Locale(QObject *parent)
         : QObject(parent),
-          mDateFormat(MDY),
-          mHourFormat(Hrs12),
-          mFirstDayOfWeek(DaySunday),
-          mpQLocale(new QLocale),
+          mpQLocale(new QLocale()),
+          mDateFormat(defaultDateFormat()),
+          mTimeFormat(defaultTimeFormat()),
+          mFirstDayOfWeek(defaultFirstDayOfWeek()),
+          mDecimalPoint(defaultDecimalPoint()),
           mpDefaultCollator(0),
           mpPhoneBookCollator(0)
     {
-        //: read DateOrder
+        qDebug() << "Starting" << __FUNCTION__;
+        mLocale = QLocale::system().name();
+    }
+
+    Locale::DateFormat Locale::defaultDateFormat() const
+    {
+        //: read DateFormat
         //: translator: this order will determine order of date picker widgets
         //: default order for numeric date (m = month, d = date, y = year)
         //: the string should contain these exact three characters in some order
-        QString dateFormat = tr("mdy", "dateorder");
+        QString dateFormat = tr("mdy", "dateformat");
 
         if (dateFormat == "dmy") {
-            mDateFormat = Locale::DMY;
+            return DateFormatDMY;
         }
         else if (dateFormat == "ymd") {
-            mDateFormat = Locale::YMD;
+            return DateFormatYMD;
         }
         else {
-            mDateFormat = Locale::MDY;
+            return DateFormatMDY;
         }
+    }
 
-        //: read 24 hrs flag DateOrder
+    Locale::TimeFormat Locale::defaultTimeFormat() const
+    {
+        //: read 24 hrs flag DateFormat
         //: translator: set to 1 for default 24-hour time format (0 for 12-hour)
         QString time24 = tr("0", "timeformat");
         if (time24 == "1") {
-            mHourFormat = Locale::Hrs24;
+            return TimeFormat24;
         }
         else {
-            mHourFormat = Locale::Hrs12;
+            return TimeFormat12;
         }
+    }
 
+    Locale::DayOfWeek Locale::defaultFirstDayOfWeek() const
+    {
         //: read DateOfWeek
         //: translator: set to 1 for Monday, 2 for Tuesday, etc, and 7 for Sunday
         QString day = tr("1", "firstday");
@@ -182,9 +195,7 @@ namespace meego
             }
         }
 
-        mFirstDayOfWeek = (Locale::DayOfWeek)dow;
-
-        mLocale = QLocale::system().name();
+        return (DayOfWeek)dow;
     }
 
     
@@ -212,50 +223,47 @@ namespace meego
 
     Locale::DateFormat Locale::dateFormat() const
     {
-        return mDateFormat;
+        // Read possible user override from settings
+        return defaultDateFormat();
     }
 
 
-    void Locale::setDateFormat(DateFormat newValue)
+    void Locale::setDateFormat(DateFormat)
     {
         qWarning() << __FUNCTION__ << "not implemented yet!";
-        mDateFormat = newValue;
-        emit dateFormatChanged();
     }
 
 
-    Locale::HourFormat Locale::hourFormat() const
+    Locale::TimeFormat Locale::timeFormat() const
     {
-        return mHourFormat;
+        // TODO: Read possible user override from settings
+        return defaultTimeFormat();
     }
 
 
-    void Locale::setHourFormat(HourFormat newValue)
+    void Locale::setTimeFormat(TimeFormat)
     {
         qWarning() << __FUNCTION__ << "not implemented yet!";
-        mHourFormat = newValue;
-        emit hourFormatChanged();
     }
 
 
     Locale::DayOfWeek Locale::firstDayOfWeek() const
     {
-        return mFirstDayOfWeek;
+        // TODO: Read possible user override from settings
+        return defaultFirstDayOfWeek();
     }
 
 
-    void Locale::setFirstDayOfWeek(DayOfWeek newValue)
+    void Locale::setFirstDayOfWeek(DayOfWeek)
     {
         qWarning() << __FUNCTION__ << "not implemented yet!";
-        mFirstDayOfWeek = newValue;
-        emit firstDayOfWeekChanged();
     }
 
 
     QString Locale::localDate(const QDate &date, Locale::DateTimeFormat format) const
     {
         if (format <= DateBEGIN || format >= DateEND) {
-            qWarning() << "Locale: invalid date format: " << format;
+            qWarning() << "meego::Locale: invalid date format: " << format;
             return QString();
         }
 
@@ -266,7 +274,7 @@ namespace meego
     QString Locale::localTime(const QTime &time, Locale::DateTimeFormat format) const
     {
         if (format <= TimeBEGIN || format >= TimeEND) {
-            qWarning() << "Locale: invalid time format: " << format;
+            qWarning() << "meego::Locale: invalid time format: " << format;
             return QString();
         }
 
@@ -282,12 +290,8 @@ namespace meego
         QString ampm = (hour < 12) ? am : pm;
         int hour12 = (hour % 12) ? (hour % 12) : 12;
 
-        if (format == TimeFull) {
-            if( mHourFormat == Hrs12 )
-                format = TimeFull12;
-            else
-                format = TimeFull24;
-        }
+        if (format == TimeFull)
+            format = (timeFormat() == TimeFormat24) ? TimeFull24 : TimeFull12;
 
         switch (format) {
         case TimeFull12:
@@ -301,7 +305,7 @@ namespace meego
             return tr("%1:%2").arg(hour).arg(minute, 2, 10, QChar('0'));
 
         default:
-            qWarning() << "Locale: unhandled time format: " << format;
+            qWarning() << "LocaleHelper: unhandled time format: " << format;
             return QString();
         }
     }
@@ -319,9 +323,21 @@ namespace meego
     }
 
 
+    QString Locale::defaultDecimalPoint() const
+    {
+        qDebug() << __FUNCTION__;
+        return mpQLocale->decimalPoint();
+    }
+
     QString Locale::decimalPoint() const
     {
-        return mpQLocale->decimalPoint();
+        // TODO: Read possible user override from settings
+        return defaultDecimalPoint();
+    }
+
+    void Locale::setDecimalPoint( QString )
+    {
+        qWarning() << __FUNCTION__ << "not implemented yet!";
     }
 
 
@@ -373,89 +389,187 @@ namespace meego
 
     QString Locale::formatString(Locale::DateTimeFormat format) const
     {
+        DateFormat order = DateFormat();
+
         switch (format) {
-        case meego::Locale::DateFullLong:
-            //: QDateTime format string (translator: update order / format) - See http://doc.qt.nokia.com/4.7/qdatetime.html#toString
+        case DateFullLong:
+            if (order == DateFormatDMY)
+                //: QDateTime format string - See http://doc.qt.nokia.com/4.7/qdatetime.html#toString
+                //: translator: long date in DMY order
+                //: dddd = full day of week, MMMM = full month, d = day of month, yyyy = year (e.g. Monday, 31 January 2011)
+                return tr("dddd, d MMMM yyyy");
+            if (order == DateFormatYMD)
+                //: translator: long date in YMD order (QDateTime format string)
+                //: dddd = full day of week, MMMM = full month, d = day of month, yyyy = year (e.g. Monday, 2011 January 31)
+                return tr("dddd, yyyy MMMM d");
+            //: translator: long date in MDY order (QDateTime format string)
             //: dddd = full day of week, MMMM = full month, d = day of month, yyyy = year (e.g. Monday, January 31, 2011)
             return tr("dddd, MMMM d, yyyy");
 
-        case meego::Locale::DateFull:
-            //: QDateTime format string (translator: update order / format)
+        case DateFull:
+            if (order == DateFormatDMY)
+                //: translator: full date in DMY order (QDateTime format string)
+                //: MMMM = full month, d = day of month, yyyy = full year (e.g. 31 January 2011)
+                return tr("d MMMM yyyy");
+            if (order == DateFormatYMD)
+                //: translator: full date in YMD order (QDateTime format string)
+                //: MMMM = full month, d = day of month, yyyy = full year (e.g. 2011 January 31)
+                return tr("yyyy MMMM d");
+            //: translator: full date in MDY order (QDateTime format string)
             //: MMMM = full month, d = day of month, yyyy = full year (e.g. January 31, 2011)
             return tr("MMMM d, yyyy");
 
-        case meego::Locale::DateFullShort:
-            //: QDateTime format string (translator: update order / format)
+        case DateFullShort:
+            if (order == DateFormatDMY)
+                //: translator: short date in DMY order (QDateTime format string)
+                //: MMM = short month, d = day of month, yyyy = full year (e.g. 31 Jan 2011)
+                return tr("d MMM d yyyy");
+            if (order == DateFormatYMD)
+                //: translator: short date in YMD order (QDateTime format string)
+                //: MMM = short month, d = day of month, yyyy = full year (e.g. Jan 31 2011)
+                return tr("MMM d yyyy");
+            //: translator: short date in MDY order (QDateTime format string)
             //: MMM = short month, d = day of month, yyyy = full year (e.g. Jan 31 2011)
             return tr("MMM d yyyy");
 
-        case meego::Locale::DateFullNum:
-            //: QDateTime format string (translator: update order / format)
+        case DateFullNum:
+            if (order == DateFormatDMY)
+                //: translator: numeric date in DMY order (QDateTime format string)
+                //: M = numeric month, d = day of month, yyyy = full year (e.g. 31/1/2011)
+                return tr("d/M/yyyy");
+            if (order == DateFormatYMD)
+                //: translator: numeric date in YMD order (QDateTime format string)
+                //: M = numeric month, d = day of month, yyyy = full year (e.g. 2011/1/31)
+                return tr("yyyy/M/d");
+            //: translator: numeric date in MDY order (QDateTime format string)
             //: M = numeric month, d = day of month, yyyy = full year (e.g. 1/31/2011)
             return tr("M/d/yyyy");
 
-         case meego::Locale::DateFullNumShort:
-            //: QDateTime format string (translator: update order / format)
+         case DateFullNumShort:
+            if (order == DateFormatDMY)
+                //: translator: short numeric date in DMY order (QDateTime format string)
+                //: M = numeric month, d = day of month, yy = year (e.g. 31/1/11)
+                return tr("d/M/yy");
+            if (order == DateFormatYMD)
+                //: translator: short numeric date in YMD order (QDateTime format string)
+                //: M = numeric month, d = day of month, yy = year (e.g. 11/1/31)
+                return tr("yy/M/d");
+            //: translator: short numeric date in MDY order (QDateTime format string)
             //: M = numeric month, d = day of month, yy = year (e.g. 1/31/11)
             return tr("M/d/yy");
 
-        case meego::Locale::DateWeekdayMonthDay:
-            //: QDateTime format string (translator: update order / format)
+        case DateWeekdayMonthDay:
+            // NOTE: here YMD and MDY are the same, so we pass tr() a context string
+            //   in case they need to differ in some translation
+
+            if (order == DateFormatDMY)
+                //: translator: weekday, month, and day in DMY order (QDateTime format string)
+                //: dddd = full day of week, MMMM = full month, d = day of month (e.g. Monday, 31 January)
+                return tr("dddd, d MMMM");
+            if (order == DateFormatYMD)
+                //: translator: weekday, month, and day in DMY order (QDateTime format string)
+                //: dddd = full day of week, MMMM = full month, d = day of month (e.g. Monday, 31 January)
+                return tr("dddd, MMMM d", "YMD");
+            //: translator: weekday, month, and day in YDM or MDY order (QDateTime format string)
             //: dddd = full day of week, MMMM = full month, d = day of month (e.g. Monday, January 31)
-            return tr("dddd, MMMM d");
+            return tr("dddd, MMMM d", "MDY");
 
-        case meego::Locale::DateWeekdayDayShort:
-            //: QDateTime format string (translator: update order / format)
+        case DateWeekdayDayShort:
+            // NOTE: here all cases are the samee, so we pass tr() a context string
+            //   in case they need to differ in some translation
+
+            if (order == DateFormatDMY)
+                //: translator: weekday and day in DMY order (QDateTime format string)
+                //: ddd = short day of week, d = day of month (e.g. Mon 31)
+                return tr("ddd d", "DMY");
+            if (order == DateFormatYMD)
+                //: translator: weekday and day in DMY order (QDateTime format string)
+                //: ddd = short day of week, d = day of month (e.g. Mon 31)
+                return tr("ddd d", "YMD");
+            //: translator: weekday and day in DMY order (QDateTime format string)
             //: ddd = short day of week, d = day of month (e.g. Mon 31)
-            return tr("ddd d");
+            return tr("ddd d", "MDY");
 
-        case meego::Locale::DateMonthDay:
-            //: QDateTime format string (translator: update order / format)
+        case DateMonthDay:
+            // NOTE: here YMD and MDY are the same, so we pass tr() a context string
+            //   in case they need to differ in some translation
+
+            if (order == DateFormatDMY)
+                //: translator: month and day in DMY order (QDateTime format string)
+                //: MMMM = full month, d = day of month (e.g. 31 January)
+                return tr("d MMMM");
+            if (order == DateFormatYMD)
+                //: translator: month and day in YMD order (QDateTime format string)
+                //: MMMM = full month, d = day of month (e.g. January 31)
+                return tr("MMMM d", "YMD");
+            //: translator: month and day in MDY order (QDateTime format string)
             //: MMMM = full month, d = day of month (e.g. January 31)
-            return tr("MMMM d");
+            return tr("MMMM d", "MDY");
 
-        case meego::Locale::DateMonthYear:
-            //: QDateTime format string (translator: update order / format)
+        case DateMonthYear:
+            // NOTE: here DMY and MDY are the same, so we pass tr() a context string
+            //   in case they need to differ in some translation
+
+            if (order == DateFormatDMY)
+                //: translator: month and year in DMY order (QDateTime format string)
+                //: MMMM = full month, yyyy = full year (e.g. January 2011)
+                return tr("MMMM yyyy", "DMY");
+            if (order == DateFormatYMD)
+                //: translator: month and year in YMD order (QDateTime format string)
+                //: MMMM = full month, yyyy = full year (e.g. 2011 January)
+                return tr("yyyy MMMM");
+            //: translator: month and year in MDY order (QDateTime format string)
             //: MMMM = full month, yyyy = full year (e.g. January 2011)
-            return tr("MMMM yyyy");
+            return tr("MMMM yyyy", "MDY");
 
-        case meego::Locale::DateMonthYearShort:
+        case DateMonthYearShort:
+            // NOTE: here DMY and MDY are the same, so we pass tr() a context string
+            //   in case they need to differ in some translation
+
+            if (order == DateFormatDMY)
+                //: translator: short month and year in DMY order (QDateTime format string)
+                //: MMM = short month, yyyy = full year (e.g. Jan 2011)
+                return tr("MMM yyyy", "DMY");
+            if (order == DateFormatYMD)
+                //: QDateTime format string (translator: update order / format)
+                //: MMM = short month, yyyy = full year (e.g. 2011 Jan)
+                return tr("yyyy MMM");
             //: QDateTime format string (translator: update order / format)
             //: MMM = short month, yyyy = full year (e.g. Jan 2011)
-            return tr("MMM yyyy");
+            return tr("MMM yyyy", "MDY");
 
-        case meego::Locale::DateDay:
+        case DateDay:
             //: QDateTime format string (translator: you probably won't change this)
             //: d = day of month (e.g. 31, no leading zero)
             return tr("d");
 
-        case meego::Locale::DateWeekday:
+        case DateWeekday:
             //: QDateTime format string (translator: you probably won't change this)
             //: dddd = full day of week (e.g. Monday)
             return tr("dddd");
 
-        case meego::Locale::DateWeekdayShort:
+        case DateWeekdayShort:
             //: QDateTime format string (translator: you probably won't change this)
             //: ddd = short day of week (e.g. Mon)
             return tr("ddd");
 
-        case meego::Locale::DateMonth:
+        case DateMonth:
             //: QDateTime format string (translator: you probably won't change this)
             //: MMMM = full month (e.g. January)
             return tr("MMMM");
 
-        case meego::Locale::DateMonthShort:
+        case DateMonthShort:
             //: QDateTime format string (translator: you probably won't change this)
             //: MMM = short month (e.g. Jan)
             return tr("MMM");
 
-        case meego::Locale::DateYear:
+        case DateYear:
             //: QDateTime format string (translator: you probably won't change this)
             //: yyyy (e.g. 2011)
             return tr("yyyy");
 
         default:
-            qWarning() << "Locale: unexpected format string";
+            qWarning() << "meego::Locale: unexpected format string";
             return QString();
         }
     }

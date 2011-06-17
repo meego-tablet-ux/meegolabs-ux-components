@@ -34,10 +34,14 @@ AppPage {
                 Text { text: "localeDisplay: "   + localehelper.localeDisplayName(localehelper.locale); width: 300; height: 25  }
                 Text { text: "localeDisplay(fr): "   + localehelper.localeDisplayName("fr_FR"); width: 300; height: 25  }
                 Text { text: "localeDisplay(de): "   + localehelper.localeDisplayName("de_DE"); width: 300; height: 25  }
-                Text { text: "decimalPoint: "   + localehelper.decimalPoint(); width: 300; height: 25  }
+                Text { text: "defaultDecimalPoint: "   + localehelper.defaultDecimalPoint; width: 300; height: 25  }
+                Text { text: "decimalPoint: "   + localehelper.decimalPoint; width: 300; height: 25  }
+                Text { text: "defaultFirstDayOfWeek: "   + localehelper.defaultFirstDayOfWeek; width: 300; height: 25  }
                 Text { text: "firstDayOfWeek: "   + localehelper.firstDayOfWeek; width: 300; height: 25  }
+                Text { text: "deafultDateFormat: "   + localehelper.defaultDateFormat; width: 300; height: 25  }
                 Text { text: "dateFormat: "   + localehelper.dateFormat; width: 300; height: 25  }
-                Text { text: "hourFormat: "   + localehelper.hourFormat; width: 300; height: 25  }
+                Text { text: "defaultTimeFormat: "   + localehelper.defaultTimeFormat; width: 300; height: 25  }
+                Text { text: "TimeFormat: "   + localehelper.timeFormat; width: 300; height: 25  }
             }
             Column {
                 Text { id: c1;  text: "<b>Date</b>" ; font.pixelSize: 18; width: 300; height: 40 }
