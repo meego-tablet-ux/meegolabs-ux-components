@@ -4,10 +4,13 @@ PROJECT_NAME = meegolocale
 
 DEFINES += LOCALE_LIBRARY
 
-CONFIG += qt
+CONFIG += qt \
+          link_pkgconfig
 
 OBJECTS_DIR = .obj
 MOC_DIR = .moc
+
+PKGCONFIG += icu-i18n icu-uc
 
 SOURCES +=  meegolocale.cpp
 

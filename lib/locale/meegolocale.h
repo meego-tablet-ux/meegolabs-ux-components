@@ -11,9 +11,12 @@
 
 #include "meegolocale_global.h"
 #include <QObject>
-#include <QLocale>
 #include <QList>
 
+
+class QLocale;
+class QDate;
+class QTime;
 
 namespace icu {
     class Collator;
@@ -30,157 +33,129 @@ namespace meego
 
         Q_ENUMS( DayOfWeek );
         Q_ENUMS( DateTimeFormat );
-        Q_ENUMS( DateOrder );
+        Q_ENUMS( DateFormat );
         Q_ENUMS( HourFormat );
 
-        Q_PROPERTY(QString name READ name);
-        Q_PROPERTY(QString country READ country);
+        Q_PROPERTY( QString    locale         READ locale WRITE setLocale NOTIFY localeChanged );
+        Q_PROPERTY( DateFormat dateFormat     READ dateFormat WRITE setDateFormat NOTIFY dateFormatChanged );
+        Q_PROPERTY( HourFormat hourFormat     READ hourFormat WRITE setHourFormat NOTIFY hourFormatChanged );
+        Q_PROPERTY( DayOfWeek  firstDayOfWeek READ firstDayOfWeek WRITE setFirstDayOfWeek NOTIFY firstDayOfWeekChanged );
 
       public:
         explicit Locale (QObject *parent = 0);
         ~Locale();
         
-        enum DateTimeFormat {
+        enum DateTimeFormat
+        {
+            // Date formats
+
             DateBEGIN = 100,
+
             DateFullLong,         // Monday, January 31, 2011
             DateFull,             // January 31, 2011
             DateFullShort,        // Jan 31 2011
             DateFullNum,          // 1/31/2011
             DateFullNumShort,     // 1/31/11
             DateWeekdayMonthDay,  // Monday, January 31
-            DateWeekdayDayShort,  // Mon 31
             DateMonthDay,         // January 31
             DateMonthYear,        // January 2011
             DateMonthYearShort,   // Jan 2011
             DateDay,              // 31 (no leading zero)
             DateWeekday,          // Monday
             DateWeekdayShort,     // Mon
+            DateWeekdayDayShort,  // Mon 31
             DateMonth,            // January
             DateMonthShort,       // Jan
             DateYear,             // 2011
 
-            // NOT YET SUPPORTED - Ask Geoff
-            DateWeekYear,       // January 30 - February 5, 2011
-            DateWeekYearShort,  // Jan 30 - Feb 5, 2011
-
-            // pass through to Qt date formats
-            DateQtLong,   // Monday, January 31, 2011
-            DateQtShort,  // 1/31/11
             DateEND,
 
+            // Time formats
+
             TimeBEGIN = 200,
+
             TimeFull,    // 9:02 PM or 21:02
             TimeFull12,  // 9:02 PM
             TimeFull24,  // 21:02
 
-            // pass through to Qt date formats
-            TimeQtLong,   // 9:02:03 PM TZ
-            TimeQtShort,  // 9:02 PM (or 24-hr time if set for locale)
             TimeEND,
-
-            DateTimeBEGIN = 300,
-            // pass through to Qt date formats
-            DateTimeQtLong,   // Monday, January 31, 2011 1:02:03 AM TZ
-            DateTimeQtShort,  // 1/31/11 1:02 AM
-            DateTimeEND
         };
+        
         enum DayOfWeek {
-            DaySunday = 1,
-            DayMonday,
+            DayMonday = 1,  // Matches QLocale numbering
             DayTuesday,
             DayWednesday,
             DayThursday,
             DayFriday,
-            DaySaturday
+            DaySaturday,
+            DaySunday
         };
-        enum DateOrder {
-            YMD,
+        
+        enum DateFormat {
+            YMD = 0,
             DMY,
             MDY
         };
+        
         enum HourFormat {
-            HrsDefault,
-            Hrs12,
+            Hrs12 = 0,
             Hrs24
         };
 
-        // date/time formatting
-        Q_INVOKABLE QString localDate(const QDate &date, int format) const;
-        Q_INVOKABLE QString localTime(const QTime &time, int format) const;
-        Q_INVOKABLE QString localDateTime(const QDateTime &datetime, int format) const;
+        QString locale() const;
+        void setLocale( QString );
 
-        Q_INVOKABLE QString currentDate(int format) const;
-        Q_INVOKABLE QString currentTime(int format) const;
-        Q_INVOKABLE QString currentDateTime(int format) const;
+        HourFormat hourFormat() const;
+        void setHourFormat( HourFormat );
 
         // Returns a three-character string with the letters 'd', 'm', and 'y' in
         //   the order that those should appear for this locale, e.g. "mdy" for
         //   American 1/31/2011, "dmy" for European 31/1/2011
-        Q_INVOKABLE QString numericDateOrder() const;
+        DateFormat dateFormat() const;
+        void       setDateFormat( DateFormat );
 
         // localized first day of the week (returns DayOfWeek enum)
-        Q_INVOKABLE DayOfWeek firstDayOfWeek() const;
-        Q_INVOKABLE void setFirstDayOfWeek( Locale::DayOfWeek dayofWeek );
-        Q_INVOKABLE DayOfWeek getDefaultFirstDayOfWeek() const;
+        DayOfWeek firstDayOfWeek() const;
+        void      setFirstDayOfWeek( DayOfWeek dayofWeek );
+
+        // date/time formatting
+        Q_INVOKABLE QString localDate(const QDate &date, DateTimeFormat format) const;
+        Q_INVOKABLE QString localTime(const QTime &time, DateTimeFormat format) const;
+        Q_INVOKABLE QString currentDate(DateTimeFormat format) const;
+        Q_INVOKABLE QString currentTime(DateTimeFormat format) const;
 
         // localized decimal point
         Q_INVOKABLE QString decimalPoint() const;
 
-        Q_INVOKABLE QString getCurrentLanguageCode() const;
-        Q_INVOKABLE void setLanguageCode( const QString code );
-        Q_INVOKABLE QList<QString> getLanguageCodes() const;
-
-        Q_INVOKABLE DateOrder getDateOrder() const;
-        Q_INVOKABLE DateOrder getDefaultDateOrder() const;
-        Q_INVOKABLE void setDateOrder( Locale::DateOrder dateOrder );
-
-        Q_INVOKABLE DateTimeFormat getDefaultDateFormat() const;
-        Q_INVOKABLE DateTimeFormat getDefaultTimeFormat() const;
-        Q_INVOKABLE DateTimeFormat getDefaultDateTimeFormat() const;
-
-        Q_INVOKABLE HourFormat getHourFormat() const;
-        Q_INVOKABLE void setHourFormat( Locale::HourFormat hourFormat );
+        Q_INVOKABLE QList<QString> installedLocales() const;
+        Q_INVOKABLE QString localeDisplayName(QString locale) const;
 
 
-        Q_INVOKABLE QString name() const;
-        Q_INVOKABLE QLocale::Country country() const;
+        bool lessThan(const QString & lStr, const QString & rStr) const;
+        int  compare(const QString & lStr, const QString & rStr) const;
+        bool lessThanPhoneBook(const QString & lStr, const QString & rStr) const;
+        int  comparePhoneBook(const QString & lStr, const QString & rStr) const;
 
-        Q_INVOKABLE bool lessThan(const QString & lStr, const QString & rStr) const;
-        Q_INVOKABLE int  compare(const QString & lStr, const QString & rStr) const;
-        Q_INVOKABLE bool lessThanPhoneBook(const QString & lStr, const QString & rStr) const;
-        Q_INVOKABLE int  comparePhoneBook(const QString & lStr, const QString & rStr) const;
+      signals:
+
+        void localeChanged();
+        void numericDateOrderChanged();
+        void hourFormatChanged();
+        void dateFormatChanged();
+        void firstDayOfWeekChanged();
+        void installedLocalesChanged();
         
       protected:
 
-        QString formatString(int format) const;
-        void readConfig();
-        void resetToDefault();
-        void changeLanguage(const QString languageString);
+        QString formatString(DateTimeFormat) const;
 
       private:
         
-        DateOrder m_currentDateOrder;
-        DateOrder m_defaultDateOrder;
-
-        HourFormat m_currentHourFormat;
-        HourFormat m_defaultHourFormat;
-
-        DateTimeFormat m_currentDateTimeFormat;
-        DateTimeFormat m_defaultDateTimeFormat;
-
-        DateTimeFormat m_currentTimeFormat;
-        DateTimeFormat m_defaultTimeFormat;
-
-        DateTimeFormat m_currentDateFormat;
-        DateTimeFormat m_defaultDateFormat;
-
-        DayOfWeek m_defaultFirstDayOfWeek;
-        DayOfWeek m_currentFirstDayOfWeek;
-
-        QString m_currentLanguage;
-        QString m_currentLanguageCode;
-        QString m_currentRegionCode;
-        QLocale m_locale;
+        DateFormat mDateFormat;
+        HourFormat mHourFormat;
+        DayOfWeek  mFirstDayOfWeek;
+        QString    mLocale;
+        QLocale  * mpQLocale;
 
         mutable icu::Collator * mpDefaultCollator;
         mutable icu::Collator * mpPhoneBookCollator;

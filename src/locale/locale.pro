@@ -7,10 +7,13 @@ TARGET = meegolabs-ux-locale
 QT += declarative
 
 CONFIG += qt \
+          link_pkgconfig \
           plugin
 
 INCLUDEPATH += ../../lib/locale
 DEFINES += LOCALE_PLUGIN
+
+PKGCONFIG += icu-i18n icu-uc
 
 SOURCES += plugin.cpp \
            ../../lib/locale/meegolocale.cpp

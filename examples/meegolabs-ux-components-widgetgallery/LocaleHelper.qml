@@ -30,11 +30,14 @@ AppPage {
         Row {
             Column {
                 Text { id: c0;  text: "<b>General</b>" ; font.pixelSize: 18; width: 300; height: 40 }
-                Text { text: "name: "   + localehelper.name; width: 300; height: 25  }
-                Text { text: "country: "   + localehelper.country; width: 300; height: 25  }
+                Text { text: "locale: "   + localehelper.locale; width: 300; height: 25  }
+                Text { text: "localeDisplay: "   + localehelper.localeDisplayName(localehelper.locale); width: 300; height: 25  }
+                Text { text: "localeDisplay(fr): "   + localehelper.localeDisplayName("fr_FR"); width: 300; height: 25  }
+                Text { text: "localeDisplay(de): "   + localehelper.localeDisplayName("de_DE"); width: 300; height: 25  }
                 Text { text: "decimalPoint: "   + localehelper.decimalPoint(); width: 300; height: 25  }
-                Text { text: "firstDayOfWeek: "   + localehelper.firstDayOfWeek(); width: 300; height: 25  }
-                Text { text: "numericDateOrder: "   + localehelper.numericDateOrder(); width: 300; height: 25  }
+                Text { text: "firstDayOfWeek: "   + localehelper.firstDayOfWeek; width: 300; height: 25  }
+                Text { text: "dateFormat: "   + localehelper.dateFormat; width: 300; height: 25  }
+                Text { text: "hourFormat: "   + localehelper.hourFormat; width: 300; height: 25  }
             }
             Column {
                 Text { id: c1;  text: "<b>Date</b>" ; font.pixelSize: 18; width: 300; height: 40 }
@@ -60,11 +63,6 @@ AppPage {
                 Text { id: l21;  text: "TimeFull: "   + localehelper.currentTime( Labs.LocaleHelper.TimeFull ); width: 300; height: 25  }
                 Text { id: l22;  text: "TimeFull12: "       + localehelper.currentTime( Labs.LocaleHelper.TimeFull12); width: 300; height: 25  }
                 Text { id: l23;  text: "TimeFull24: "      + localehelper.currentTime( Labs.LocaleHelper.TimeFull24); width: 300; height: 25  }
-                Text { id: l24;  text: "TimeQtLong: "    + localehelper.currentTime( Labs.LocaleHelper.TimeQtLong ); width: 300; height: 25  }
-                Text { id: l25;  text: "TimeQtShort: " + localehelper.currentTime( Labs.LocaleHelper.TimeQtShort); width: 300; height: 25  }
-                Text { id: l26;  text: "DateTime" ; width: 300; height: 25  }
-                Text { id: l27;  text: "DateTimeQtLong: " + localehelper.currentDateTime( Labs.LocaleHelper.DateTimeQtLong ); width: 300; height: 25  }
-                Text { id: l28;  text: "DateTimeQtShort: " + localehelper.currentDateTime( Labs.LocaleHelper.DateTimeQtShort ); width: 300; height: 25  }
             }
         }
     }
