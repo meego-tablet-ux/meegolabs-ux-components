@@ -145,7 +145,6 @@ namespace meego
           mpDefaultCollator(0),
           mpPhoneBookCollator(0)
     {
-        qDebug() << "Starting" << __FUNCTION__;
         mLocale = QLocale::system().name();
     }
 
@@ -325,7 +324,6 @@ namespace meego
 
     QString Locale::defaultDecimalPoint() const
     {
-        qDebug() << __FUNCTION__;
         return mpQLocale->decimalPoint();
     }
 
@@ -341,14 +339,10 @@ namespace meego
     }
 
 
-    QList<QString> Locale::installedLocales() const
+    QString Locale::localeDisplayName(QString locale)
     {
-        return QList<QString>(); //TODO where comes the codes from?
-    }
+        qDebug() << __FUNCTION__ << locale;
 
-
-    QString Locale::localeDisplayName(QString locale) const
-    {
         icu::UnicodeString localeUCS = toUnicodeString(locale);
         icu::Locale displayLocale(locale.toLatin1());
         return toQString(displayLocale.getDisplayName(displayLocale, localeUCS));

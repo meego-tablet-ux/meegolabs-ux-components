@@ -12,10 +12,12 @@ MOC_DIR = .moc
 
 PKGCONFIG += icu-i18n icu-uc
 
-SOURCES +=  meegolocale.cpp
+SOURCES +=  meegolocale.cpp \
+            localelistmodel.cpp
 
 HEADERS +=  meegolocale_global.h \
-            meegolocale.h
+            meegolocale.h \
+            localelistmodel.h
 
 INSTALL_HEADERS += meegolocale_global.h \
                    meegolocale.h
@@ -26,5 +28,7 @@ headers.files += $$INSTALL_HEADERS
 headers.path += $$INSTALL_ROOT/usr/include
 
 INSTALLS += target headers
+
+EXTRA_CLEAN += $${OBJECTS_DIR}/* $${MOC_DIR}/*
 
 TRANSLATIONS += $${SOURCES} $${HEADERS} $${OTHER_FILES}

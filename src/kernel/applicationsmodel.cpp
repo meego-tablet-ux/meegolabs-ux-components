@@ -47,8 +47,9 @@ ApplicationsModel::ApplicationsModel(QObject *parent) :
 
 void ApplicationsModel::appsDirChanged(QString changedDir)
 {
-  resetApps();
-  emit appsChanged();
+    Q_UNUSED(changedDir);
+    resetApps();
+    emit appsChanged();
 }
 
 void ApplicationsModel::setDirectories(QStringList directories)

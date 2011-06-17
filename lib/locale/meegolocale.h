@@ -36,15 +36,15 @@ namespace meego
         Q_ENUMS( DateFormat );
         Q_ENUMS( TimeFormat );
 
-        Q_PROPERTY( QString    locale                READ locale WRITE setLocale NOTIFY localeChanged );
-        Q_PROPERTY( DateFormat dateFormat            READ dateFormat WRITE setDateFormat NOTIFY dateFormatChanged );
-        Q_PROPERTY( DateFormat defaultDateFormat     READ defaultDateFormat NOTIFY defaultDateFormatChanged );
-        Q_PROPERTY( TimeFormat timeFormat            READ timeFormat WRITE setTimeFormat NOTIFY timeFormatChanged );
-        Q_PROPERTY( TimeFormat defaultTimeFormat     READ defaultTimeFormat NOTIFY defaultTimeFormatChanged );
-        Q_PROPERTY( DayOfWeek  firstDayOfWeek        READ firstDayOfWeek WRITE setFirstDayOfWeek NOTIFY firstDayOfWeekChanged );
-        Q_PROPERTY( DayOfWeek  defaultFirstDayOfWeek READ defaultFirstDayOfWeek NOTIFY defaultFirstDayOfWeekChanged );
-        Q_PROPERTY( QString    decimalPoint          READ decimalPoint WRITE setDecimalPoint NOTIFY decimalPointChanged)
-        Q_PROPERTY( QString    defaultDecimalPoint   READ defaultDecimalPoint NOTIFY defaultDecimalPointChanged)
+        Q_PROPERTY( QString     locale                READ locale WRITE setLocale NOTIFY localeChanged );
+        Q_PROPERTY( DateFormat  dateFormat            READ dateFormat WRITE setDateFormat NOTIFY dateFormatChanged );
+        Q_PROPERTY( DateFormat  defaultDateFormat     READ defaultDateFormat NOTIFY defaultDateFormatChanged );
+        Q_PROPERTY( TimeFormat  timeFormat            READ timeFormat WRITE setTimeFormat NOTIFY timeFormatChanged );
+        Q_PROPERTY( TimeFormat  defaultTimeFormat     READ defaultTimeFormat NOTIFY defaultTimeFormatChanged );
+        Q_PROPERTY( DayOfWeek   firstDayOfWeek        READ firstDayOfWeek WRITE setFirstDayOfWeek NOTIFY firstDayOfWeekChanged );
+        Q_PROPERTY( DayOfWeek   defaultFirstDayOfWeek READ defaultFirstDayOfWeek NOTIFY defaultFirstDayOfWeekChanged );
+        Q_PROPERTY( QString     decimalPoint          READ decimalPoint WRITE setDecimalPoint NOTIFY decimalPointChanged)
+        Q_PROPERTY( QString     defaultDecimalPoint   READ defaultDecimalPoint NOTIFY defaultDecimalPointChanged)
 
       public:
         explicit Locale (QObject *parent = 0);
@@ -139,8 +139,7 @@ namespace meego
         Q_INVOKABLE void setDecimalPoint( QString );
         Q_INVOKABLE QString defaultDecimalPoint() const;
 
-        Q_INVOKABLE QList<QString> installedLocales() const;
-        Q_INVOKABLE QString localeDisplayName( QString locale ) const;
+        Q_INVOKABLE static QString localeDisplayName( QString locale );
 
 
         bool lessThan(const QString & lStr, const QString & rStr) const;
@@ -151,7 +150,6 @@ namespace meego
       signals:
 
         void localeChanged();
-        void installedLocalesChanged();
         void dateFormatChanged();
         void defaultDateFormatChanged();
         void timeFormatChanged();
