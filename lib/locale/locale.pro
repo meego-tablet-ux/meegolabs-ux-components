@@ -20,7 +20,8 @@ HEADERS +=  meegolocale_global.h \
             localelistmodel.h
 
 INSTALL_HEADERS += meegolocale_global.h \
-                   meegolocale.h
+                   meegolocale.h \
+                   localelistmodel.h
 
 target.path += $$[QT_INSTALL_LIBS]
 
