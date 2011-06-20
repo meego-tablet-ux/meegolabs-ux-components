@@ -383,7 +383,7 @@ namespace meego
 
     QString Locale::formatString(Locale::DateTimeFormat format) const
     {
-        DateFormat order = DateFormat();
+        DateFormat order = dateFormat();
 
         switch (format) {
         case DateFullLong:
