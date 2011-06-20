@@ -184,9 +184,9 @@ namespace meego
         // read DayOfWeek
         //: this number sets default first day of week
         //: set to 1 for Monday, 2 for Tuesday, etc, and 7 for Sunday
-        QString day = tr("1", "firstday");
+        QString day = tr("7", "firstday");
 
-        int dow = 1;
+        int dow = 7;
         if (1 == day.length()) {
             QChar ch = day.at(0);
             if (ch >= '1' && ch <= '7') {
