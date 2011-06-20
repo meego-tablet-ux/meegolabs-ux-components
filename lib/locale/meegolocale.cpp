@@ -388,68 +388,83 @@ namespace meego
         switch (format) {
         case DateFullLong:
             if (order == DateFormatDMY)
-                //: QDateTime format string - See http://doc.qt.nokia.com/4.7/qdatetime.html#toString
-                //: translator: long date in DMY order
-                //: dddd = full day of week, MMMM = full month, d = day of month, yyyy = year (e.g. Monday, 31 January 2011)
+                //: long date where user chose DMY order (e.g. Monday, 31 January 2011)
+                //: Translate the format delimiters, not order (except you can move dddd here)
+                //: dddd = full day of week, MMMM = full month, d = day of month, yyyy = year (QDateTime format string)
+                //: See http://doc.qt.nokia.com/4.7/qdatetime.html#toString
                 return tr("dddd, d MMMM yyyy");
             if (order == DateFormatYMD)
-                //: translator: long date in YMD order (QDateTime format string)
-                //: dddd = full day of week, MMMM = full month, d = day of month, yyyy = year (e.g. Monday, 2011 January 31)
+                //: long date where user chose YMD order (e.g. Monday, 2011 January 31)
+                //: Translate the format delimiters, not order (except you can move dddd here)
+                //: dddd = full day of week, MMMM = full month, d = day of month, yyyy = year (QDateTime format string)
                 return tr("dddd, yyyy MMMM d");
-            //: translator: long date in MDY order (QDateTime format string)
-            //: dddd = full day of week, MMMM = full month, d = day of month, yyyy = year (e.g. Monday, January 31, 2011)
+            //: long date where user chose MDY order (e.g. Monday, January 31, 2011)
+            //: Translate the format delimiters, not order (except you can move dddd here)
+            //: dddd = full day of week, MMMM = full month, d = day of month, yyyy = year (QDateTime format string)
             return tr("dddd, MMMM d, yyyy");
 
         case DateFull:
             if (order == DateFormatDMY)
-                //: translator: full date in DMY order (QDateTime format string)
-                //: MMMM = full month, d = day of month, yyyy = full year (e.g. 31 January 2011)
+                //: full date where user chose DMY order (e.g. 31 January 2011)
+                //: Translate the format delimiters, not order
+                //: MMMM = full month, d = day of month, yyyy = full year (QDateTime format string)
                 return tr("d MMMM yyyy");
             if (order == DateFormatYMD)
-                //: translator: full date in YMD order (QDateTime format string)
+                //: full date where user chose YMD order (QDateTime format string)
+                //: Translate the format delimiters, not order
                 //: MMMM = full month, d = day of month, yyyy = full year (e.g. 2011 January 31)
                 return tr("yyyy MMMM d");
-            //: translator: full date in MDY order (QDateTime format string)
+            //: full date where user chose MDY order (QDateTime format string)
+            //: Translate the format delimiters, not order
             //: MMMM = full month, d = day of month, yyyy = full year (e.g. January 31, 2011)
             return tr("MMMM d, yyyy");
 
         case DateFullShort:
             if (order == DateFormatDMY)
-                //: translator: short date in DMY order (QDateTime format string)
-                //: MMM = short month, d = day of month, yyyy = full year (e.g. 31 Jan 2011)
-                return tr("d MMM d yyyy");
+                //: short date where user chose DMY order (e.g. 31 Jan 2011)
+                //: Translate the format delimiters, not order
+                //: MMM = short month, d = day of month, yyyy = full year (QDateTime format string)
+                return tr("d MMM yyyy");
             if (order == DateFormatYMD)
-                //: translator: short date in YMD order (QDateTime format string)
-                //: MMM = short month, d = day of month, yyyy = full year (e.g. Jan 31 2011)
-                return tr("MMM d yyyy");
-            //: translator: short date in MDY order (QDateTime format string)
-            //: MMM = short month, d = day of month, yyyy = full year (e.g. Jan 31 2011)
+                //: short date where user chose YMD order (e.g. 2011 Jan 31)
+                //: Translate the format delimiters, not order
+                //: MMM = short month, d = day of month, yyyy = full year (QDateTime format string)
+                return tr("yyyy MMM d");
+            //: short date where user chose MDY order (e.g. Jan 31 2011)
+            //: Translate the format delimiters, not order
+            //: MMM = short month, d = day of month, yyyy = full year (QDateTime format string)
             return tr("MMM d yyyy");
 
         case DateFullNum:
             if (order == DateFormatDMY)
-                //: translator: numeric date in DMY order (QDateTime format string)
-                //: M = numeric month, d = day of month, yyyy = full year (e.g. 31/1/2011)
+                //: numeric date where user chose DMY order (e.g. 31/1/2011)
+                //: Translate the format delimiters, not order
+                //: M = numeric month, d = day of month, yyyy = full year (QDateTime format string)
                 return tr("d/M/yyyy");
             if (order == DateFormatYMD)
-                //: translator: numeric date in YMD order (QDateTime format string)
-                //: M = numeric month, d = day of month, yyyy = full year (e.g. 2011/1/31)
+                //: numeric date where user chose YMD order (e.g. 2011/1/31)
+                //: Translate the format delimiters, not order
+                //: M = numeric month, d = day of month, yyyy = full year (QDateTime format string)
                 return tr("yyyy/M/d");
-            //: translator: numeric date in MDY order (QDateTime format string)
-            //: M = numeric month, d = day of month, yyyy = full year (e.g. 1/31/2011)
+            //: numeric date where user chose MDY order (e.g. 1/31/2011)
+            //: Translate the format delimiters, not order
+            //: M = numeric month, d = day of month, yyyy = full year (QDateTime format string)
             return tr("M/d/yyyy");
 
          case DateFullNumShort:
             if (order == DateFormatDMY)
-                //: translator: short numeric date in DMY order (QDateTime format string)
-                //: M = numeric month, d = day of month, yy = year (e.g. 31/1/11)
+                //: short numeric date where user chose DMY order (e.g. 31/1/11)
+                //: Translate the format delimiters, not order
+                //: M = numeric month, d = day of month, yy = year (QDateTime format string)
                 return tr("d/M/yy");
             if (order == DateFormatYMD)
-                //: translator: short numeric date in YMD order (QDateTime format string)
-                //: M = numeric month, d = day of month, yy = year (e.g. 11/1/31)
+                //: short numeric date where user chose YMD order (e.g. 11/1/31)
+                //: Translate the format delimiters, not order
+                //: M = numeric month, d = day of month, yy = year (QDateTime format string)
                 return tr("yy/M/d");
-            //: translator: short numeric date in MDY order (QDateTime format string)
-            //: M = numeric month, d = day of month, yy = year (e.g. 1/31/11)
+            //: short numeric date where user chose MDY order (e.g. 1/31/11)
+            //: Translate the format delimiters, not order
+            //: M = numeric month, d = day of month, yy = year (QDateTime format string)
             return tr("M/d/yy");
 
         case DateWeekdayMonthDay:
@@ -457,31 +472,37 @@ namespace meego
             //   in case they need to differ in some translation
 
             if (order == DateFormatDMY)
-                //: translator: weekday, month, and day in DMY order (QDateTime format string)
-                //: dddd = full day of week, MMMM = full month, d = day of month (e.g. Monday, 31 January)
+                //: weekday, month, and day where user chose DMY order (e.g. Monday, 31 January)
+                //: Translate the format delimiters, not order
+                //: dddd = full day of week, MMMM = full month, d = day of month (QDateTime format string)
                 return tr("dddd, d MMMM");
             if (order == DateFormatYMD)
-                //: translator: weekday, month, and day in DMY order (QDateTime format string)
-                //: dddd = full day of week, MMMM = full month, d = day of month (e.g. Monday, 31 January)
+                //: weekday, month, and day where user chose YMD order (e.g. Monday, January 31)
+                //: Translate the format delimiters, not order
+                //: dddd = full day of week, MMMM = full month, d = day of month (QDateTime format string)
                 return tr("dddd, MMMM d", "YMD");
-            //: translator: weekday, month, and day in YDM or MDY order (QDateTime format string)
-            //: dddd = full day of week, MMMM = full month, d = day of month (e.g. Monday, January 31)
+            //: weekday, month, and day where user chose MDY order (e.g. Monday, January 31)
+            //: Translate the format delimiters, not order
+            //: dddd = full day of week, MMMM = full month, d = day of month (QDateTime format string)
             return tr("dddd, MMMM d", "MDY");
 
         case DateWeekdayDayShort:
-            // NOTE: here all cases are the samee, so we pass tr() a context string
+            // NOTE: here all cases are the same, so we pass tr() a context string
             //   in case they need to differ in some translation
 
             if (order == DateFormatDMY)
-                //: translator: weekday and day in DMY order (QDateTime format string)
-                //: ddd = short day of week, d = day of month (e.g. Mon 31)
+                //: weekday and day where user chose DMY order (e.g. Mon 31)
+                //: Translate the format delimiters, not order
+                //: ddd = short day of week, d = day of month (QDateTime format string)
                 return tr("ddd d", "DMY");
             if (order == DateFormatYMD)
-                //: translator: weekday and day in DMY order (QDateTime format string)
-                //: ddd = short day of week, d = day of month (e.g. Mon 31)
+                //: weekday and day where user chose YMD order (e.g. Mon 31)
+                //: Translate the format delimiters, not order
+                //: ddd = short day of week, d = day of month (QDateTime format string)
                 return tr("ddd d", "YMD");
-            //: translator: weekday and day in DMY order (QDateTime format string)
-            //: ddd = short day of week, d = day of month (e.g. Mon 31)
+            //: weekday and day where user chose MDY order (e.g. Mon 31)
+            //: Translate the format delimiters, not order
+            //: ddd = short day of week, d = day of month (QDateTime format string)
             return tr("ddd d", "MDY");
 
         case DateMonthDay:
@@ -489,15 +510,18 @@ namespace meego
             //   in case they need to differ in some translation
 
             if (order == DateFormatDMY)
-                //: translator: month and day in DMY order (QDateTime format string)
-                //: MMMM = full month, d = day of month (e.g. 31 January)
+                //: month and day where user chose DMY order (e.g. 31 January)
+                //: Translate the format delimiters, not order
+                //: MMMM = full month, d = day of month (QDateTime format string)
                 return tr("d MMMM");
             if (order == DateFormatYMD)
-                //: translator: month and day in YMD order (QDateTime format string)
-                //: MMMM = full month, d = day of month (e.g. January 31)
+                //: month and day where user chose YMD order (e.g. January 31)
+                //: Translate the format delimiters, not order
+                //: MMMM = full month, d = day of month (QDateTime format string)
                 return tr("MMMM d", "YMD");
-            //: translator: month and day in MDY order (QDateTime format string)
-            //: MMMM = full month, d = day of month (e.g. January 31)
+            //: month and day where user chose MDY order (e.g. January 31)
+            //: Translate the format delimiters, not order
+            //: MMMM = full month, d = day of month (QDateTime format string)
             return tr("MMMM d", "MDY");
 
         case DateMonthYear:
@@ -505,15 +529,18 @@ namespace meego
             //   in case they need to differ in some translation
 
             if (order == DateFormatDMY)
-                //: translator: month and year in DMY order (QDateTime format string)
-                //: MMMM = full month, yyyy = full year (e.g. January 2011)
+                //: month and year where user chose DMY order (e.g. January 2011)
+                //: Translate the format delimiters, not order
+                //: MMMM = full month, yyyy = full year (QDateTime format string)
                 return tr("MMMM yyyy", "DMY");
             if (order == DateFormatYMD)
-                //: translator: month and year in YMD order (QDateTime format string)
-                //: MMMM = full month, yyyy = full year (e.g. 2011 January)
+                //: month and year where user chose YMD order (e.g. 2011 January)
+                //: Translate the format delimiters, not order
+                //: MMMM = full month, yyyy = full year (QDateTime format string)
                 return tr("yyyy MMMM");
-            //: translator: month and year in MDY order (QDateTime format string)
-            //: MMMM = full month, yyyy = full year (e.g. January 2011)
+            //: month and year where user chose MDY order (e.g. January 2011)
+            //: Translate the format delimiters, not order
+            //: MMMM = full month, yyyy = full year (QDateTime format string)
             return tr("MMMM yyyy", "MDY");
 
         case DateMonthYearShort:
@@ -521,45 +548,54 @@ namespace meego
             //   in case they need to differ in some translation
 
             if (order == DateFormatDMY)
-                //: translator: short month and year in DMY order (QDateTime format string)
-                //: MMM = short month, yyyy = full year (e.g. Jan 2011)
+                //: short month and year where user chose DMY order (e.g. Jan 2011)
+                //: Translate the format delimiters, not order
+                //: MMM = short month, yyyy = full year (QDateTime format string)
                 return tr("MMM yyyy", "DMY");
             if (order == DateFormatYMD)
-                //: QDateTime format string (translator: update order / format)
-                //: MMM = short month, yyyy = full year (e.g. 2011 Jan)
+                //: short month and year where user chose YMD order (e.g. 2011 Jan)
+                //: Translate the format delimiters, not order
+                //: MMM = short month, yyyy = full year (QDateTime format string)
                 return tr("yyyy MMM");
-            //: QDateTime format string (translator: update order / format)
-            //: MMM = short month, yyyy = full year (e.g. Jan 2011)
+            //: short month and year where user chose MDY order (e.g. Jan 2011)
+            //: Translate the format delimiters, not order
+            //: MMM = short month, yyyy = full year (QDateTime format string)
             return tr("MMM yyyy", "MDY");
 
         case DateDay:
-            //: QDateTime format string (translator: you probably won't change this)
-            //: d = day of month (e.g. 31, no leading zero)
+            //: day of month (e.g. 31, no leading zero)
+            //: You probably won't translate this
+            //: d = day of month (QDateTime format string)
             return tr("d");
 
         case DateWeekday:
-            //: QDateTime format string (translator: you probably won't change this)
-            //: dddd = full day of week (e.g. Monday)
+            //: full day of week (e.g. Monday)
+            //: You probably won't translate this
+            //: dddd = full day of week (QDateTime format string)
             return tr("dddd");
 
         case DateWeekdayShort:
-            //: QDateTime format string (translator: you probably won't change this)
-            //: ddd = short day of week (e.g. Mon)
+            //: short day of week (e.g. Mon)
+            //: You probably won't translate this
+            //: ddd = short day of week (QDateTime format string)
             return tr("ddd");
 
         case DateMonth:
-            //: QDateTime format string (translator: you probably won't change this)
-            //: MMMM = full month (e.g. January)
+            //: full month (e.g. January)
+            //: You probably won't translate this
+            //: MMMM = full month (QDateTime format string)
             return tr("MMMM");
 
         case DateMonthShort:
-            //: QDateTime format string (translator: you probably won't change this)
-            //: MMM = short month (e.g. Jan)
+            //: short month (e.g. Jan)
+            //: You probably won't translate this
+            //: MMM = short month (QDateTime format string)
             return tr("MMM");
 
         case DateYear:
-            //: QDateTime format string (translator: you probably won't change this)
-            //: yyyy (e.g. 2011)
+            //: full year  (e.g. 2011)
+            //: You probably won't translate this
+            //: yyyy = full year (QDateTime format string)
             return tr("yyyy");
 
         default:
