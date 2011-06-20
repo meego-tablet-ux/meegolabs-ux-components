@@ -150,10 +150,9 @@ namespace meego
 
     Locale::DateFormat Locale::defaultDateFormat() const
     {
-        //: read DateFormat
-        //: translator: this order will determine order of date picker widgets
-        //: default order for numeric date (m = month, d = date, y = year)
-        //: the string should contain these exact three characters in some order
+        // read DateFormat
+        //: this string defines default order for dates
+        //: choose one of "dmy", "ymd", or "mdy" (m = month, d = date, y = year)
         QString dateFormat = tr("mdy", "dateformat");
 
         if (dateFormat == "dmy") {
@@ -169,8 +168,8 @@ namespace meego
 
     Locale::TimeFormat Locale::defaultTimeFormat() const
     {
-        //: read 24 hrs flag DateFormat
-        //: translator: set to 1 for default 24-hour time format (0 for 12-hour)
+        // read 24 hrs flag TimeFormat
+        //: set to 1 for default 24-hour time format (0 for 12-hour)
         QString time24 = tr("0", "timeformat");
         if (time24 == "1") {
             return TimeFormat24;
@@ -182,8 +181,9 @@ namespace meego
 
     Locale::DayOfWeek Locale::defaultFirstDayOfWeek() const
     {
-        //: read DateOfWeek
-        //: translator: set to 1 for Monday, 2 for Tuesday, etc, and 7 for Sunday
+        // read DayOfWeek
+        //: this number sets default first day of week
+        //: set to 1 for Monday, 2 for Tuesday, etc, and 7 for Sunday
         QString day = tr("1", "firstday");
 
         int dow = 1;
@@ -294,12 +294,12 @@ namespace meego
 
         switch (format) {
         case TimeFull12:
-            //: AM time format string (translator: update order / format)
+            //: AM time format string (update format / order )
             //: %1 = hours (no leading zero), %2 = minutes (leading zero if needed), %3 = AM/PM string
             return tr("%1:%2 %3").arg(hour12).arg(minute, 2, 10, QChar('0')).arg(ampm);
 
         case TimeFull24:
-            //: 24-hour time format string (translator: update order / format)
+            //: 24-hour time format string (update format / order)
             //: %1 = hours (no leading zero), %2 = minutes (leading zero if needed)
             return tr("%1:%2").arg(hour).arg(minute, 2, 10, QChar('0'));
 
