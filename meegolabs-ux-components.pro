@@ -1,3 +1,6 @@
+PROJECT_NAME = meegolabs-ux-components
+VERSION = 0.2.8.12
+
 TEMPLATE = subdirs
 CONFIG += ordered
 
@@ -14,6 +17,7 @@ CONFIG += qt \
     dbus \
     link_pkgconfig \
     mobility
+
 PKGCONFIG += gconf-2.0 \
     qmfmessageserver \
     qmfclient \
@@ -28,10 +32,7 @@ PKGCONFIG += gconf-2.0 \
 
 MOBILITY = publishsubscribe
 
-
-TRANSLATIONS += src
-VERSION = 0.2.8.11
-PROJECT_NAME = meegolabs-ux-components
+TRANSLATIONS += src lib
 
 dist.commands += rm -fR $${PROJECT_NAME}-$${VERSION} &&
 dist.commands += [ ! -e .git/refs/tags/$${VERSION} ] || git tag -d $${VERSION} &&
