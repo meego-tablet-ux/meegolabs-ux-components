@@ -1,6 +1,6 @@
 TEMPLATE = lib
-TARGET = $$qtLibraryTarget(meegolocale)
 PROJECT_NAME = meegolocale
+TARGET = $$qtLibraryTarget($$PROJECT_NAME)
 
 DEFINES += LOCALE_LIBRARY
 
@@ -28,7 +28,10 @@ target.path += $$[QT_INSTALL_LIBS]
 headers.files += $$INSTALL_HEADERS
 headers.path += $$INSTALL_ROOT/usr/include
 
-INSTALLS += target headers
+pcfiles.files += $${PROJECT_NAME}.pc
+pcfiles.path += $$INSTALL_ROOT/usr/lib/pkgconfig
+
+INSTALLS += target headers pcfiles
 
 EXTRA_CLEAN += $${OBJECTS_DIR}/* $${MOC_DIR}/*
 
