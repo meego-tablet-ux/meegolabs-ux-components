@@ -32,54 +32,91 @@ AppPage {
             Column {
                 id: c0
                 Text { text: "<b>General</b>" ; font.pixelSize: 18; width: 300; height: 40 }
-                Text { text: "locale: "   + localehelper.locale; width: 300; height: 25  }
-                Text { text: "installedLocales:"; width: 300; height: 25  }
+                Text { text: "<b>locale</b>: "   + localehelper.locale; width: 300; height: 25  }
+
+                Text { text: "<b>defaultDecimalPoint</b>: "   + localehelper.defaultDecimalPoint; width: 300; height: 25  }
+                Text { text: "<b>decimalPoint</b>: "   + localehelper.decimalPoint; width: 300; height: 25  }
+                Text { text: "<b>defaultFirstDayOfWeek</b>: "   + localehelper.defaultFirstDayOfWeek; width: 300; height: 25  }
+                Text { text: "<b>firstDayOfWeek</b>: "   + localehelper.firstDayOfWeek; width: 300; height: 25  }
+                Text { text: "<b>defaultDateFormat</b>: "   + localehelper.defaultDateFormat; width: 300; height: 25  }
+                Text { text: "<b>dateFormat</b>: "   + localehelper.dateFormat; width: 300; height: 25  }
+                Text { text: "<b>defaultTimeFormat</b>: "   + localehelper.defaultTimeFormat; width: 300; height: 25  }
+                Text { text: "<b>TimeFormat</b>: "   + localehelper.timeFormat; width: 300; height: 25  }
+
+                Text { text: "<b>installedLocales</b>:"; width: 300; height: 25  }
                 Column {
                     Repeater {
                         model: Labs.LocaleListModel {}
                         delegate:  Text {
-                            text: "   " + displayLocale + " [" + locale + "]"
-                            width: 300
+                            text: "   - " + displayLocale + " [" + locale + "]"
+                            width:300
                             height: 25
                         }
                     }
                 }
-
-                Text { text: "defaultDecimalPoint: "   + localehelper.defaultDecimalPoint; width: 300; height: 25  }
-                Text { text: "decimalPoint: "   + localehelper.decimalPoint; width: 300; height: 25  }
-                Text { text: "defaultFirstDayOfWeek: "   + localehelper.defaultFirstDayOfWeek; width: 300; height: 25  }
-                Text { text: "firstDayOfWeek: "   + localehelper.firstDayOfWeek; width: 300; height: 25  }
-                Text { text: "defaultDateFormat: "   + localehelper.defaultDateFormat; width: 300; height: 25  }
-                Text { text: "dateFormat: "   + localehelper.dateFormat; width: 300; height: 25  }
-                Text { text: "defaultTimeFormat: "   + localehelper.defaultTimeFormat; width: 300; height: 25  }
-                Text { text: "TimeFormat: "   + localehelper.timeFormat; width: 300; height: 25  }
             }
             Column {
                 id: c1
-                Text { text: "<b>Date</b>" ; font.pixelSize: 18; width: 300; height: 40 }
-                Text { id: l1;  text: "FullLong: "   + localehelper.currentDate( Labs.LocaleHelper.DateFullLong ); width: 300; height: 25  }
-                Text { id: l2;  text: "Full: "       + localehelper.currentDate( Labs.LocaleHelper.DateFull); width: 300; height: 25  }
-                Text { id: l3;  text: "FullShort: "      + localehelper.currentDate( Labs.LocaleHelper.DateFullShort); width: 300; height: 25  }
-                Text { id: l4;  text: "FullNum: "    + localehelper.currentDate( Labs.LocaleHelper.DateFullNum ); width: 300; height: 25  }
-                Text { id: l5;  text: "FullNumShort: " + localehelper.currentDate( Labs.LocaleHelper.DateFullNumShort); width: 300; height: 25  }
-                Text { id: l6;  text: "DateWeekdayMonthDay: " + localehelper.currentDate( Labs.LocaleHelper.DateWeekdayMonthDay ); width: 300; height: 25  }
-                Text { id: l7;  text: "DateWeekdayDayShort: " + localehelper.currentDate( Labs.LocaleHelper.DateWeekdayDayShort ); width: 300; height: 25  }
-                Text { id: l8;  text: "DateMonthDay: " + localehelper.currentDate( Labs.LocaleHelper.DateMonthDay ); width: 300; height: 25  }
-                Text { id: l9;  text: "DateMonthYear: " + localehelper.currentDate( Labs.LocaleHelper.DateMonthYear ); width: 300; height: 25  }
-                Text { id: l10; text: "DateMonthYearShort: " + localehelper.currentDate( Labs.LocaleHelper.DateMonthYearShort ); width: 300; height: 25  }
-                Text { id: l11; text: "DateDay: " + localehelper.currentDate( Labs.LocaleHelper.DateDay ); width: 300; height: 25  }
-                Text { id: l12; text: "DateWeekday: " + localehelper.currentDate( Labs.LocaleHelper.DateWeekday ); width: 300; height: 25  }
-                Text { id: l13; text: "DateWeekdayShort: " + localehelper.currentDate( Labs.LocaleHelper.DateWeekdayShort ); width: 300; height: 25  }
-                Text { id: l14; text: "DateMonth: " + localehelper.currentDate( Labs.LocaleHelper.DateMonth ); width: 300; height: 25  }
-                Text { id: l15; text: "DateMonthShort: " + localehelper.currentDate( Labs.LocaleHelper.DateMonthShort ); width: 300; height: 25  }
-                Text { id: l16; text: "DateYear: " + localehelper.currentDate( Labs.LocaleHelper.DateYear ); width: 300; height: 25  }
+                Text { text: "<b>Date Format</b>" ; font.pixelSize: 18; width: 300; height: 25 }
+
+                DropDown {
+                    width:  250
+                    height: 40
+
+                    title: "Date Format"
+                    showTitleInMenu: true
+                    model:  [ "Year, Month, Day",
+                              "Day, Month, Year",
+                              "Month, Day, Year" ]
+                    payload: [ Labs.LocaleHelper.DateFormatYMD,
+                               Labs.LocaleHelper.DateFormatDMY,
+                               Labs.LocaleHelper.DateFormatMDY ]
+                    selectedIndex: localehelper.dateFormat
+                    onTriggered:  {
+                        localehelper.dateFormat = payload[index]
+                    }
+                }
+
+                LocaleHelperDate { label: "DateFullLong"; format: Labs.LocaleHelper.DateFullLong }
+                LocaleHelperDate { label: "DateFull"; format: Labs.LocaleHelper.DateFull }
+                LocaleHelperDate { label: "DateFullShort"; format: Labs.LocaleHelper.DateFullShort }
+                LocaleHelperDate { label: "DateFullNum"; format: Labs.LocaleHelper.DateFullNum }
+                LocaleHelperDate { label: "DateFullNumShort"; format: Labs.LocaleHelper.DateFullNumShort }
+                LocaleHelperDate { label: "DateWeekdayMonthDay"; format: Labs.LocaleHelper.DateWeekdayMonthDay }
+                LocaleHelperDate { label: "DateWeekdayDayShort"; format: Labs.LocaleHelper.DateWeekdayDayShort }
+                LocaleHelperDate { label: "DateMonthDay"; format: Labs.LocaleHelper.DateMonthDay }
+                LocaleHelperDate { label: "DateMonthYear"; format: Labs.LocaleHelper.DateMonthYear }
+                LocaleHelperDate { label: "DateMonthYearShort"; format: Labs.LocaleHelper.DateMonthYearShort }
+                LocaleHelperDate { label: "DateDay"; format: Labs.LocaleHelper.DateDay }
+                LocaleHelperDate { label: "DateWeekday"; format: Labs.LocaleHelper.DateWeekday }
+                LocaleHelperDate { label: "DateWeekdayShort"; format: Labs.LocaleHelper.DateWeekdayShort }
+                LocaleHelperDate { label: "DateMonth"; format: Labs.LocaleHelper.DateMonth }
+                LocaleHelperDate { label: "DateMonthShort"; format: Labs.LocaleHelper.DateMonthShort }
+                LocaleHelperDate { label: "DateYear"; format: Labs.LocaleHelper.DateYear }
             }
             Column {
                 id: c2
-                Text { text: "<b>Time</b>" ; font.pixelSize: 18; width: 300; height: 40 }
-                Text { id: l21;  text: "TimeFull: "   + localehelper.currentTime( Labs.LocaleHelper.TimeFull ); width: 300; height: 25  }
-                Text { id: l22;  text: "TimeFull12: "       + localehelper.currentTime( Labs.LocaleHelper.TimeFull12); width: 300; height: 25  }
-                Text { id: l23;  text: "TimeFull24: "      + localehelper.currentTime( Labs.LocaleHelper.TimeFull24); width: 300; height: 25  }
+                Text { text: "<b>Time Format</b>" ; font.pixelSize: 18; width: 300; height: 25 }
+
+                DropDown {
+                    width:  250
+                    height: 40
+
+                    title: "Time Format"
+                    showTitleInMenu: true
+                    model:  [ "12 Hour",
+                              "24 Hour"]
+                    payload: [ Labs.LocaleHelper.TimeFormat12,
+                               Labs.LocaleHelper.TimeFormat24 ]
+                    selectedIndex: localehelper.timeformat
+                    onTriggered:  {
+                        localehelper.timeFormat = payload[index]
+                    }
+                }
+
+                LocaleHelperTime { label: "TimeFull";   format: Labs.LocaleHelper.TimeFull }
+                LocaleHelperTime { label: "TimeFull12"; format: Labs.LocaleHelper.TimeFull12 }
+                LocaleHelperTime { label: "TimeFull24"; format: Labs.LocaleHelper.TimeFull24 }
             }
         }
     }

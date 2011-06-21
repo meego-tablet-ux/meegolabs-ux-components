@@ -87,6 +87,7 @@ namespace meego
         };
         
         enum DayOfWeek {
+            DayInvalid = 0,
             DayMonday = 1,  // Matches QLocale numbering
             DayTuesday,
             DayWednesday,
@@ -97,14 +98,14 @@ namespace meego
         };
         
         enum DateFormat {
-            DateFormatInvalid = 0,
-            DateFormatYMD,
+            DateFormatInvalid = -1,
+            DateFormatYMD = 0,
             DateFormatDMY,
             DateFormatMDY
         };
         
         enum TimeFormat {
-            TimeFormatInvalid = 0,
+            TimeFormatInvalid = -1,
             TimeFormat12 = 0,
             TimeFormat24
         };

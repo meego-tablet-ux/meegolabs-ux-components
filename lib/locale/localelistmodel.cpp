@@ -10,9 +10,6 @@
 #include "meegolocale.h"
 #include <QDir>
 
-#include <QDebug>
-
-
 namespace
 {
 
@@ -30,7 +27,6 @@ void parseInstalledLocales (QStringList & locales)
         const int localeLength = file.length() - localeNameFilter.length() + 1;
         const QString locale = file.mid(asteriskPos, localeLength);
         locales << locale;
-        qDebug() << __FUNCTION__ << file << locale;
     }
 }
 

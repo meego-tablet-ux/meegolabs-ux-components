@@ -138,14 +138,31 @@ namespace meego
     Locale::Locale(QObject *parent)
         : QObject(parent),
           mpQLocale(new QLocale()),
-          mDateFormat(defaultDateFormat()),
-          mTimeFormat(defaultTimeFormat()),
-          mFirstDayOfWeek(defaultFirstDayOfWeek()),
-          mDecimalPoint(defaultDecimalPoint()),
+          mDateFormat(DateFormatInvalid),
+          mTimeFormat(TimeFormatInvalid),
+          mFirstDayOfWeek(DayInvalid),
+          mDecimalPoint(""),
           mpDefaultCollator(0),
           mpPhoneBookCollator(0)
     {
         mLocale = QLocale::system().name();
+
+        // TODO: Read value of dateFormat, timeFormat, firstDayOfWeek and decimalPoint config
+        //       For any value, if it has no saved config, reset to default value and save that setting.
+        //       Until the backend is ready, all values are set to defaults now.
+
+        if (DateFormatInvalid == mDateFormat) {
+            mDateFormat = defaultDateFormat();
+        }
+        if (TimeFormatInvalid == mTimeFormat) {
+            mTimeFormat = defaultTimeFormat();
+        }
+        if (DayInvalid == mFirstDayOfWeek) {
+            mFirstDayOfWeek = defaultFirstDayOfWeek();
+        }
+        if ("" == mDecimalPoint) {
+            mDecimalPoint = defaultDecimalPoint();
+        }
     }
 
     Locale::DateFormat Locale::defaultDateFormat() const
@@ -212,50 +229,71 @@ namespace meego
     }
 
 
-    void Locale::setLocale(QString newValue)
+    void Locale::setLocale( QString v )
     {
-        qWarning() << __FUNCTION__ << "not implemented yet!";
-        mLocale = newValue;
+        mLocale = v;
+        // TODO: persist this change
         emit localeChanged();
     }
 
 
     Locale::DateFormat Locale::dateFormat() const
     {
-        // Read possible user override from settings
-        return defaultDateFormat();
+        return mDateFormat;
     }
 
 
-    void Locale::setDateFormat(DateFormat)
+    void Locale::setDateFormat( DateFormat v )
     {
-        qWarning() << __FUNCTION__ << "not implemented yet!";
+        mDateFormat = v;
+        // TODO: persist this change
+        emit dateFormatChanged();
     }
 
 
     Locale::TimeFormat Locale::timeFormat() const
     {
-        // TODO: Read possible user override from settings
-        return defaultTimeFormat();
+        return mTimeFormat;
     }
 
 
-    void Locale::setTimeFormat(TimeFormat)
+    void Locale::setTimeFormat( TimeFormat v )
     {
-        qWarning() << __FUNCTION__ << "not implemented yet!";
+        mTimeFormat = v;
+        // TODO: persist this change
+        emit timeFormatChanged();
     }
 
 
     Locale::DayOfWeek Locale::firstDayOfWeek() const
     {
-        // TODO: Read possible user override from settings
-        return defaultFirstDayOfWeek();
+        return mFirstDayOfWeek;
     }
 
 
-    void Locale::setFirstDayOfWeek(DayOfWeek)
+    void Locale::setFirstDayOfWeek( DayOfWeek v )
     {
-        qWarning() << __FUNCTION__ << "not implemented yet!";
+        mFirstDayOfWeek = v;
+        // TODO: persist this change
+        emit firstDayOfWeekChanged();
+    }
+
+
+    QString Locale::defaultDecimalPoint() const
+    {
+        return mpQLocale->decimalPoint();
+    }
+
+    QString Locale::decimalPoint() const
+    {
+        return mDecimalPoint;
+    }
+
+    void Locale::setDecimalPoint( QString v )
+    {
+        mDecimalPoint = v;
+        // TODO: persist this change
+        emit decimalPointChanged();
     }
 
 
@@ -322,27 +360,8 @@ namespace meego
     }
 
 
-    QString Locale::defaultDecimalPoint() const
-    {
-        return mpQLocale->decimalPoint();
-    }
-
-    QString Locale::decimalPoint() const
-    {
-        // TODO: Read possible user override from settings
-        return defaultDecimalPoint();
-    }
-
-    void Locale::setDecimalPoint( QString )
-    {
-        qWarning() << __FUNCTION__ << "not implemented yet!";
-    }
-
-
     QString Locale::localeDisplayName(QString locale)
     {
-        qDebug() << __FUNCTION__ << locale;
-
         icu::UnicodeString localeUCS = toUnicodeString(locale);
         icu::Locale displayLocale(locale.toLatin1());
         return toQString(displayLocale.getDisplayName(displayLocale, localeUCS));
