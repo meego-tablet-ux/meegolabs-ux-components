@@ -8,4 +8,4 @@ Description: Locale functions for MeeGo
 Version: 0.0.1
 Cflags: -I${includedir}
 Libs: -L${libdir} -lmeegolocale
-Requires: icu-i18n
+Requires: icu-i18n icu-uc
