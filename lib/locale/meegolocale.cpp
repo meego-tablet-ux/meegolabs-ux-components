@@ -50,7 +50,7 @@ namespace
     };
 
 
-    bool compare (const QString & lStr, const QString & rStr, icu::Collator & coll)
+    int compare (const QString & lStr, const QString & rStr, icu::Collator & coll)
     {
         UnicodeString lUniStr = toUnicodeString(lStr);
         UnicodeString rUniStr = toUnicodeString(rStr);
