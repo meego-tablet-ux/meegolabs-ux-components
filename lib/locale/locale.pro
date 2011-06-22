@@ -10,7 +10,7 @@ CONFIG += qt \
 OBJECTS_DIR = .obj
 MOC_DIR = .moc
 
-PKGCONFIG += icu-i18n icu-uc
+PKGCONFIG += icu-i18n icu-uc mlite
 
 SOURCES +=  meegolocale.cpp \
             localelistmodel.cpp

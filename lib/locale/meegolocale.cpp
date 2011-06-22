@@ -12,6 +12,8 @@
 #include <QDateTime>
 #include <QTime>
 #include <QLocale>
+#include <QFile>
+#include <QDir>
 
 #include <unicode/unistr.h>
 #include <unicode/locid.h>
@@ -23,7 +25,9 @@
 #include <unicode/uchriter.h>
 
 #include <QDebug>
+#include <QSettings>
 
+#include "mgconfitem.h"
 
 namespace
 {
@@ -38,7 +42,6 @@ namespace
         const ushort *strShort = str.utf16();
         return UnicodeString(static_cast<const UChar *>(strShort));
     }
-
 
     enum CollationTypes {
         Default = 0,
@@ -128,7 +131,44 @@ namespace
         }
         return pColl;
     }
-    
+
+    QStringList getLanguageList()
+    {
+        QStringList languageList;
+        for(int i=0; i<215; i++)
+        {
+            QString language = QLocale::languageToString((QLocale::Language)i);
+            if(language != "")
+            {
+                foreach(QLocale::Country country,QLocale::countriesForLanguage((QLocale::Language)i))
+                {
+                    QString localeString = language + " - " + QLocale::countryToString(country);
+                    languageList<<localeString;
+                }
+            }
+        }
+        return languageList;
+    }
+
+    void setLocaleToQSettings(QString locale)
+    {
+        if(!QFile::exists(QDir::homePath() + "/.config/sysconfig/i18n"))
+        {
+            if(!QDir::home().exists(QDir::homePath() + "/.config/sysconfig"))
+            {
+                QDir::home().mkpath(".config/sysconfig");
+            }
+            QFile::copy("/etc/sysconfig/i18n", QDir::homePath() + "/.config/sysconfig/i18n");
+        }
+        QSettings i18n(QDir::homePath() + "/.config/sysconfig/i18n", QSettings::NativeFormat);
+        i18n.setValue("LANG", locale + ".UTF-8");
+    }
+    void setLocaleEnvironment(QString locale)
+    {
+        //nop
+    }
+
+
 } // anonymous namespace
 
 
@@ -143,26 +183,29 @@ namespace meego
           mFirstDayOfWeek(DayInvalid),
           mDecimalPoint(""),
           mpDefaultCollator(0),
-          mpPhoneBookCollator(0)
+          mpPhoneBookCollator(0),
+          mLanguageConfItem( LANG_KEY ),
+          mDateFormatConfItem( DATE_KEY ),
+          mTimeFormatConfItem( TIME_KEY ),
+          mDecimalPointConfItem( DEC_KEY ),
+          mFirstDayOfWeekConfItem( DAY_KEY )
     {
+
+        connect( &mLanguageConfItem, SIGNAL( valueChanged() ), this, SLOT( readLanguageConfItem() ) );
+        connect( &mDateFormatConfItem, SIGNAL( valueChanged() ), this, SLOT( readDateFormatConfItem() ) );
+        connect( &mTimeFormatConfItem, SIGNAL( valueChanged() ), this, SLOT( readTimeFormatConfItem() ) );
+        connect( &mDecimalPointConfItem, SIGNAL( valueChanged() ), this, SLOT( readDecimalConfItem() ) );
+        connect( &mFirstDayOfWeekConfItem, SIGNAL( valueChanged() ), this, SLOT( readFirstWeekConfItem() ) );
+
+        readLanguageConfItem();
+        readDateFormatConfItem();
+        readTimeFormatConfItem();
+        readDecimalPointConfItem();
+        readFirstWeekConfItem();
+
+        //TODO from confitem?
         mLocale = QLocale::system().name();
 
-        // TODO: Read value of dateFormat, timeFormat, firstDayOfWeek and decimalPoint config
-        //       For any value, if it has no saved config, reset to default value and save that setting.
-        //       Until the backend is ready, all values are set to defaults now.
-
-        if (DateFormatInvalid == mDateFormat) {
-            mDateFormat = defaultDateFormat();
-        }
-        if (TimeFormatInvalid == mTimeFormat) {
-            mTimeFormat = defaultTimeFormat();
-        }
-        if (DayInvalid == mFirstDayOfWeek) {
-            mFirstDayOfWeek = defaultFirstDayOfWeek();
-        }
-        if ("" == mDecimalPoint) {
-            mDecimalPoint = defaultDecimalPoint();
-        }
     }
 
     Locale::DateFormat Locale::defaultDateFormat() const
@@ -214,6 +257,10 @@ namespace meego
         return (DayOfWeek)dow;
     }
 
+    QString Locale::defaultDecimalPoint() const
+    {
+        return mpQLocale->decimalPoint();
+    }
     
     Locale::~Locale()
     {
@@ -232,10 +279,14 @@ namespace meego
     void Locale::setLocale( QString v )
     {
         mLocale = v;
-        // TODO: persist this change
+        if( getLanguageList().contains(v) )
+        {
+            setLocaleToQSettings(v);
+            setLocaleEnvironment(v);
+            mLanguageConfItem.set( QVariant(v) );
+        }
         emit localeChanged();
     }
-
 
     Locale::DateFormat Locale::dateFormat() const
     {
@@ -244,9 +295,28 @@ namespace meego
 
 
     void Locale::setDateFormat( DateFormat v )
-    {
+    {        
         mDateFormat = v;
-        // TODO: persist this change
+
+        if( v != DateFormatInvalid)
+        {
+            if( v == DateFormatYMD )
+                mDateFormatConfItem.set( QVariant( "ymd" ) );
+            else if( v == DateFormatDMY )
+                mDateFormatConfItem.set( QVariant( "dmy" ) );
+            else if( v == DateFormatMDY )
+                mDateFormatConfItem.set( QVariant( "mdy" ) );
+        } else {
+            mDateFormatConfItem.set( QVariant( "invalid" ) );
+        }
+
+        emit dateFormatChanged();
+    }
+
+
+    void Locale::resetDateFormat() {
+        mDateFormatConfItem.set( QVariant("") );
+        mDateFormat = defaultDateFormat();
         emit dateFormatChanged();
     }
 
@@ -260,7 +330,20 @@ namespace meego
     void Locale::setTimeFormat( TimeFormat v )
     {
         mTimeFormat = v;
-        // TODO: persist this change
+        if( TimeFormat12 == v )
+            mTimeFormatConfItem.set( QVariant( 12 ) );
+        else if ( TimeFormat24 == v)
+            mTimeFormatConfItem.set( QVariant( 24 ) );
+        else
+            mTimeFormatConfItem.set( QVariant( 0 ) );
+
+        emit timeFormatChanged();
+    }
+
+
+    void Locale::resetTimeFormat() {
+        mTimeFormatConfItem.set( QVariant("") );
+        mTimeFormat = defaultTimeFormat();
         emit timeFormatChanged();
     }
 
@@ -274,28 +357,46 @@ namespace meego
     void Locale::setFirstDayOfWeek( DayOfWeek v )
     {
         mFirstDayOfWeek = v;
-        // TODO: persist this change
+
+        QChar ch = '0' + (int)v;
+        if (ch >= '1' && ch <= '7')
+            ch = '0';
+
+        mFirstDayOfWeekConfItem.set( QVariant( QString( ch ) ) );
+
         emit firstDayOfWeekChanged();
     }
 
 
-    QString Locale::defaultDecimalPoint() const
+    void Locale::resetFirstDayOfWeek()
     {
-        return mpQLocale->decimalPoint();
+        mFirstDayOfWeekConfItem.set( QVariant("") );
+        mFirstDayOfWeek = defaultFirstDayOfWeek();
+        emit firstDayOfWeekChanged();
     }
+
+
 
     QString Locale::decimalPoint() const
     {
         return mDecimalPoint;
     }
 
+
     void Locale::setDecimalPoint( QString v )
     {
         mDecimalPoint = v;
-        // TODO: persist this change
+        mDecimalPointConfItem.set( QVariant( v ) );
         emit decimalPointChanged();
     }
 
+
+    void Locale::resetDecimalPoint()
+    {
+        mDecimalPointConfItem.set( QVariant( "" ) );
+        mDecimalPoint = defaultDecimalPoint();
+        emit decimalPointChanged();
+    }
 
     QString Locale::localDate(const QDate &date, Locale::DateTimeFormat format) const
     {
@@ -622,5 +723,77 @@ namespace meego
             return QString();
         }
     }
+
+
+    void Locale::readLanguageConfItem()
+    {
+        QString lang = mLanguageConfItem.value().toString();
+
+        if( lang.isEmpty() )
+            lang = QString::fromLatin1( "en_US" );
+
+        mLocale = lang;
+
+        setLocale( mLocale );
+    }
+
+
+    void Locale::readDateFormatConfItem()
+    {
+        QString dateformat = mDateFormatConfItem.value().toString();
+
+        if( dateformat == "dmy" )
+            mDateFormat = DateFormatDMY;
+        else if( dateformat == "mdy" )
+            mDateFormat = DateFormatMDY;
+        else if( dateformat == "ymd" )
+            mDateFormat = DateFormatYMD;
+        else
+            mDateFormat = defaultDateFormat();
+    }
+
+
+    void Locale::readTimeFormatConfItem()
+    {
+        int timeformat = mTimeFormatConfItem.value().toInt();
+
+        if( 12 == timeformat )
+            mTimeFormat = TimeFormat12;
+        else if( 24 == timeformat )
+            mTimeFormat = TimeFormat24;
+        else
+            mTimeFormat = defaultTimeFormat();
+    }
+
+
+    void Locale::readDecimalPointConfItem()
+    {
+        QString dec = mDecimalPointConfItem.value().toString();
+        if( !dec.isEmpty() )
+            mDecimalPoint = dec;
+        else
+            mDecimalPoint = defaultDecimalPoint() ;
+    }
+
+
+    void Locale::readFirstWeekConfItem()
+    {
+        QString firstday = mFirstDayOfWeekConfItem.value().toString();
+
+        if( !firstday.isEmpty() ) {
+            mFirstDayOfWeek = defaultFirstDayOfWeek();
+        } else if (1 == firstday.length()) {
+            QChar ch = firstday.at(0);
+            if (ch >= '1' && ch <= '7') {
+                mFirstDayOfWeek = (DayOfWeek)(int)(ch.toAscii() - '0');
+            }
+        } else if( "invalid" == firstday ) {
+            //TODO -> set to invalid?
+            mFirstDayOfWeek = defaultFirstDayOfWeek();
+        } else {
+            mFirstDayOfWeek = defaultFirstDayOfWeek();
+        }
+    }
+
 
 } //namespace meego

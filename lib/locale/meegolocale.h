@@ -12,7 +12,13 @@
 #include "meegolocale_global.h"
 #include <QObject>
 #include <QList>
+#include <MGConfItem>
 
+#define LANG_KEY "/meego/ux/locale/lang"
+#define DATE_KEY "/meego/ux/locale/dateformat"
+#define TIME_KEY "/meego/ux/locale/timeformat"
+#define DAY_KEY  "/meego/ux/locale/firstday"
+#define DEC_KEY  "/meego/ux/locale/decimalpoint"
 
 class QLocale;
 class QDate;
@@ -113,8 +119,9 @@ namespace meego
         QString locale() const;
         void setLocale( QString );
 
-        TimeFormat timeFormat() const;
-        void setTimeFormat( TimeFormat );
+        TimeFormat  timeFormat() const;
+        void        setTimeFormat( TimeFormat );
+        void        resetTimeFormat();
         TimeFormat defaultTimeFormat() const;
 
         // Returns a three-character string with the letters 'd', 'm', and 'y' in
@@ -122,11 +129,13 @@ namespace meego
         //   American 1/31/2011, "dmy" for European 31/1/2011
         DateFormat dateFormat() const;
         void       setDateFormat( DateFormat );
+        void       resetDateFormat();
         DateFormat defaultDateFormat() const;
 
         // localized first day of the week (returns DayOfWeek enum)
         DayOfWeek firstDayOfWeek() const;
         void      setFirstDayOfWeek( DayOfWeek dayofWeek );
+        void      resetFirstDayOfWeek();
         DayOfWeek defaultFirstDayOfWeek() const;
 
         // date/time formatting
@@ -138,10 +147,10 @@ namespace meego
         // localized decimal point
         Q_INVOKABLE QString decimalPoint() const;
         Q_INVOKABLE void setDecimalPoint( QString );
+        Q_INVOKABLE void resetDecimalPoint();
         Q_INVOKABLE QString defaultDecimalPoint() const;
 
         Q_INVOKABLE static QString localeDisplayName( QString locale );
-
 
         bool lessThan(const QString & lStr, const QString & rStr) const;
         int  compare(const QString & lStr, const QString & rStr) const;
@@ -164,17 +173,31 @@ namespace meego
 
         QString formatString(DateTimeFormat) const;
 
+      private slots:
+        void readLanguageConfItem();
+        void readDateFormatConfItem();
+        void readTimeFormatConfItem();
+        void readDecimalPointConfItem();
+        void readFirstWeekConfItem();
+
       private:
         
         QLocale  * mpQLocale;
         DateFormat mDateFormat;
         TimeFormat mTimeFormat;
         DayOfWeek  mFirstDayOfWeek;
-        QString    mDecimalPoint;
+        QString    mDecimalPoint;        
         QString    mLocale;
 
         mutable icu::Collator * mpDefaultCollator;
         mutable icu::Collator * mpPhoneBookCollator;
+
+        MGConfItem mLanguageConfItem;
+        MGConfItem mDateFormatConfItem;
+        MGConfItem mTimeFormatConfItem;
+        MGConfItem mDecimalPointConfItem;
+        MGConfItem mFirstDayOfWeekConfItem;
+
     };
     
 } //namespace meego
