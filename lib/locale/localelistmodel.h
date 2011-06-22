@@ -38,6 +38,12 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     Q_INVOKABLE QVariant getData(int index, int role) const;
 
+    Q_INVOKABLE bool contains(const QString & locale) const;
+    Q_INVOKABLE int indexOf(const QString & locale) const;
+
+    Q_INVOKABLE QStringList locales() const;
+    Q_INVOKABLE QStringList displayLocales() const;
+
 protected:
 
     QStringList mLocales;

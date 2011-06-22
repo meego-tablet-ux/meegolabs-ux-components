@@ -27,5 +27,8 @@ Text {
         onDateFormatChanged: {
             text = displayText()
         }
+        onLocaleChanged: {
+            text = displayText()
+        }
     }
 }

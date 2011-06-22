@@ -27,5 +27,8 @@ Text {
         onTimeFormatChanged: {
             text = displayText()
         }
+        onLocaleChanged: {
+            text = displayText()
+        }
     }
 }

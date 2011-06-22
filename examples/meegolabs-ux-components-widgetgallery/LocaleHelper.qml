@@ -23,6 +23,14 @@ AppPage {
         color: "white"
     }
 
+    Labs.LocaleHelper {
+        id: localehelper
+    }
+
+    Labs.LocaleListModel {
+        id: localeModel
+    } 
+
     Flickable {
         id: flow
         anchors.fill: parent
@@ -31,22 +39,61 @@ AppPage {
         Row {
             Column {
                 id: c0
-                Text { text: "<b>General</b>" ; font.pixelSize: 18; width: 300; height: 40 }
-                Text { text: "<b>locale</b>: "   + localehelper.locale; width: 300; height: 25  }
+                Text { text: "<b>General</b>" ; font.pixelSize: 18; width: 300; height: 25 }
+                DropDown {
+                    width:  250
+                    height: 40
 
-                Text { text: "<b>defaultDecimalPoint</b>: "   + localehelper.defaultDecimalPoint; width: 300; height: 25  }
-                Text { text: "<b>decimalPoint</b>: "   + localehelper.decimalPoint; width: 300; height: 25  }
-                Text { text: "<b>defaultFirstDayOfWeek</b>: "   + localehelper.defaultFirstDayOfWeek; width: 300; height: 25  }
-                Text { text: "<b>firstDayOfWeek</b>: "   + localehelper.firstDayOfWeek; width: 300; height: 25  }
-                Text { text: "<b>defaultDateFormat</b>: "   + localehelper.defaultDateFormat; width: 300; height: 25  }
-                Text { text: "<b>dateFormat</b>: "   + localehelper.dateFormat; width: 300; height: 25  }
-                Text { text: "<b>defaultTimeFormat</b>: "   + localehelper.defaultTimeFormat; width: 300; height: 25  }
-                Text { text: "<b>TimeFormat</b>: "   + localehelper.timeFormat; width: 300; height: 25  }
+                    title: "Locale"
+                    showTitleInMenu: true
+                    model: localeModel.displayLocales()
+                    payload: localeModel.locales()
+                    selectedIndex: localeModel.indexOf(localehelper.locale)
+                    onTriggered:  {
+                        localehelper.locale = payload[index]
+                    }
+                }
 
-                Text { text: "<b>installedLocales</b>:"; width: 300; height: 25  }
+                Text { 
+                    text: "<b>defaultDecimalPoint</b>: "   + localehelper.defaultDecimalPoint; width: 300; height: 25  
+                    Connections {
+                        target: localehelper
+                        onDateFormatChanged: {
+                            text = displayText()
+                        }
+                        onLocaleChanged: {
+                            text = displayText()
+                        }
+                    }
+                }
+                Text { 
+                        text: "<b>decimalPoint</b>: "   + localehelper.decimalPoint; width: 300; height: 25
+                }
+                Text { 
+                    text: "<b>defaultFirstDayOfWeek</b>: "   + localehelper.defaultFirstDayOfWeek; width: 300; height: 25  
+                }
+                Text { 
+                    text: "<b>firstDayOfWeek</b>: "   + localehelper.firstDayOfWeek; width: 300; height: 25  
+                }
+                Text { 
+                    text: "<b>defaultDateFormat</b>: "   + localehelper.defaultDateFormat; width: 300; height: 25  
+                }
+                Text { 
+                    text: "<b>dateFormat</b>: "   + localehelper.dateFormat; width: 300; height: 25  
+                }
+                Text { 
+                    text: "<b>defaultTimeFormat</b>: "   + localehelper.defaultTimeFormat; width: 300; height: 25  
+                }
+                Text { 
+                    text: "<b>TimeFormat</b>: "   + localehelper.timeFormat; width: 300; height: 25  
+                }
+
+                Text { 
+                    text: "<b>installedLocales</b>:"; width: 300; height: 25  
+                }
                 Column {
                     Repeater {
-                        model: Labs.LocaleListModel {}
+                        model: localeModel
                         delegate:  Text {
                             text: "   - " + displayLocale + " [" + locale + "]"
                             width:300
@@ -108,7 +155,7 @@ AppPage {
                               "24 Hour"]
                     payload: [ Labs.LocaleHelper.TimeFormat12,
                                Labs.LocaleHelper.TimeFormat24 ]
-                    selectedIndex: localehelper.timeformat
+                    selectedIndex: localehelper.timeFormat
                     onTriggered:  {
                         localehelper.timeFormat = payload[index]
                     }
@@ -120,10 +167,4 @@ AppPage {
             }
         }
     }
-
-
-    Labs.LocaleHelper {
-        id: localehelper
-    }
-
 }

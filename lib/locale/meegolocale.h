@@ -14,12 +14,6 @@
 #include <QList>
 #include <MGConfItem>
 
-#define LANG_KEY "/meego/ux/locale/lang"
-#define DATE_KEY "/meego/ux/locale/dateformat"
-#define TIME_KEY "/meego/ux/locale/timeformat"
-#define DAY_KEY  "/meego/ux/locale/firstday"
-#define DEC_KEY  "/meego/ux/locale/decimalpoint"
-
 class QLocale;
 class QDate;
 class QTime;
@@ -174,7 +168,7 @@ namespace meego
         QString formatString(DateTimeFormat) const;
 
       private slots:
-        void readLanguageConfItem();
+        void readLocaleConfItem();
         void readDateFormatConfItem();
         void readTimeFormatConfItem();
         void readDecimalPointConfItem();
@@ -192,7 +186,7 @@ namespace meego
         mutable icu::Collator * mpDefaultCollator;
         mutable icu::Collator * mpPhoneBookCollator;
 
-        MGConfItem mLanguageConfItem;
+        MGConfItem mLocaleConfItem;
         MGConfItem mDateFormatConfItem;
         MGConfItem mTimeFormatConfItem;
         MGConfItem mDecimalPointConfItem;

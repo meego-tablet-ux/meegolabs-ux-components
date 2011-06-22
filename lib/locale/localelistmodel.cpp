@@ -90,4 +90,28 @@ QVariant LocaleListModel::data(const QModelIndex &index, int role) const
 }
 
 
+bool LocaleListModel::contains(const QString & locale) const
+{
+    return mLocales.contains(locale);
+}
+
+
+int LocaleListModel::indexOf(const QString & locale) const
+{
+    return mLocales.indexOf(locale);
+}
+
+
+QStringList LocaleListModel::locales() const
+{
+    return mLocales;
+}
+
+
+QStringList LocaleListModel::displayLocales() const
+{
+    return mDisplayLocales;
+}
+
+
 }; //namespace meego
