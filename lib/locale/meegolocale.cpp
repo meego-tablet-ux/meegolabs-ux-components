@@ -14,6 +14,7 @@
 #include <QLocale>
 #include <QFile>
 #include <QDir>
+#include <QDebug>
 
 #include <unicode/unistr.h>
 #include <unicode/locid.h>
@@ -26,8 +27,6 @@
 
 #include <QDebug>
 #include <QSettings>
-
-#include "mgconfitem.h"
 
 namespace
 {
@@ -194,7 +193,7 @@ namespace meego
         connect( &mLanguageConfItem, SIGNAL( valueChanged() ), this, SLOT( readLanguageConfItem() ) );
         connect( &mDateFormatConfItem, SIGNAL( valueChanged() ), this, SLOT( readDateFormatConfItem() ) );
         connect( &mTimeFormatConfItem, SIGNAL( valueChanged() ), this, SLOT( readTimeFormatConfItem() ) );
-        connect( &mDecimalPointConfItem, SIGNAL( valueChanged() ), this, SLOT( readDecimalConfItem() ) );
+        connect( &mDecimalPointConfItem, SIGNAL( valueChanged() ), this, SLOT( readDecimalPointConfItem() ) );
         connect( &mFirstDayOfWeekConfItem, SIGNAL( valueChanged() ), this, SLOT( readFirstWeekConfItem() ) );
 
         readLanguageConfItem();
@@ -278,15 +277,17 @@ namespace meego
 
     void Locale::setLocale( QString v )
     {
-        mLocale = v;
         if( getLanguageList().contains(v) )
         {
+            mLocale = v;
             setLocaleToQSettings(v);
             setLocaleEnvironment(v);
             mLanguageConfItem.set( QVariant(v) );
         }
+
         emit localeChanged();
     }
+
 
     Locale::DateFormat Locale::dateFormat() const
     {
@@ -359,7 +360,7 @@ namespace meego
         mFirstDayOfWeek = v;
 
         QChar ch = '0' + (int)v;
-        if (ch >= '1' && ch <= '7')
+        if (ch < '1' || ch > '7')
             ch = '0';
 
         mFirstDayOfWeekConfItem.set( QVariant( QString( ch ) ) );
@@ -385,8 +386,10 @@ namespace meego
 
     void Locale::setDecimalPoint( QString v )
     {
-        mDecimalPoint = v;
-        mDecimalPointConfItem.set( QVariant( v ) );
+        if(!v.isEmpty() && v.length() == 1) {
+            mDecimalPoint = v;
+            mDecimalPointConfItem.set( QVariant( v ) );
+        }
         emit decimalPointChanged();
     }
 
@@ -780,16 +783,13 @@ namespace meego
     {
         QString firstday = mFirstDayOfWeekConfItem.value().toString();
 
-        if( !firstday.isEmpty() ) {
+        if( firstday.isEmpty() ) {
             mFirstDayOfWeek = defaultFirstDayOfWeek();
         } else if (1 == firstday.length()) {
-            QChar ch = firstday.at(0);
+            QChar ch = firstday.at(0);            
             if (ch >= '1' && ch <= '7') {
                 mFirstDayOfWeek = (DayOfWeek)(int)(ch.toAscii() - '0');
-            }
-        } else if( "invalid" == firstday ) {
-            //TODO -> set to invalid?
-            mFirstDayOfWeek = defaultFirstDayOfWeek();
+            }        
         } else {
             mFirstDayOfWeek = defaultFirstDayOfWeek();
         }
