@@ -94,9 +94,11 @@ QVariant AppUpAppsModel::data(const QModelIndex &index, int role) const
 void AppUpAppsModel::loadDesktops()
 {
 //    qDebug("**** Beginning loadDesktops");
-    this->beginRemoveRows(QModelIndex(), 0, mDesktops.count()-1);
-    mDesktops.clear();
-    this->endRemoveRows();
+    if (mDesktops.count()) {
+        this->beginRemoveRows(QModelIndex(), 0, mDesktops.count()-1);
+        mDesktops.clear();
+        this->endRemoveRows();
+    }
 
     qDebug() << mWatcher->directories();
 
