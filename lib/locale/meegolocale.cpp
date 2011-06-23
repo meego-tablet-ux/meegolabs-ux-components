@@ -81,13 +81,6 @@ namespace
     }
 
 
-    QLocale::Country country()
-    {
-	// TODO: will this change in process if the language is changed?
-        return QLocale::system().country();
-    }
-
-
     icu::Collator * createCollator (int collType, QString locale, QLocale::Country country)
     {
         QString collation;
@@ -160,6 +153,9 @@ namespace
         i18n.setValue("LANG", lang);
 
 	(void) setenv("LANG", lang.toAscii(), 1 /*overwrite*/);
+
+        // TODO: this is not thread-safe
+        QLocale::setDefault(lang);
     }
 
 
@@ -180,7 +176,6 @@ namespace meego
 
     Locale::Locale(QObject *parent)
         : QObject(parent),
-          mpQLocale(new QLocale()),
           mDateFormat(DateFormatInvalid),
           mTimeFormat(TimeFormatInvalid),
           mFirstDayOfWeek(DayInvalid),
@@ -209,7 +204,6 @@ namespace meego
 
     Locale::~Locale()
     {
-        delete mpQLocale;
         delete mpDefaultCollator;
         delete mpPhoneBookCollator;
     }
@@ -269,7 +263,7 @@ namespace meego
 
     QString Locale::defaultDecimalPoint() const
     {
-        return mpQLocale->decimalPoint();
+        return mQLocale.decimalPoint();
     }
     
 
@@ -286,7 +280,8 @@ namespace meego
             mLocale = v;
             mLocaleConfItem.set(mLocale);
             setLocaleToQSettings(mLocale);
-	    emit localeChanged();
+            emit countryChanged();
+            emit localeChanged();
         }
     }
 
@@ -783,5 +778,10 @@ namespace meego
 	}
     }
 
+
+    QLocale::Country Locale::country() const
+    {
+        return mQLocale.country();
+    }
 
 } //namespace meego

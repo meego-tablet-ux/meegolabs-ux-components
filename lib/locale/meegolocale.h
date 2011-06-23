@@ -13,8 +13,8 @@
 #include <QObject>
 #include <QList>
 #include <MGConfItem>
+#include <QLocale>
 
-class QLocale;
 class QDate;
 class QTime;
 
@@ -37,6 +37,7 @@ namespace meego
         Q_ENUMS( TimeFormat );
 
         Q_PROPERTY( QString     locale                READ locale WRITE setLocale NOTIFY localeChanged );
+        Q_PROPERTY( QLocale::Country country          READ country NOTIFY countryChanged );
         Q_PROPERTY( DateFormat  dateFormat            READ dateFormat WRITE setDateFormat NOTIFY dateFormatChanged );
         Q_PROPERTY( DateFormat  defaultDateFormat     READ defaultDateFormat NOTIFY defaultDateFormatChanged );
         Q_PROPERTY( TimeFormat  timeFormat            READ timeFormat WRITE setTimeFormat NOTIFY timeFormatChanged );
@@ -88,7 +89,7 @@ namespace meego
         
         enum DayOfWeek {
             DayInvalid = 0,
-            DayMonday = 1,  // Matches QLocale numbering
+            DayMonday = 1,  // Matches QLocale::dayName() numbering
             DayTuesday,
             DayWednesday,
             DayThursday,
@@ -132,6 +133,8 @@ namespace meego
         void      resetFirstDayOfWeek();
         DayOfWeek defaultFirstDayOfWeek() const;
 
+        QLocale::Country country() const;
+
         // date/time formatting
         Q_INVOKABLE QString localDate(const QDate &date, DateTimeFormat format) const;
         Q_INVOKABLE QString localTime(const QTime &time, DateTimeFormat format) const;
@@ -162,6 +165,7 @@ namespace meego
         void defaultFirstDayOfWeekChanged();
         void decimalPointChanged();
         void defaultDecimalPointChanged();
+        void countryChanged();
         
       protected:
 
@@ -176,7 +180,7 @@ namespace meego
 
       private:
         
-        QLocale  * mpQLocale;
+        QLocale    mQLocale;
         DateFormat mDateFormat;
         TimeFormat mTimeFormat;
         DayOfWeek  mFirstDayOfWeek;
