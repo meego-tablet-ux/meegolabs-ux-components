@@ -9,6 +9,7 @@
 #include <QDir>
 #include <QDebug>
 #include <unicode/timezone.h>
+#include <unicode/locid.h>
 #include "timezonelistmodel.h"
 
 TimezoneListModel::TimezoneListModel(QObject *parent)
@@ -56,7 +57,7 @@ QString TimezoneListModel::getLocationName(QString title) const
 {
     TimeZone *zone = TimeZone::createTimeZone(UnicodeString(static_cast<const UChar*>(title.utf16())));
     UnicodeString result;
-    zone->getDisplayName(TRUE, TimeZone::GENERIC_LOCATION, result);
+    zone->getDisplayName(TRUE, TimeZone::GENERIC_LOCATION, Locale(mLocale.locale().toAscii().constData()), result);
     delete zone;
     return QString(reinterpret_cast<const QChar*>(result.getBuffer()), result.length());
 }
@@ -65,7 +66,7 @@ QString TimezoneListModel::getLongGMTName(QString title) const
 {
     TimeZone *zone = TimeZone::createTimeZone(UnicodeString(static_cast<const UChar*>(title.utf16())));
     UnicodeString result;
-    zone->getDisplayName(TRUE, TimeZone::LONG_GMT, result);
+    zone->getDisplayName(TRUE, TimeZone::LONG_GMT, Locale(mLocale.locale().toAscii().constData()), result);
     delete zone;
     return QString(reinterpret_cast<const QChar*>(result.getBuffer()), result.length());
 }
@@ -74,7 +75,7 @@ QString TimezoneListModel::getGMTName(QString title) const
 {
     TimeZone *zone = TimeZone::createTimeZone(UnicodeString(static_cast<const UChar*>(title.utf16())));
     UnicodeString result;
-    zone->getDisplayName(TRUE, TimeZone::SHORT_GMT, result);
+    zone->getDisplayName(TRUE, TimeZone::SHORT_GMT, Locale(mLocale.locale().toAscii().constData()), result);
     delete zone;
     return QString(reinterpret_cast<const QChar*>(result.getBuffer()), result.length());
 }
