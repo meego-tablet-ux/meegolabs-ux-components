@@ -94,9 +94,11 @@ QVariant AppUpAppsModel::data(const QModelIndex &index, int role) const
 void AppUpAppsModel::loadDesktops()
 {
 //    qDebug("**** Beginning loadDesktops");
-    this->beginRemoveRows(QModelIndex(), 0, mDesktops.count()-1);
-    mDesktops.clear();
-    this->endRemoveRows();
+    if (mDesktops.count()) {
+        this->beginRemoveRows(QModelIndex(), 0, mDesktops.count()-1);
+        mDesktops.clear();
+        this->endRemoveRows();
+    }
 
     qDebug() << mWatcher->directories();
 
@@ -112,18 +114,17 @@ void AppUpAppsModel::loadDesktops()
     filters << "*.desktop";
     foreach (QFileInfo fileInfo, dir.entryInfoList(filters))
     {
-//        qDebug("Inside foreach loop");
+        qDebug() << fileInfo.absoluteFilePath();
         MDesktopEntry *newDesktop = new MDesktopEntry(fileInfo.absoluteFilePath());
-//        qDebug("After MDesktopEntry creation");
         if (newDesktop->isValid()) {
-//            qDebug("MDesktopEntry valid!");
             this->beginInsertRows(QModelIndex(), mDesktops.count(), mDesktops.count());
             mDesktops.append(new MDesktopEntry(fileInfo.absoluteFilePath()));
             this->endInsertRows();
-//            qDebug("After endInsertRows");
+        } else {
+            qDebug() << "Invalid desktop: " << fileInfo.absoluteFilePath();
         }
     }
-//    qDebug("End of loadDesktops");
+    emit countChanged();
 }
 
 //Private functions
