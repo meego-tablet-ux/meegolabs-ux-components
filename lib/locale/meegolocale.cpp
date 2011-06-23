@@ -134,7 +134,7 @@ namespace
         return pColl;
     }
 
-    void setLocaleToQSettings(QString locale)
+    QLocale updateQLocale(QString locale)
     {
 	const QString userConfigPath = QDir::homePath() + "/.config/sysconfig";
 	const QString userI18nFile = userConfigPath + "/i18n";
@@ -156,6 +156,7 @@ namespace
 
         // TODO: this is not thread-safe
         QLocale::setDefault(lang);
+        return QLocale();
     }
 
 
@@ -279,7 +280,7 @@ namespace meego
         {
             mLocale = v;
             mLocaleConfItem.set(mLocale);
-            setLocaleToQSettings(mLocale);
+            mQLocale = updateQLocale(mLocale);
             emit countryChanged();
             emit localeChanged();
         }
@@ -719,7 +720,7 @@ namespace meego
 	}
 	else {
 	    mLocale = value;
-	    setLocaleToQSettings(mLocale);
+	    mQLocale = updateQLocale(mLocale);
 	}
     }
 
