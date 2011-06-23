@@ -25,23 +25,27 @@ AppPage {
 
     Labs.LocaleHelper {
         id: localehelper
+    }
+
+    // Create a second LocaleHelper object to show that changes to one instance notify to all other instances
+    Labs.LocaleHelper {
+        id: localehelper2
 
         onLocaleChanged: {
-            localeSignals.text += "locale changed to " + localehelper.locale + "<br>"
+            localeSignals.text += "locale changed to " + localehelper2.locale + "<br>"
         }
         onDateFormatChanged: {
-            localeSignals.text += "date format changed to " + localehelper.dateFormat + "<br>"
+            localeSignals.text += "date format changed to " + localehelper2.dateFormat + "<br>"
         }
         onTimeFormatChanged: {
-            localeSignals.text += "time format changed to " + localehelper.timeFormat + "<br>"
+            localeSignals.text += "time format changed to " + localehelper2.timeFormat + "<br>"
         }
         onFirstDayOfWeekChanged: {
-            localeSignals.text += "first day of week changed to " + localehelper.firstDayOfWeek + "<br>"
+            localeSignals.text += "first day of week changed to " + localehelper2.firstDayOfWeek + "<br>"
         }
         onCountryChanged: {
-            localeSignals.text += "country changed to " + localehelper.country + "<br>"
+            localeSignals.text += "country changed to " + localehelper2.country + "<br>"
         }
-        
     }
 
     Labs.LocaleListModel {
