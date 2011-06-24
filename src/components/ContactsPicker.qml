@@ -178,7 +178,7 @@ ModalDialog {
                                         field:Name.FirstName
                                         direction:Qt.AscendingOrder
                                     }
-                                    IntersectionFilter {
+                                    Filter {
                                         id: allFilter
                                     }
 
