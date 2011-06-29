@@ -1,5 +1,5 @@
 PROJECT_NAME = meegolabs-ux-components
-VERSION = 0.2.8.15
+VERSION = 0.2.8.17
 
 TEMPLATE = subdirs
 CONFIG += ordered
