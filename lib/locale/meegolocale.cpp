@@ -716,7 +716,11 @@ namespace meego
         const QString value = mLocaleConfItem.value().toString();
 
         if( value.isEmpty() ) {
-	    setLocale(defaultLocale());
+            QString locale = mQLocale.name();
+            if (locale.isEmpty()) {
+                locale = defaultLocale();
+            }
+            setLocale(locale);
 	}
 	else {
             setLocale(value, false);
