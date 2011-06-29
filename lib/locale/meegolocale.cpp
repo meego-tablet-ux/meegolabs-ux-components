@@ -136,23 +136,23 @@ namespace
 
     QLocale updateQLocale(QString locale)
     {
-	const QString userConfigPath = QDir::homePath() + "/.config/sysconfig";
-	const QString userI18nFile = userConfigPath + "/i18n";
-	const QString systemI18nFile = "/etc/sysconfig/i18n";
+        const QString userConfigPath = QDir::homePath() + "/.config";
+        const QString userI18nFile = userConfigPath + "/i18n";
+        const QString systemI18nFile = "/etc/sysconfig/i18n";
 
         if(!QFile::exists(userI18nFile))
         {
             if(!QFile::exists(userConfigPath))
             {
-                QDir::home().mkpath(".config/sysconfig");
+                QDir::home().mkpath(".config");
             }
             QFile::copy(systemI18nFile, userI18nFile);
         }
         QSettings i18n(userI18nFile, QSettings::NativeFormat);
-	const QString lang = locale + ".UTF-8";
+        const QString lang = locale + ".UTF-8";
         i18n.setValue("LANG", lang);
 
-	(void) setenv("LANG", lang.toAscii(), 1 /*overwrite*/);
+        (void) setenv("LANG", lang.toAscii(), 1 /*overwrite*/);
 
         // TODO: this is not thread-safe
         QLocale::setDefault(lang);
@@ -165,8 +165,8 @@ namespace
 
     QString defaultLocale()
     {
-	// TODO: check to see this is an available language
-	return QString::fromLatin1( "en_US" );
+        // TODO: check to see this is an available language
+        return QString::fromLatin1( "en_US" );
     }
 
 } // anonymous namespace
