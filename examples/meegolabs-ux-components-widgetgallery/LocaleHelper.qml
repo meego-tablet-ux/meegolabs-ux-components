@@ -27,6 +27,27 @@ AppPage {
         id: localehelper
     }
 
+    // Create a second LocaleHelper object to show that changes to one instance notify to all other instances
+    Labs.LocaleHelper {
+        id: localehelper2
+
+        onLocaleChanged: {
+            localeSignals.text += "locale changed to " + localehelper2.locale + "<br>"
+        }
+        onDateFormatChanged: {
+            localeSignals.text += "date format changed to " + localehelper2.dateFormat + "<br>"
+        }
+        onTimeFormatChanged: {
+            localeSignals.text += "time format changed to " + localehelper2.timeFormat + "<br>"
+        }
+        onFirstDayOfWeekChanged: {
+            localeSignals.text += "first day of week changed to " + localehelper2.firstDayOfWeek + "<br>"
+        }
+        onCountryChanged: {
+            localeSignals.text += "country changed to " + localehelper2.country + "<br>"
+        }
+    }
+
     Labs.LocaleListModel {
         id: localeModel
     } 
@@ -41,7 +62,6 @@ AppPage {
                 id: c0
                 Text { text: "<b>General</b>" ; font.pixelSize: 18; width: 300; height: 25 }
                 DropDown {
-                    width:  250
                     height: 40
 
                     title: "Locale"
@@ -53,50 +73,40 @@ AppPage {
                         localehelper.locale = payload[index]
                     }
                 }
-
                 Text { 
-                    text: "<b>defaultDecimalPoint</b>: "   + localehelper.defaultDecimalPoint; width: 300; height: 25  
-                    Connections {
-                        target: localehelper
-                        onDateFormatChanged: {
-                            text = displayText()
-                        }
-                        onLocaleChanged: {
-                            text = displayText()
-                        }
-                    }
+                        text: "<b>defaultDecimalPoint</b>: "   + localehelper.defaultDecimalPoint; height: 25
                 }
                 Text { 
-                        text: "<b>decimalPoint</b>: "   + localehelper.decimalPoint; width: 300; height: 25
+                        text: "<b>decimalPoint</b>: "   + localehelper.decimalPoint; height: 25
                 }
                 Text { 
-                    text: "<b>defaultFirstDayOfWeek</b>: "   + localehelper.defaultFirstDayOfWeek; width: 300; height: 25  
+                    text: "<b>defaultFirstDayOfWeek</b>: "   + localehelper.defaultFirstDayOfWeek; height: 25  
                 }
                 Text { 
-                    text: "<b>firstDayOfWeek</b>: "   + localehelper.firstDayOfWeek; width: 300; height: 25  
+                    text: "<b>firstDayOfWeek</b>: "   + localehelper.firstDayOfWeek; height: 25  
                 }
                 Text { 
-                    text: "<b>defaultDateFormat</b>: "   + localehelper.defaultDateFormat; width: 300; height: 25  
+                    text: "<b>defaultDateFormat</b>: "   + localehelper.defaultDateFormat; height: 25  
                 }
                 Text { 
-                    text: "<b>dateFormat</b>: "   + localehelper.dateFormat; width: 300; height: 25  
+                    text: "<b>dateFormat</b>: "   + localehelper.dateFormat; height: 25  
                 }
                 Text { 
-                    text: "<b>defaultTimeFormat</b>: "   + localehelper.defaultTimeFormat; width: 300; height: 25  
+                    text: "<b>defaultTimeFormat</b>: "   + localehelper.defaultTimeFormat; height: 25  
                 }
                 Text { 
-                    text: "<b>TimeFormat</b>: "   + localehelper.timeFormat; width: 300; height: 25  
+                    text: "<b>TimeFormat</b>: "   + localehelper.timeFormat; height: 25  
                 }
 
                 Text { 
-                    text: "<b>installedLocales</b>:"; width: 300; height: 25  
+                    text: "<b>installedLocales</b>:"; height: 25  
                 }
                 Column {
                     Repeater {
                         model: localeModel
                         delegate:  Text {
                             text: "   - " + displayLocale + " [" + locale + "]"
-                            width:300
+                            width: paintedWidth + 10
                             height: 25
                         }
                     }
@@ -104,10 +114,9 @@ AppPage {
             }
             Column {
                 id: c1
-                Text { text: "<b>Date Format</b>" ; font.pixelSize: 18; width: 300; height: 25 }
+                Text { text: "<b>Date Format</b>" ; font.pixelSize: 18; height: 25 }
 
                 DropDown {
-                    width:  250
                     height: 40
 
                     title: "Date Format"
@@ -143,10 +152,9 @@ AppPage {
             }
             Column {
                 id: c2
-                Text { text: "<b>Time Format</b>" ; font.pixelSize: 18; width: 300; height: 25 }
+                Text { text: "<b>Time Format</b>" ; font.pixelSize: 18; height: 25 }
 
                 DropDown {
-                    width:  250
                     height: 40
 
                     title: "Time Format"
@@ -164,6 +172,33 @@ AppPage {
                 LocaleHelperTime { label: "TimeFull";   format: Labs.LocaleHelper.TimeFull }
                 LocaleHelperTime { label: "TimeFull12"; format: Labs.LocaleHelper.TimeFull12 }
                 LocaleHelperTime { label: "TimeFull24"; format: Labs.LocaleHelper.TimeFull24 }
+
+                Text { text: "<b>Signals</b>" ; font.pixelSize: 18; height: 25 }
+                Rectangle {
+                    width: 300
+                    height: 100
+                    color: "lightgray"
+                    Flickable {
+                        id: localeSignalsFlick
+                        anchors.fill: parent
+
+                        contentHeight: localeSignals.height
+                        clip: true
+                        focus: true
+    
+                        Text {
+                            id: localeSignals
+                            height: paintedHeight
+                            width: paintedWidth
+    
+                            onTextChanged: {
+                                localeSignalsFlick.contentY = Math.max(0, height - localeSignalsFlick.height)
+                                
+                            }
+                        }
+                    }
+                }
+
             }
         }
     }

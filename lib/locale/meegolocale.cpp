@@ -134,7 +134,7 @@ namespace
         return pColl;
     }
 
-    void setLocaleToQSettings(QString locale)
+    QLocale updateQLocale(QString locale)
     {
 	const QString userConfigPath = QDir::homePath() + "/.config/sysconfig";
 	const QString userI18nFile = userConfigPath + "/i18n";
@@ -156,6 +156,7 @@ namespace
 
         // TODO: this is not thread-safe
         QLocale::setDefault(lang);
+        return QLocale();
     }
 
 
@@ -273,13 +274,13 @@ namespace meego
     }
 
 
-    void Locale::setLocale( QString v )
+    void Locale::setLocale( QString v, bool setKey )
     {
         if( mLocale != v )
         {
             mLocale = v;
-            mLocaleConfItem.set(mLocale);
-            setLocaleToQSettings(mLocale);
+            if (setKey) mLocaleConfItem.set(mLocale);
+            mQLocale = updateQLocale(mLocale);
             emit countryChanged();
             emit localeChanged();
         }
@@ -292,13 +293,13 @@ namespace meego
     }
 
 
-    void Locale::setDateFormat( DateFormat v )
+    void Locale::setDateFormat( DateFormat v, bool setKey )
     {        
 	if (mDateFormat != v)
         {
 	    mDateFormat = v;
-	    mDateFormatConfItem.set((int)mDateFormat);
-	    emit dateFormatChanged();
+            if (setKey) mDateFormatConfItem.set((int)mDateFormat);
+            emit dateFormatChanged();
 	}
     }
 
@@ -316,13 +317,13 @@ namespace meego
     }
 
 
-    void Locale::setTimeFormat( TimeFormat v )
+    void Locale::setTimeFormat( TimeFormat v, bool setKey )
     {
 	if (mTimeFormat != v)
 	{
 	    mTimeFormat = v;
-            mTimeFormatConfItem.set((int)mTimeFormat);
-	    emit timeFormatChanged();
+            if (setKey) mTimeFormatConfItem.set((int)mTimeFormat);
+            emit timeFormatChanged();
 	}
     }
 
@@ -340,13 +341,13 @@ namespace meego
     }
 
 
-    void Locale::setFirstDayOfWeek( DayOfWeek v )
+    void Locale::setFirstDayOfWeek( DayOfWeek v, bool setKey )
     {
 	if (mFirstDayOfWeek != v) 
 	{
 	    mFirstDayOfWeek = v;
-	    mFirstDayOfWeekConfItem.set((int)mFirstDayOfWeek);
-	    emit firstDayOfWeekChanged();
+            if (setKey) mFirstDayOfWeekConfItem.set((int)mFirstDayOfWeek);
+            emit firstDayOfWeekChanged();
 	}
     }
 
@@ -365,13 +366,13 @@ namespace meego
     }
 
 
-    void Locale::setDecimalPoint( QString v )
+    void Locale::setDecimalPoint( QString v, bool setKey )
     {
 	if (mDecimalPoint != v)
 	{
 	    mDecimalPoint = v;
-            mDecimalPointConfItem.set(mDecimalPoint);
-	    emit decimalPointChanged();
+            if (setKey) mDecimalPointConfItem.set(mDecimalPoint);
+            emit decimalPointChanged();
 	}
     }
 
@@ -718,8 +719,7 @@ namespace meego
 	    setLocale(defaultLocale());
 	}
 	else {
-	    mLocale = value;
-	    setLocaleToQSettings(mLocale);
+            setLocale(value, false);
 	}
     }
 
@@ -733,7 +733,7 @@ namespace meego
 	    resetDateFormat();
 	}
 	else {
-	    mDateFormat = (DateFormat)value;
+            setDateFormat((DateFormat)value, false);
 	}
     }
 
@@ -747,7 +747,7 @@ namespace meego
 	    resetTimeFormat();
 	}
 	else {
-	    mTimeFormat = (TimeFormat)value;
+            setTimeFormat((TimeFormat)value, false);
 	}
     }
 
@@ -760,7 +760,7 @@ namespace meego
 	    resetDecimalPoint();
 	}
 	else {
-	    mDecimalPoint = value;
+            setDecimalPoint(value, false);
 	}
     }
 
@@ -774,7 +774,7 @@ namespace meego
 	    resetFirstDayOfWeek();
 	}
 	else {
-	    mFirstDayOfWeek = (DayOfWeek)value;
+            setFirstDayOfWeek((DayOfWeek)value, false);
 	}
     }
 

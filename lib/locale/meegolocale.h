@@ -112,10 +112,10 @@ namespace meego
         };
 
         QString locale() const;
-        void setLocale( QString );
+        void setLocale( QString newVal, bool setKey = true );
 
         TimeFormat  timeFormat() const;
-        void        setTimeFormat( TimeFormat );
+        void        setTimeFormat( TimeFormat newVal, bool setKey = true );
         void        resetTimeFormat();
         TimeFormat defaultTimeFormat() const;
 
@@ -123,15 +123,21 @@ namespace meego
         //   the order that those should appear for this locale, e.g. "mdy" for
         //   American 1/31/2011, "dmy" for European 31/1/2011
         DateFormat dateFormat() const;
-        void       setDateFormat( DateFormat );
+        void       setDateFormat( DateFormat newVal, bool setKey = true );
         void       resetDateFormat();
         DateFormat defaultDateFormat() const;
 
         // localized first day of the week (returns DayOfWeek enum)
         DayOfWeek firstDayOfWeek() const;
-        void      setFirstDayOfWeek( DayOfWeek dayofWeek );
+        void      setFirstDayOfWeek( DayOfWeek newVal, bool setKey = true );
         void      resetFirstDayOfWeek();
         DayOfWeek defaultFirstDayOfWeek() const;
+
+        // localized decimal point
+        QString decimalPoint() const;
+        void    setDecimalPoint( QString newVal, bool setKey = true  );
+        void    resetDecimalPoint();
+        QString defaultDecimalPoint() const;
 
         QLocale::Country country() const;
 
@@ -140,12 +146,6 @@ namespace meego
         Q_INVOKABLE QString localTime(const QTime &time, DateTimeFormat format) const;
         Q_INVOKABLE QString currentDate(DateTimeFormat format) const;
         Q_INVOKABLE QString currentTime(DateTimeFormat format) const;
-
-        // localized decimal point
-        Q_INVOKABLE QString decimalPoint() const;
-        Q_INVOKABLE void setDecimalPoint( QString );
-        Q_INVOKABLE void resetDecimalPoint();
-        Q_INVOKABLE QString defaultDecimalPoint() const;
 
         Q_INVOKABLE static QString localeDisplayName( QString locale );
 
