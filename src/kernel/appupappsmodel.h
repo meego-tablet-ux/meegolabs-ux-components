@@ -13,12 +13,14 @@
 #include <QString>
 #include <QList>
 #include <QAbstractListModel>
+#include <QMutex>
 
 #define APPUP_DESKTOP_PATH QString("%1/.local/opt/com.intel.appup-tablet/%2")
 #define APPUP_DIRECTORIES (QStringList() << "featured" << "update")
 
 class MDesktopEntry;
 class QFileSystemWatcher;
+class QMutex;
 
 class AppUpAppsModel : public QAbstractListModel
 {
@@ -82,8 +84,11 @@ private:
 
     QList<MDesktopEntry *> mDesktops;
     QFileSystemWatcher *mWatcher;
+    QMutex mMutex;
     int mLimit;
     AppUpType mType;
+    uint mRecurseCount;
+    bool mNeedReload;
 };
 
 #endif // APPUPAPPSMODEL_H

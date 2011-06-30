@@ -16,11 +16,12 @@
 #include <QtDeclarative/qdeclarative.h>
 #include <mdesktopentry.h>
 
-
 AppUpAppsModel::AppUpAppsModel(AppUpType type, QObject *parent) :
     QAbstractListModel(parent),
     mLimit(6),
-    mType(type)
+    mType(type),
+    mRecurseCount(0),
+    mNeedReload(false)
 {
     QHash<int, QByteArray> roles;
     roles.insert(AppUpAppsModel::Type, "type");
@@ -93,38 +94,66 @@ QVariant AppUpAppsModel::data(const QModelIndex &index, int role) const
 
 void AppUpAppsModel::loadDesktops()
 {
-//    qDebug("**** Beginning loadDesktops");
-    if (mDesktops.count()) {
-        this->beginRemoveRows(QModelIndex(), 0, mDesktops.count()-1);
-        mDesktops.clear();
-        this->endRemoveRows();
-    }
+    //Keep us from reentering loadDesktops while we're still processing the desktops from last time
+    if (mMutex.tryLock(100)) {
+        mNeedReload = false;
 
-    qDebug() << mWatcher->directories();
-
-    if (mWatcher->directories().count() < 1) {
-        qDebug("No directories loaded into mWatcher!");
-        return;
-    }
-    QString curDir = mWatcher->directories().at(0);
-    QDir dir(curDir);
-    dir.setFilter(QDir::Files | QDir::NoSymLinks);
-
-    QStringList filters;
-    filters << "*.desktop";
-    foreach (QFileInfo fileInfo, dir.entryInfoList(filters))
-    {
-        qDebug() << fileInfo.absoluteFilePath();
-        MDesktopEntry *newDesktop = new MDesktopEntry(fileInfo.absoluteFilePath());
-        if (newDesktop->isValid()) {
-            this->beginInsertRows(QModelIndex(), mDesktops.count(), mDesktops.count());
-            mDesktops.append(new MDesktopEntry(fileInfo.absoluteFilePath()));
-            this->endInsertRows();
-        } else {
-            qDebug() << "Invalid desktop: " << fileInfo.absoluteFilePath();
+        if (mDesktops.count()) {
+            this->beginRemoveRows(QModelIndex(), 0, mDesktops.count()-1);
+            mDesktops.clear();
+            this->endRemoveRows();
         }
+
+        if (mWatcher->directories().count() < 1) {
+            qDebug("No directories loaded into mWatcher!");
+            mMutex.unlock();
+            return;
+        }
+        QString curDir = mWatcher->directories().at(0);
+        QDir dir(curDir);
+        dir.setFilter(QDir::Files | QDir::NoSymLinks);
+
+        QStringList filters;
+        filters << "*.desktop";
+        foreach (QFileInfo fileInfo, dir.entryInfoList(filters)) {
+            qDebug() << fileInfo.absoluteFilePath();
+            MDesktopEntry *newDesktop = new MDesktopEntry(fileInfo.absoluteFilePath());
+            if (newDesktop->isValid()) {
+                this->beginInsertRows(QModelIndex(), mDesktops.count(), mDesktops.count());
+                mDesktops.append(new MDesktopEntry(fileInfo.absoluteFilePath()));
+                this->endInsertRows();
+            } else {
+                qDebug() << "Invalid desktop: " << fileInfo.absoluteFilePath();
+            }
+        }
+        emit countChanged();
+        mMutex.unlock();
+
+        //If new changes came in while we were still processing, recurse
+        //and run again...        
+        if (mRecurseCount >= 5) {
+            //However, if we've recursed 5 times, die out and ignore the
+            //changes until the next time we get a change event - it's
+            //better to rarely miss a change for a while than to
+            //introduce a potential infinite recursion loop in a core
+            //component...
+            mRecurseCount = 0;
+            mNeedReload = false;
+            qDebug("AppUpAppsModel: Had to bail out of loadDesktops due to recursion! Current count: %u", mDesktops.count());
+        } else if (mNeedReload) {
+            mRecurseCount++;
+            loadDesktops();
+            mRecurseCount = 0;
+        }
+    } else {
+        //If we're still processing, and get a new change, then indicate that
+        //we need reload the desktops once we're done this time - this method
+        //will make our worst case a 2x processing of desktops - 1st time will
+        //hit, start processing, all concurrent changes will just flag
+        //mNeedReload, then once we're done with the first pass, we will
+        //recurse back, run the final processing.
+        mNeedReload = true;
     }
-    emit countChanged();
 }
 
 //Private functions
