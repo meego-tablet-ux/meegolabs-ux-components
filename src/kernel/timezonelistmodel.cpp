@@ -8,9 +8,32 @@
 
 #include <QDir>
 #include <QDebug>
+#include <QtAlgorithms>
 #include <unicode/timezone.h>
 #include <unicode/locid.h>
 #include "timezonelistmodel.h"
+
+
+bool TimezoneListModel::TimezoneItem::operator< (const TimezoneListModel::TimezoneItem & other) const
+{
+    const int thisOffset = timezone.currentOffset(Qt::UTC);
+    const int otherOffset = other.timezone.currentOffset(Qt::UTC);
+
+    bool cmp = false;
+
+    if (thisOffset < otherOffset) {
+	cmp = true;
+    }
+    else if (thisOffset == otherOffset) {
+	cmp = mpLocale && (-1 == mpLocale->compare(locationName, other.locationName));
+    }
+
+    qDebug() << "Comparing" << thisOffset << "/" << locationName << "and" 
+	     << otherOffset << "/" << other.locationName << ":"
+	     << cmp;
+
+    return cmp;
+}
 
 TimezoneListModel::TimezoneListModel(QObject *parent)
     : QAbstractListModel(parent)
@@ -30,10 +53,13 @@ TimezoneListModel::TimezoneListModel(QObject *parent)
 
     foreach (KTimeZone zone, zones.timeZones()->zones()) {
         itemsList.append(TimezoneItem(zone,
-                    getLocationName(zone.name()),
-                    getLongGMTName(zone.name()),
-                    getGMTName(zone.name())));
+				      getLocationName(zone.name()),
+				      getLongGMTName(zone.name()),
+				      getGMTName(zone.name()),
+				      &mLocale
+			     ));
     }
+    qStableSort(itemsList.begin(), itemsList.end());
 
     for(int i = 0; i < itemsList.count(); i++)
     {
@@ -171,3 +197,4 @@ int TimezoneListModel::columnCount(const QModelIndex &parent) const
 
     return 1;
 }
+

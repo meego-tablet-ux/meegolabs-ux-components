@@ -60,25 +60,34 @@ protected:
     class TimezoneItem {
     public:
         TimezoneItem(KTimeZone zone,
-                QString location,
-                QString longgmt,
-                QString gmt) :
+		     QString location,
+		     QString longgmt,
+		     QString gmt,
+		     meego::Locale * pLocale) :
             timezone(zone),
             locationName(location),
             longGMTName(longgmt),
-            GMTName(gmt)
-        {}
+            GMTName(gmt),
+	    mpLocale(pLocale)
+       {}
+
+        bool operator< (const TimezoneItem & other) const;
 
         KTimeZone timezone;
         QString locationName;
         QString longGMTName;
         QString GMTName;
+	meego::Locale * mpLocale;
     };
 
     KSystemTimeZones zones;
     QList<TimezoneItem> itemsList;
     QList<TimezoneItem*> itemsDisplay;
     meego::Locale mLocale;
+
+    static bool LessTimezone(const TimezoneItem & leftZone, 
+			     const TimezoneItem & rightZone);
+
 };
 
 #endif // TIMEZONELISTMODEL_H
