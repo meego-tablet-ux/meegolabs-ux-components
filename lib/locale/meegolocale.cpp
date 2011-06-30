@@ -611,6 +611,23 @@ namespace meego
             //: ddd = short day of week, d = day of month (QDateTime format string)
             return tr("ddd d", "MDY");
 
+        case DateWeekdayDayLong:
+            // NOTE: here all cases are the samee, so we pass tr() a context string
+            //   in case they need to differ in some translation
+
+            if (order == DateFormatDMY)
+                //: translator: weekday and day in DMY order (QDateTime format string)
+                //: ddd = short day of week, d = day of month (e.g. Mon 31)
+                return tr("dddd d", "DMY");
+            if (order == DateFormatYMD)
+                //: translator: weekday and day in DMY order (QDateTime format string)
+                //: ddd = short day of week, d = day of month (e.g. Mon 31)
+                return tr("dddd d", "YMD");
+            //: translator: weekday and day in DMY order (QDateTime format string)
+            //: ddd = short day of week, d = day of month (e.g. Mon 31)
+            return tr("dddd d", "MDY");
+
+
         case DateMonthDay:
             // NOTE: here YMD and MDY are the same, so we pass tr() a context string
             //   in case they need to differ in some translation
