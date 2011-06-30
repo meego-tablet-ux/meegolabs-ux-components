@@ -28,10 +28,6 @@ bool TimezoneListModel::TimezoneItem::operator< (const TimezoneListModel::Timezo
 	cmp = mpLocale && (-1 == mpLocale->compare(locationName, other.locationName));
     }
 
-    qDebug() << "Comparing" << thisOffset << "/" << locationName << "and" 
-	     << otherOffset << "/" << other.locationName << ":"
-	     << cmp;
-
     return cmp;
 }
 

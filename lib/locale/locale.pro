@@ -6,7 +6,6 @@ DEFINES += LOCALE_LIBRARY
 
 CONFIG += qt \
           link_pkgconfig
-CONFIG += debug
 
 OBJECTS_DIR = .obj
 MOC_DIR = .moc
