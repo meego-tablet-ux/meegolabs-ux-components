@@ -13,7 +13,7 @@
 #include <QtCore/QtCore>
 #include <QtCore/QObject>
 #include <kcalcoren/ksystemtimezone.h>
-#include "../../lib/locale/meegolocale.h"
+#include "meegolocale.h"
 
 class TimezoneListModel: public QAbstractListModel
 {

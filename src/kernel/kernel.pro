@@ -101,6 +101,9 @@ HEADERS += \
   windowlistener.h \
   windowmodel.h
 
+LIBS += -L ../../lib/locale/ -l meegolocale
+INCLUDEPATH += ../../lib/locale
+
 QML_FILES = qmldir
 
 qmlfiles.files = $$QML_FILES
