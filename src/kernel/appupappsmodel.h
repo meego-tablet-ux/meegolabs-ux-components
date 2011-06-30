@@ -20,7 +20,6 @@
 
 class MDesktopEntry;
 class QFileSystemWatcher;
-class QMutex;
 
 class AppUpAppsModel : public QAbstractListModel
 {
