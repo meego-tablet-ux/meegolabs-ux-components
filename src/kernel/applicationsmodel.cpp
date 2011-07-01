@@ -18,6 +18,7 @@
 #include "favoriteapplicationsmodel.h"
 #include "recentapplicationsmodel.h"
 #include "appupappsmodel.h"
+#include "meegolocale.h"
 
 ApplicationsModel::ApplicationsModel(QObject *parent) :
     QAbstractListModel(parent),
@@ -43,6 +44,8 @@ ApplicationsModel::ApplicationsModel(QObject *parent) :
 
     setRoleNames(roles);
 
+    meego::Locale *pLocale = new meego::Locale(this);
+    connect(pLocale, SIGNAL(localeChanged()), this, SLOT(resetApps()));
 }
 
 void ApplicationsModel::appsDirChanged(QString changedDir)
@@ -112,6 +115,7 @@ void ApplicationsModel::resetApps()
 
 
     emit appsReset();
+    emit appsChanged();
 }
 
 QVariant ApplicationsModel::data(const QModelIndex& index, int role) const
