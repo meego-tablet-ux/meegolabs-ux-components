@@ -391,7 +391,7 @@ namespace meego
             return QString();
         }
 
-        return date.toString( formatString(format) );
+        return mQLocale.toString( date, formatString(format) );
     }
 
 
