@@ -40,6 +40,7 @@ ModalDialog {
     property int dataIndex: 0 //not implemented yet
     property variant person: null
     property string noContact;
+    property string searchKey;
 
     title: promptString
 
@@ -61,6 +62,106 @@ ModalDialog {
 
     Theme{ id:theme }
 
+    Filter {
+        id: allFilter
+    }
+
+    UnionFilter {
+        id: searchEmail
+        DetailFilter{
+            detail: ContactDetail.Name
+            field: Name.FirstName
+            matchFlags: DetailFilter.MatchContains
+            value: contactPicker.searchKey
+        }
+        DetailFilter{
+            detail: ContactDetail.Name
+            field: Name.LastName
+            matchFlags: DetailFilter.MatchContains
+            value: contactPicker.searchKey
+        }
+        DetailFilter{
+            detail: ContactDetail.EmailAddress
+            field: EmailAddress.EmailAddress
+            matchFlags: DetailFilter.MatchExactly
+            value: contactPicker.searchKey
+        }
+    }
+    UnionFilter {
+        id: searchPhone
+        DetailFilter{
+            detail: ContactDetail.Name
+            field: Name.FirstName
+            matchFlags: DetailFilter.MatchContains
+            value: contactPicker.searchKey
+        }
+        DetailFilter{
+            detail: ContactDetail.Name
+            field: Name.LastName
+            matchFlags: DetailFilter.MatchContains
+            value: contactPicker.searchKey
+        }
+        DetailFilter{
+            detail: ContactDetail.PhoneNumber
+            field: PhoneNumber.Number
+            matchFlags: DetailFilter.MatchContains
+            value: contactPicker.searchKey
+        }
+        DetailFilter{
+            detail: ContactDetail.PhoneNumber
+            field: PhoneNumber.Number
+            matchFlags: DetailFilter.MatchPhoneNumber
+            value: contactPicker.searchKey
+        }
+    }
+    UnionFilter {
+        id: searchIM
+        DetailFilter{
+            detail: ContactDetail.Name
+            field: Name.FirstName
+            matchFlags: DetailFilter.MatchContains
+            value: contactPicker.searchKey
+        }
+        DetailFilter{
+            detail: ContactDetail.Name
+            field: Name.LastName
+            matchFlags: DetailFilter.MatchContains
+            value: contactPicker.searchKey
+        }
+        DetailFilter{
+            detail: ContactDetail.OnlineAccount
+            field: OnlineAccount.accoutUri
+            matchFlags: DetailFilter.MatchContains
+            value: contactPicker.searchKey
+        }
+    }
+    UnionFilter {
+        id: searchName
+        DetailFilter{
+            detail: ContactDetail.Name
+            field: Name.FirstName
+            matchFlags: DetailFilter.MatchContains
+            value: contactPicker.searchKey
+        }
+        DetailFilter{
+            detail: ContactDetail.Name
+            field: Name.LastName
+            matchFlags: DetailFilter.MatchContains
+            value: contactPicker.searchKey
+        }
+    }
+
+    function getFilter(dType){
+        if( dType == "Email"){
+            return searchEmail;
+        }else if (dType == "Phone"){
+            return searchPhone;
+        }else if (dType == "IM") {
+            return searchIM;
+        }
+        return searchName;
+    }
+
     sizeHintWidth: 300
     sizeHintHeight: 450
 
@@ -70,6 +171,8 @@ ModalDialog {
             property int highlightHeight: 0
             property int highlightWidth: 0
             property alias contactListView: cardListView
+            anchors {left: parent.left; right: parent.right; top: parent.top; bottom: parent.bottom;}
+
 
             function getDataModel(dType, cModel){
                 if( dType == "Email"){
@@ -110,15 +213,34 @@ ModalDialog {
                 }
             }
 
-            anchors.fill: parent
-            clip:  true
-
             Column {
                 id:pickerContents
-                spacing: 5
-
    		height: parent.height
                 width: parent.width
+
+                Image {
+                    id: searchBox
+                    width: parent.width
+                    height: 50
+                    source: "image://themedimage/images/contacts/contact_bg_portrait";
+
+                TextEntry {
+                    id: searchEntry
+                    text: ""
+                    defaultText: qsTr("Type to search")
+                    anchors {left: searchBox.left; right: searchBox.right; top: searchBox.top; bottom: searchBox.bottom; leftMargin: 10; rightMargin: 10; topMargin: 10; bottomMargin: 10}
+                    visible: true
+                    opacity: 1
+                    onTextChanged: {
+                        searchKey = searchEntry.text
+                        if(searchEntry.text && (searchEntry.text !="")){
+                           contactModel.filter=contactPicker.getFilter(contactPicker.filterType);
+                        }else{
+                            contactModel.filter=allFilter;
+                        }
+                    }
+                }
+                }
 
                 Item {
                     id:noContactText
@@ -177,9 +299,6 @@ ModalDialog {
                                         detail:ContactDetail.Name
                                         field:Name.FirstName
                                         direction:Qt.AscendingOrder
-                                    }
-                                    Filter {
-                                        id: allFilter
                                     }
 
                                     delegate:  Image {
