@@ -616,15 +616,18 @@ namespace meego
             //   in case they need to differ in some translation
 
             if (order == DateFormatDMY)
-                //: translator: weekday and day in DMY order (QDateTime format string)
-                //: ddd = short day of week, d = day of month (e.g. Mon 31)
+                //: weekday and day where user chose DMY order (e.g. Mon 31)
+                //: Translate the format delimiters, not order
+                //: dddd = long day of week, d = day of month (QDateTime format string)
                 return tr("dddd d", "DMY");
             if (order == DateFormatYMD)
-                //: translator: weekday and day in DMY order (QDateTime format string)
-                //: ddd = short day of week, d = day of month (e.g. Mon 31)
+                //: weekday and day where user chose YMD order (e.g. Mon 31)
+                //: Translate the format delimiters, not order
+                //: dddd = long day of week, d = day of month (QDateTime format string)
                 return tr("dddd d", "YMD");
-            //: translator: weekday and day in DMY order (QDateTime format string)
-            //: ddd = short day of week, d = day of month (e.g. Mon 31)
+            //: weekday and day where user chose MDY order (e.g. Mon 31)
+            //: Translate the format delimiters, not order
+            //: dddd = long day of week, d = day of month (QDateTime format string)
             return tr("dddd d", "MDY");
 
 

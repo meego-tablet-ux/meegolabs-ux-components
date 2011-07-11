@@ -70,7 +70,7 @@ namespace meego
             DateWeekday,          // Monday
             DateWeekdayShort,     // Mon
             DateWeekdayDayShort,  // Mon 31
-            DateWeekdayDayLong,   // Monday 31th
+            DateWeekdayDayLong,   // Monday 31
             DateMonth,            // January
             DateMonthShort,       // Jan
             DateYear,             // 2011

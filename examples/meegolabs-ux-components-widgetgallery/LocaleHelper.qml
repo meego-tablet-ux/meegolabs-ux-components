@@ -140,6 +140,7 @@ AppPage {
                 LocaleHelperDate { label: "DateFullNumShort"; format: Labs.LocaleHelper.DateFullNumShort }
                 LocaleHelperDate { label: "DateWeekdayMonthDay"; format: Labs.LocaleHelper.DateWeekdayMonthDay }
                 LocaleHelperDate { label: "DateWeekdayDayShort"; format: Labs.LocaleHelper.DateWeekdayDayShort }
+                LocaleHelperDate { label: "DateWeekdayDayLong"; format: Labs.LocaleHelper.DateWeekdayDayLong }
                 LocaleHelperDate { label: "DateMonthDay"; format: Labs.LocaleHelper.DateMonthDay }
                 LocaleHelperDate { label: "DateMonthYear"; format: Labs.LocaleHelper.DateMonthYear }
                 LocaleHelperDate { label: "DateMonthYearShort"; format: Labs.LocaleHelper.DateMonthYearShort }
