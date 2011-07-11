@@ -373,9 +373,12 @@ void BrowserItemListModel::viewItem(const QString& url)
 // Remove a browser item from data model
 bool BrowserItemListModel::internalRemoveItem(int id)
 {
+	if(!m_db.isValid()) 
+		loadDataSource();
+
 	BrowserItem* item = getItem(id);
 	if(item == NULL) return false;
-	
+
 	int i = m_items.indexOf(item);
 	beginRemoveRows(QModelIndex(), i, i);
 	m_items.removeOne(item);
@@ -384,7 +387,7 @@ bool BrowserItemListModel::internalRemoveItem(int id)
 	
 	// Remove it from backend database
 	QString stmt;
-	QSqlQuery query;
+	QSqlQuery query(m_db);
 
 	if(m_type == ListofRecentVisited)
 	{
@@ -445,8 +448,11 @@ void BrowserItemListModel::destroyItem(int id)
 
 void BrowserItemListModel::clearAllItems()
 {
+	if(!m_db.isValid()) 
+		loadDataSource();
+
 	QString stmt;
-	QSqlQuery query;
+	QSqlQuery query(m_db);
 
 	// Clear item contained in list model
 	beginResetModel();
