@@ -12,8 +12,38 @@
 #include <QAbstractListModel>
 #include <QtCore/QtCore>
 #include <QtCore/QObject>
+#include <QFutureWatcher>
 #include <kcalcoren/ksystemtimezone.h>
 #include "meegolocale.h"
+
+
+
+class TimezoneItem {
+public:
+    TimezoneItem(KTimeZone zone,
+             QString location,
+             QString longgmt,
+             QString gmt,
+             meego::Locale * pLocale) :
+        timezone(zone),
+        locationName(location),
+        longGMTName(longgmt),
+            GMTName(gmt),
+        mpLocale(pLocale)
+       {}
+
+        bool operator< (const TimezoneItem & other) const;
+
+    KTimeZone timezone;
+    QString locationName;
+    QString longGMTName;
+    QString GMTName;
+    meego::Locale * mpLocale;
+
+    static bool LessTimezone(const TimezoneItem & leftZone,
+                 const TimezoneItem & rightZone);
+
+};
 
 class TimezoneListModel: public QAbstractListModel
 {
@@ -56,38 +86,16 @@ public slots:
     QString getLongGMTName(QString title) const;
     QString getGMTName(QString title) const;
 
+private slots:
+    void initializeFinished();
+    QList<TimezoneItem*> initializeList();
+
 protected:
-    class TimezoneItem {
-    public:
-        TimezoneItem(KTimeZone zone,
-		     QString location,
-		     QString longgmt,
-		     QString gmt,
-		     meego::Locale * pLocale) :
-            timezone(zone),
-            locationName(location),
-            longGMTName(longgmt),
-            GMTName(gmt),
-	    mpLocale(pLocale)
-       {}
-
-        bool operator< (const TimezoneItem & other) const;
-
-        KTimeZone timezone;
-        QString locationName;
-        QString longGMTName;
-        QString GMTName;
-	meego::Locale * mpLocale;
-    };
-
-    KSystemTimeZones zones;
-    QList<TimezoneItem> itemsList;
     QList<TimezoneItem*> itemsDisplay;
     meego::Locale mLocale;
-
-    static bool LessTimezone(const TimezoneItem & leftZone, 
-			     const TimezoneItem & rightZone);
-
+    QFutureWatcher<QList<TimezoneItem*> > *watcher;
 };
+
+
 
 #endif // TIMEZONELISTMODEL_H

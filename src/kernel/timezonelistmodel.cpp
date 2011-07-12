@@ -9,12 +9,15 @@
 #include <QDir>
 #include <QDebug>
 #include <QtAlgorithms>
+#include <QFuture>
+#include <QFutureWatcher>
 #include <unicode/timezone.h>
 #include <unicode/locid.h>
 #include "timezonelistmodel.h"
 
+static QList<TimezoneItem*> itemsList;
 
-bool TimezoneListModel::TimezoneItem::operator< (const TimezoneListModel::TimezoneItem & other) const
+bool TimezoneItem::operator< (const TimezoneItem & other) const
 {
     const int thisOffset = timezone.currentOffset(Qt::UTC);
     const int otherOffset = other.timezone.currentOffset(Qt::UTC);
@@ -47,30 +50,48 @@ TimezoneListModel::TimezoneListModel(QObject *parent)
     roles.insert(GMTName, "gmtname");
     setRoleNames(roles);
 
+    if(!itemsList.count())
+    {
+        QFuture< QList<TimezoneItem*> > future = QtConcurrent::run(this, &TimezoneListModel::initializeList);
+        watcher = new QFutureWatcher<QList<TimezoneItem*> >(this);
+        connect(watcher,SIGNAL(finished()),this,SLOT(initializeFinished()));
+        watcher->setFuture(future);
+    }
+    else itemsDisplay = itemsList;
+}
+
+QList<TimezoneItem*> TimezoneListModel::initializeList()
+{
+    QList<TimezoneItem*> timezones;
+    KSystemTimeZones zones;
     foreach (KTimeZone zone, zones.timeZones()->zones()) {
-        itemsList.append(TimezoneItem(zone,
-				      getLocationName(zone.name()),
-				      getLongGMTName(zone.name()),
-				      getGMTName(zone.name()),
-				      &mLocale
-			     ));
+        TimezoneItem *item = new TimezoneItem(zone,
+                            getLocationName(zone.name()),
+                            getLongGMTName(zone.name()),
+                            getGMTName(zone.name()),&mLocale );
+	timezones.append(item);
     }
     qStableSort(itemsList.begin(), itemsList.end());
 
-    for(int i = 0; i < itemsList.count(); i++)
-    {
-        itemsDisplay << &itemsList[i];
-    }
+    return timezones;
+}
 
+void TimezoneListModel::initializeFinished()
+{
+    itemsList = watcher->result();
+
+    beginInsertRows(QModelIndex(), 0, itemsList.count() - 1);
+    itemsDisplay = itemsList;
+    endInsertRows();
 }
 
 TimezoneListModel::~TimezoneListModel()
 {
-    if(!itemsList.isEmpty())
+    if(!itemsDisplay.isEmpty())
     {
         /* formally remove all the items from the list */
-        beginRemoveRows(QModelIndex(), 0, itemsList.count()-1);
-        itemsList.clear();
+        beginRemoveRows(QModelIndex(), 0, itemsDisplay.count()-1);
+        itemsDisplay.clear();
         endRemoveRows();
     }
 }
@@ -125,8 +146,8 @@ void TimezoneListModel::filterOut(QString filter)
     QList<TimezoneItem*> displaylist;
     for(int i = 0; i < itemsList.count(); i++)
         if(filter.isEmpty() ||
-            itemsList[i].locationName.contains(filter, Qt::CaseInsensitive))
-            displaylist << &itemsList[i];
+            itemsList[i]->locationName.contains(filter, Qt::CaseInsensitive))
+            displaylist << itemsList[i];
 
     if(!itemsDisplay.isEmpty())
     {
