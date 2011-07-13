@@ -14,6 +14,8 @@
 #include <QList>
 #include <QAbstractListModel>
 #include <QMutex>
+#include <QDateTime>
+#include <QTimer>
 
 #define APPUP_DESKTOP_PATH QString("%1/.local/opt/com.intel.appup-tablet/%2")
 #define APPUP_DIRECTORIES (QStringList() << "featured" << "update")
@@ -83,7 +85,9 @@ private:
 
     QList<MDesktopEntry *> mDesktops;
     QFileSystemWatcher *mWatcher;
+    QTimer *mReloadTimer;
     QMutex mMutex;
+    QDateTime mLastReload;
     int mLimit;
     AppUpType mType;
     uint mRecurseCount;

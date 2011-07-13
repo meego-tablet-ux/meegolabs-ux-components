@@ -13,11 +13,14 @@
 #include <QDebug>
 #include <QStringList>
 #include <QFileSystemWatcher>
+#include <QTimer>
 #include <QtDeclarative/qdeclarative.h>
 #include <mdesktopentry.h>
 
 AppUpAppsModel::AppUpAppsModel(AppUpType type, QObject *parent) :
     QAbstractListModel(parent),
+    mReloadTimer(new QTimer(this)),
+    mLastReload(QDateTime::currentDateTime().addSecs(-100)),
     mLimit(6),
     mType(type),
     mRecurseCount(0),
@@ -38,6 +41,11 @@ AppUpAppsModel::AppUpAppsModel(AppUpType type, QObject *parent) :
 
     connect(mWatcher,
             SIGNAL(directoryChanged(QString)),
+            this,
+            SLOT(loadDesktops()));
+    mReloadTimer->setSingleShot(true);
+    connect(mReloadTimer,
+            SIGNAL(timeout()),
             this,
             SLOT(loadDesktops()));
     loadDesktops();
@@ -94,9 +102,19 @@ QVariant AppUpAppsModel::data(const QModelIndex &index, int role) const
 
 void AppUpAppsModel::loadDesktops()
 {
+    //Only allow a reload at a maximum of every 5 seconds, to allow the desktop file writing
+    //to quiesce before we reload
+    //Also, protect against significant system time changes preventing us from refreshing
+    //for 10 years...
+    if ((mLastReload >= QDateTime::currentDateTime().addSecs(-5)) &&
+            !(mLastReload > QDateTime::currentDateTime()) ) {
+        mReloadTimer->start(5100);
+        return;
+    }
     //Keep us from reentering loadDesktops while we're still processing the desktops from last time
     if (mMutex.tryLock(100)) {
         mNeedReload = false;
+        mLastReload = QDateTime::currentDateTime();
 
         if (mDesktops.count()) {
             this->beginRemoveRows(QModelIndex(), 0, mDesktops.count()-1);
