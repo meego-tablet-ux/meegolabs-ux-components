@@ -307,7 +307,7 @@ namespace meego
     void Locale::resetDateFormat() 
     {
 	const DateFormat v = defaultDateFormat();
-	setDateFormat(v);
+        setDateFormat(v, false);
     }
 
 
@@ -331,7 +331,7 @@ namespace meego
     void Locale::resetTimeFormat() 
     {
 	const TimeFormat v = defaultTimeFormat();
-	setTimeFormat(v);
+        setTimeFormat(v, false);
     }
 
 
@@ -355,7 +355,7 @@ namespace meego
     void Locale::resetFirstDayOfWeek()
     {
         const DayOfWeek v = defaultFirstDayOfWeek();
-	setFirstDayOfWeek(v);
+        setFirstDayOfWeek(v, false);
     }
 
 
@@ -380,7 +380,7 @@ namespace meego
     void Locale::resetDecimalPoint()
     {
         QString v = defaultDecimalPoint();
-	setDecimalPoint(v);
+        setDecimalPoint(v, false);
     }
 
 
@@ -740,7 +740,7 @@ namespace meego
             if (locale.isEmpty()) {
                 locale = defaultLocale();
             }
-            setLocale(locale);
+            setLocale(locale, false);
 	}
 	else {
             setLocale(value, false);
