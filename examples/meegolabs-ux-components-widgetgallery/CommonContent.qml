@@ -102,54 +102,54 @@ Item {
                     Component { id: contactsPickerComponent; WidgetPageContactsPicker{} }
                 }
 
-//                Rectangle {
-//                    id: volumeControllerItem
+                Rectangle {
+                    id: timezoneListViewItem
 
-//                    width: parent.width
-//                    height:  flickContainer.itemHeight
+                    width: parent.width
+                    height:  flickContainer.itemHeight
 
-//                    anchors.left: parent.left
+                    anchors.left: parent.left
 
-//                    anchors.right: parent.right
+                    anchors.right: parent.right
 
-//                    border.width: 1
-//                    border.color: "grey"
+                    border.width: 1
+                    border.color: "grey"
 
-//                    color: flickContainer.backColor
-//                    clip:  true
+                    color: flickContainer.backColor
+                    clip:  true
 
-//                    MouseArea {
-//                        anchors.fill: volumeControllerItem
-//                        z: 1
+                    MouseArea {
+                        anchors.fill: timezoneListViewItem
+                        z: 1
 
-//                        onClicked: addPage( volumeControllerComponent )
-//                    }
+                        onClicked: addPage( timezoneListViewComponent )
+                    }
 
-//                    Item {
-//                        x: parent.width / 2 - width - ( parent.width / 2 - width ) / 2
-//                        width:  parent.width  * flickContainer.leftFactor
-//                        anchors.verticalCenter: parent.verticalCenter
-//                        Button {
-//                            text:  qsTr("VolumeController")
+                    Item {
+                        x: parent.width / 2 - width - ( parent.width / 2 - width ) / 2
+                        width:  parent.width  * flickContainer.leftFactor
+                        anchors.verticalCenter: parent.verticalCenter
+                        Button {
+                            text:  qsTr("Time Zones")
 
-//                            width: parent.width
-//                            anchors.centerIn: parent
-//                        }
-//                    }
+                            width: parent.width
+                            anchors.centerIn: parent
+                        }
+                    }
 
-//                    Text {
-//                        x: parent.width / 2
-//                        width: parent.width * flickContainer.rightFactor
-//                        height: parent.height
+                    Text {
+                        x: parent.width / 2
+                        width: parent.width * flickContainer.rightFactor
+                        height: parent.height
 
-//                        verticalAlignment: Text.AlignVCenter
-//                        wrapMode: Text.WordWrap
-//                        font.pixelSize: flickContainer.textSize
-//                        text: qsTr("ContactsPicker, to choose from a list of contacts.")
-//                    }
+                        verticalAlignment: Text.AlignVCenter
+                        wrapMode: Text.WordWrap
+                        font.pixelSize: flickContainer.textSize
+                        text: qsTr("TimezoneListView, to choose from a list of timezones.")
+                    }
 
-//                    Component { id: volumeControllerComponent; WidgetPageVolumeController{} }
-//                }
+                    Component { id: timezoneListViewComponent; WidgetPageTimezoneListView{} }
+                }
             }
         }
     } //end outerRect

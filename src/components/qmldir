@@ -6,7 +6,7 @@ VolumeController  0.1 VolumeController.qml
 VolumeSettings    0.1 VolumeSettings.qml
 DocumentPicker    0.1 DocumentPicker.qml
 RelativeTimeText  0.1 RelativeTimeText.qml
-TimezoneList      0.1 TimezoneList.qml
+TimezoneListView  0.1 TimezoneListView.qml
 
 plugin meegolabs-ux-kernel ../Kernel
 plugin meegolabs-ux-locale ../Locale
